@@ -1,0 +1,12 @@
+[tool.pdm]
+
+[project]
+name = ""
+version = ""
+description = ""
+authors = [
+    {name = "Yuliya Bryukhovskikh", email = "makutu@ereb.ru"},
+]
+dependencies = []
+requires-python = ">=3.10"
+license = {text = "MIT"}
