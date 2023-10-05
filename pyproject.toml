@@ -1,5 +1,3 @@
-[tool.pdm]
-
 [project]
 name = ""
 version = ""
@@ -7,6 +5,8 @@ description = ""
 authors = [
     {name = "Yuliya Bryukhovskikh", email = "makutu@ereb.ru"},
 ]
-dependencies = []
+dependencies = [
+    "Django==4.2.5",
+]
 requires-python = ">=3.10"
 license = {text = "MIT"}
