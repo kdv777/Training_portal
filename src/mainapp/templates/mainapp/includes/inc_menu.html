@@ -7,7 +7,7 @@
     data-bs-theme="dark"
   >
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="/mainapp/">
         <img
           src="{% static 'img/logo.svg' %}"
           alt="Logo"
@@ -58,7 +58,7 @@
             <a class="nav-link active" aria-current="page" href="#">Новости</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Контакты</a>
+            <a class="nav-link active" aria-current="page" href="/mainapp/contacts/">Контакты</a>
           </li>
         </ul>
         <form class="d-flex" role="search">
@@ -71,13 +71,8 @@
           <button class="btn btn-outline-success" type="submit">Поиск</button>
         </form>
         <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <button
-            class="btn btn-primary"
-            type="submit"
-            style="margin-left: 20px"
-          >
-            Войти
-          </button>
+          <a class="btn btn-primary" style="margin-left: 20px"
+             href="/mainapp/login/" role="button">Войти</a>
           <button class="btn btn-primary" type="submit">
             Зарегистрироваться
           </button>
