@@ -1,0 +1,141 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+
+
+{% block content %}
+   {# Блок Категории #}
+   <div class="container" style="margin-top: 100px;">
+    <div style="background-color: #F3F4F6;padding: 20px;border-radius: 10px;">
+        <form class="d-flex" role="search">
+            <input class="form-control me-4" type="search" placeholder="Поиск" aria-label="Поиск">
+            <div class="form-check" style="width: 250px;">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                    С сертификатами
+                </label>
+            </div>
+            <div class="form-check" style="width: 250px;">
+                <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+                <label class="form-check-label" for="flexCheckDefault">
+                    Бесплатные
+                </label>
+            </div>
+            <button class="btn btn-outline-success" type="submit">Поиск</button>
+        </form>
+    </div>
+
+    <div style="margin-top: 40px;">
+        <h2>Категории</h2>
+    </div>
+    <div class="row row-cols-4">
+        {# card start#}
+        <div class="col">
+            <div class="card category_card" >
+                <div class="card-body shadow d-flex flex-column justify-content-between">
+                    <h5 class="card-title" style="color: #3E50CB;">Категория 1</h5>
+
+                    <a href="#" class="card-link">2 курса</a>
+                </div>
+            </div>
+        </div>
+        cols-4">
+        {# card end#}
+
+        {# card start#}
+        <div class="col">
+            <div class="card category_card" >
+                <div class="card-body shadow d-flex flex-column justify-content-between">
+                    <h5 class="card-title" style="color: #3E50CB;">Категория 2</h5>
+
+                    <a href="#" class="card-link">4 курса</a>
+                </div>
+            </div>
+        </div>
+        cols-4">
+        {# card end#}
+
+        {# card start#}
+        <div class="col">
+            <div class="card category_card" >
+                <div class="card-body shadow d-flex flex-column justify-content-between">
+                    <h5 class="card-title" style="color: #3E50CB;">Категория 3</h5>
+
+                    <a href="#" class="card-link">3 курса</a>
+                </div>
+            </div>
+        </div>
+        cols-4">
+        {# card end#}
+
+        {# card start#}
+        <div class="col">
+            <div class="card category_card" >
+                <div class="card-body shadow d-flex flex-column justify-content-between">
+                    <h5 class="card-title" style="color: #3E50CB;">Категория 4</h5>
+
+                    <a href="#" class="card-link">2 курса</a>
+                </div>
+            </div>
+        </div>
+        cols-4">
+        {# card end#}
+
+        {# card start#}
+        <div class="col">
+            <div class="card category_card" >
+                <div class="card-body shadow d-flex flex-column justify-content-between">
+                    <h5 class="card-title" style="color: #3E50CB;">Категория 5</h5>
+
+                    <a href="#" class="card-link">6 курсов</a>
+                </div>
+            </div>
+        </div>
+        cols-4">
+        {# card end#}
+
+        {# card start#}
+        <div class="col">
+            <div class="card category_card" >
+                <div class="card-body shadow d-flex flex-column justify-content-between">
+                    <h5 class="card-title" style="color: #3E50CB;">Категория 6</h5>
+
+                    <a href="#" class="card-link">8 курсов</a>
+                </div>
+            </div>
+        </div>
+        cols-4">
+        {# card end#}
+
+        {# card start#}
+        <div class="col">
+            <div class="card category_card" >
+                <div class="card-body shadow d-flex flex-column justify-content-between">
+                    <h5 class="card-title" style="color: #3E50CB;">Категория 7</h5>
+
+                    <a href="#" class="card-link">2 курса</a>
+                </div>
+            </div>
+        </div>
+        cols-4">
+        {# card end#}
+
+        {# card start#}
+        <div class="col">
+            <div class="card category_card" >
+                <div class="card-body shadow d-flex flex-column justify-content-between">
+                    <h5 class="card-title" style="color: #3E50CB;">Категория 8</h5>
+
+                    <a href="#" class="card-link">2 курса</a>
+                </div>
+            </div>
+        </div>
+        cols-4">
+        {# card end#}
+
+    </div>
+
+</div>
+{# End blocl Category #}
+
+{% endblock %}
