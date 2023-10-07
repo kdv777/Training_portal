@@ -6,7 +6,7 @@
     data-bs-theme="dark"
   >
     <div class="container-fluid">
-      <a class="navbar-brand" href="#">
+      <a class="navbar-brand" href="{% url 'mainapp:index' %}">
         <img
           src="{% static 'img/logo.svg' %}"
           alt="Logo"
@@ -51,13 +51,13 @@
             </ul>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Статьи</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'mainapp:catalog' %}">Статьи</a>
           </li>
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="#">Новости</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Контакты</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'mainapp:contacts' %}">Контакты</a>
           </li>
         </ul>
         <form class="d-flex" role="search">
