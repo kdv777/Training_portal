@@ -6,11 +6,11 @@ class MainPageView(TemplateView):
 
 
 class ContactsPageView(TemplateView):
-    template_name = "mainapp/contacts.html"
+    template_name = "mainapp/about.html"
 
 
 class CatalogPageView(TemplateView):
-    template_name = "mainapp/catalog.html"
+    template_name = "mainapp/categories.html"
 
 
 class LoginPageView(TemplateView):
