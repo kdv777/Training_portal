@@ -1,0 +1,16 @@
+#!/bin/sh
+
+FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E '\.py$')
+
+if [ -z "$FILES" ]
+then
+   exit 0
+fi
+
+set -e
+
+black --config pyproject.toml $FILES
+isort $FILES
+flake8p $FILES
+
+git add $FILES
