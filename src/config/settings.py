@@ -133,3 +133,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Auth
 AUTH_USER_MODEL = 'authapp.User'
+
+DEFAULT_AUTO_FIELD='django.db.models.AutoField'
