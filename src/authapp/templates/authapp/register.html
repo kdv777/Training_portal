@@ -8,7 +8,7 @@
                 Регистрация нового пользователя
             </div>
             <form class="form-horizontal"
-                  action="{% url 'auth:register' %}" method="post"
+                  action="{% url 'authapp:register' %}" method="post"
                   enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ register_form.as_p }}

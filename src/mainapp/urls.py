@@ -10,4 +10,6 @@ urlpatterns = [
     path("contacts/", views.ContactsPageView.as_view(), name="contacts"),
     path("catalog/", views.CatalogPageView.as_view(), name="catalog"),
     path("login/", views.LoginPageView.as_view(), name="login"),
+    path("news/", views.NewsPageView.as_view(), name="news"),
+    path("in_progress/", views.InProgressPageView.as_view(), name="in_progress"),
 ]
