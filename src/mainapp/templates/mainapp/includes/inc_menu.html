@@ -40,18 +40,18 @@
                             Каталог курсов
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Курс 1</a></li>
-                            <li><a class="dropdown-item" href="#">Курс 2</a></li>
-                            <li><a class="dropdown-item" href="#">Курс 3</a></li>
-                            <li><a class="dropdown-item" href="#">Курс 4</a></li>
+                            <li><a class="dropdown-item" href="{% url 'mainapp:in_progress' %}">Курс 1</a></li>
+                            <li><a class="dropdown-item" href="{% url 'mainapp:in_progress' %}">Курс 2</a></li>
+                            <li><a class="dropdown-item" href="{% url 'mainapp:in_progress' %}">Курс 3</a></li>
+                            <li><a class="dropdown-item" href="{% url 'mainapp:in_progress' %}">Курс 4</a></li>
                             <li>
                                 <hr class="dropdown-divider"/>
                             </li>
-                            <li><a class="dropdown-item" href="#">Что-то еще здесь</a></li>
+                            <li><a class="dropdown-item" href="{% url 'mainapp:in_progress' %}">Что-то еще здесь</a></li>
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'mainapp:catalog' %}">Статьи</a>
+                        <a class="nav-link active" aria-current="page" href="{% url 'mainapp:catalog' %}">Категории</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{% url 'mainapp:news' %}">Новости</a>
