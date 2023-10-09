@@ -15,3 +15,11 @@ class CatalogPageView(TemplateView):
 
 class LoginPageView(TemplateView):
     template_name = "mainapp/login.html"
+
+
+class NewsPageView(TemplateView):
+    template_name = "mainapp/news.html"
+
+
+class InProgressPageView(TemplateView):
+    template_name = "mainapp/in_progress.html"
