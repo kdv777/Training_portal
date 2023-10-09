@@ -24,8 +24,11 @@ class NewsPageView(TemplateView):
 class Course1PageView(TemplateView):
     template_name = "mainapp/course1.html"
 
-class Lesson1_11PageView(TemplateView):
+class Lesson1_1PageView(TemplateView):
     template_name = "mainapp/lesson1_1.html"
+
+class Courses_categoryPageView(TemplateView):
+    template_name = "mainapp/courses_category.html"
 
 
 class InProgressPageView(TemplateView):
