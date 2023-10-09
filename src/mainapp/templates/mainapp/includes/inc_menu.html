@@ -1,88 +1,96 @@
 {# Блок меню #}
 {% load static %}
 <div>
-  <nav
-    class="navbar navbar-expand-lg bg-body-tertiary fixed-top"
-    data-bs-theme="dark"
-  >
-    <div class="container-fluid">
-      <a class="navbar-brand" href="#">
-        <img
-          src="{% static 'img/logo.svg' %}"
-          alt="Logo"
-          width="30"
-          height="30"
-          class="d-inline-block align-text-top"
-        />
-        Питоны</a
-      >
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-bs-toggle="collapse"
-        data-bs-target="#navbarSupportedContent"
-        aria-controls="navbarSupportedContent"
-        aria-expanded="false"
-        aria-label="Переключатель навигации"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-          <li class="nav-item dropdown">
-            <a
-              class="nav-link dropdown-toggle"
-              href="#"
-              role="button"
-              data-bs-toggle="dropdown"
-              aria-expanded="false"
+    <nav
+            class="navbar navbar-expand-lg bg-body-tertiary fixed-top"
+            data-bs-theme="dark"
+    >
+        <div class="container-fluid">
+            <a class="navbar-brand" href="{% url 'mainapp:index' %}">
+                <img
+                        src="{% static 'img/logo.svg' %}"
+                        alt="Logo"
+                        width="30"
+                        height="30"
+                        class="d-inline-block align-text-top"
+                />
+                Питоны</a
             >
-              Каталог курсов
-            </a>
-            <ul class="dropdown-menu">
-              <li><a class="dropdown-item" href="#">Курс 1</a></li>
-              <li><a class="dropdown-item" href="#">Курс 2</a></li>
-              <li><a class="dropdown-item" href="#">Курс 3</a></li>
-              <li><a class="dropdown-item" href="#">Курс 4</a></li>
-              <li>
-                <hr class="dropdown-divider" />
-              </li>
-              <li><a class="dropdown-item" href="#">Что-то еще здесь</a></li>
-            </ul>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Статьи</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Новости</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="#">Контакты</a>
-          </li>
-        </ul>
-        <form class="d-flex" role="search">
-          <input
-            class="form-control me-2"
-            type="search"
-            placeholder="Поиск"
-            aria-label="Поиск"
-          />
-          <button class="btn btn-outline-success" type="submit">Поиск</button>
-        </form>
-        <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-          <button
-            class="btn btn-primary"
-            type="submit"
-            style="margin-left: 20px"
-          >
-            Войти
-          </button>
-          <button class="btn btn-primary" type="submit">
-            Зарегистрироваться
-          </button>
+            <button
+                    class="navbar-toggler"
+                    type="button"
+                    data-bs-toggle="collapse"
+                    data-bs-target="#navbarSupportedContent"
+                    aria-controls="navbarSupportedContent"
+                    aria-expanded="false"
+                    aria-label="Переключатель навигации"
+            >
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <li class="nav-item dropdown">
+                        <a
+                                class="nav-link dropdown-toggle"
+                                href="#"
+                                role="button"
+                                data-bs-toggle="dropdown"
+                                aria-expanded="false"
+                        >
+                            Каталог курсов
+                        </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'mainapp:course1' %}">Курс 1</a></li>
+                            <li><a class="dropdown-item" href="{% url 'mainapp:course1' %}">Курс 2</a></li>
+                            <li><a class="dropdown-item" href="{% url 'mainapp:course1' %}">Курс 3</a></li>
+                            <li><a class="dropdown-item" href="{% url 'mainapp:course1' %}">Курс 4</a></li>
+                            <li>
+                                <hr class="dropdown-divider"/>
+                            </li>
+                            <li><a class="dropdown-item" href="{% url 'mainapp:in_progress' %}">Что-то еще здесь</a></li>
+                        </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'mainapp:catalog' %}">Категории</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'mainapp:news' %}">Новости</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'mainapp:contacts' %}">Контакты</a>
+                    </li>
+                </ul>
+                <form class="d-flex" role="search">
+                    <input
+                            class="form-control me-2"
+                            type="search"
+                            placeholder="Поиск"
+                            aria-label="Поиск"
+                    />
+                    <button class="btn btn-outline-success" type="submit">Поиск</button>
+                </form>
+                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'authapp:login' %}">
+                            <button
+                                    class="btn btn-primary"
+                                    type="submit"
+                                    style="margin-left: 20px"
+                            >
+                                Войти
+                            </button>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'authapp:register' %}">
+                            <button class="btn btn-primary" type="submit">
+                                Зарегистрироваться
+                            </button>
+                        </a>
+                    </li>
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  </nav>
+    </nav>
 </div>
 {# КОНЕЦ Блок меню #}
