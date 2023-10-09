@@ -4,11 +4,112 @@
 {% block content %}
 
     {# Блок about #}
-    <br>
-        <br>
-        <br>
-            <h1> Тут будут новости </h1>
+    <div class="row" style="margin-top: 100px;margin-bottom: 50px;">
 
+  <div class="col-lg-8">
+
+    <div class="card my-2">
+      <div class="card-body shadow">
+        <h5 class="card-title">Новость 1</h5>
+        <h6 class="card-subtitle mb-2 text-muted">2023-10-09 20-50-26</h6>
+        <p class="card-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ad eos quo labore eius
+          officiis inventore accusamus. Quidem, officiis error! Fuga assumenda maxime debitis modi omnis nisi
+          magni porro in asperiores cum molestiae ducimus sunt nostrum, eveniet dolor culpa, est ea sapiente
+          expedita ad quae hic repudiandae! Earum cupiditate veniam obcaecati.</p>
+        <a href="#" class="card-link">Подробнее</a>
+      </div>
+    </div>
+
+    <div class="card my-2">
+      <div class="card-body shadow">
+        <h5 class="card-title">Новость 2</h5>
+        <h6 class="card-subtitle mb-2 text-muted">2023-10-08 20-50-26</h6>
+        <p class="card-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ad eos quo labore eius
+          officiis inventore accusamus. Quidem, officiis error! Fuga assumenda maxime debitis modi omnis nisi
+          magni porro in asperiores cum molestiae ducimus sunt nostrum, eveniet dolor culpa, est ea sapiente
+          expedita ad quae hic repudiandae! Earum cupiditate veniam obcaecati.</p>
+        <a href="#" class="card-link">Подробнее</a>
+      </div>
+    </div>
+
+    <div class="card my-2">
+      <div class="card-body shadow">
+        <h5 class="card-title">Новость 3</h5>
+        <h6 class="card-subtitle mb-2 text-muted">2023-10-07 20-50-26</h6>
+        <p class="card-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ad eos quo labore eius
+          officiis inventore accusamus. Quidem, officiis error! Fuga assumenda maxime debitis modi omnis nisi
+          magni porro in asperiores cum molestiae ducimus sunt nostrum, eveniet dolor culpa, est ea sapiente
+          expedita ad quae hic repudiandae! Earum cupiditate veniam obcaecati.</p>
+        <a href="#" class="card-link">Подробнее</a>
+      </div>
+    </div>
+
+    <div class="card my-2">
+      <div class="card-body shadow">
+        <h5 class="card-title">Новость 4</h5>
+        <h6 class="card-subtitle mb-2 text-muted">2023-10-06 20-50-26</h6>
+        <p class="card-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ad eos quo labore eius
+          officiis inventore accusamus. Quidem, officiis error! Fuga assumenda maxime debitis modi omnis nisi
+          magni porro in asperiores cum molestiae ducimus sunt nostrum, eveniet dolor culpa, est ea sapiente
+          expedita ad quae hic repudiandae! Earum cupiditate veniam obcaecati.</p>
+        <a href="#" class="card-link">Подробнее</a>
+      </div>
+    </div>
+
+    <div class="card mt-2">
+      <div class="card-body shadow">
+        <h5 class="card-title">Новость 5</h5>
+        <h6 class="card-subtitle mb-2 text-muted">2023-10-05 20-50-26</h6>
+        <p class="card-text">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ad eos quo labore eius
+          officiis inventore accusamus. Quidem, officiis error! Fuga assumenda maxime debitis modi omnis nisi
+          magni porro in asperiores cum molestiae ducimus sunt nostrum, eveniet dolor culpa, est ea sapiente
+          expedita ad quae hic repudiandae! Earum cupiditate veniam obcaecati.</p>
+        <a href="#" class="card-link">Подробнее</a>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="col-lg-4">
+    <div class="card my-2 sticky-top">
+      <div class="card-header">
+        Фильтры
+      </div>
+      <div class="card-body shadow">
+        <form action="">
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">Дата от...</span>
+            </div>
+            <input type="date" class="form-control" name="dateFrom">
+          </div>
+          <div class="input-group mb-3">
+            <div class="input-group-prepend">
+              <span class="input-group-text" id="basic-addon1">Дата до...</span>
+            </div>
+            <input type="date" class="form-control" name="dateTo">
+          </div>
+
+          <button type="submit"
+            class="btn btn-primary btn-block">Фильтровать</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="row justify-content-center align-items-center mt-3" style="margin-bottom: 20px;">
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
+  </nav>
+</div>
     {# end block about #}
 
 {% endblock %}
