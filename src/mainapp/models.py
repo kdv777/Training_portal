@@ -1,3 +1,4 @@
+from ckeditor.fields import RichTextField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
@@ -35,6 +36,7 @@ class Course(TimestampMixin):
 class Post(TimestampMixin):
     title = models.CharField(max_length=128, unique=True)
     text = models.TextField(blank=True)
+    body = RichTextField(blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     slug = models.SlugField(max_length=128, unique=True)
 
