@@ -43,4 +43,12 @@ git branch -D <branch_name>
 git push origin -d <branch_name>
 ```
 
+# Как запустить проект локально
+```bash
+pdm install 
+pdm run python src/manage.py collectstatic
+pdm run python src/manage.py migrate
+pdm run python src/manage.py runserver
+```
+
 
