@@ -1,11 +1,11 @@
 from django.contrib import admin
 
-from mainapp.models import (Article, Comment, Course, CourseCategory, Lesson,
-                            News, Post)
+from mainapp.models import (Article, Category, Comment, Course, Lesson, News,
+                            Post)
 
 
-@admin.register(CourseCategory)
-class CourseCategoryAdmin(admin.ModelAdmin):
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
     pass
 
 
