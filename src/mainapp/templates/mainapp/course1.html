@@ -1,84 +1,67 @@
 {% extends 'mainapp/base.html' %}
 {% load static %}
 
-{% block content %}
-<!-- Блок Course-->
-<div class="container d-flex mt-3" style="margin-top: 100px">
-    <!-- left bar -->
-    <div class="col-md-3" style=" padding: 20px 40px 20px 20px;">
-        <h3 style="margin-top: 70px">Рекомендуем вам</h3>
-        <ul class="list-group">
-            <li class="list-group-item">
-                <a href="#" style="text-decoration: none"> Курс Йога </a>
-            </li>
-            <li class="list-group-item">
-                <a href="#" style="text-decoration: none"> Курс Фитомедицина </a>
-            </li>
-        </ul>
-    </div>
-    <!-- end of left bar -->
-    <!-- main content -->
-    <div
-            class="col-md-9"
-            style="max-width: 540px; padding: 20px"
-    >
-        <h1>Здравствуйте, first_name</h1>
-        <h3 class="mt-4">Вы сейчас изучаете:</h3>
-        <!-- card start -->
 
-        <div class="card mb-3" style="max-width: 540px">
-            <div class="row g-0">
-                <div
-                        class="col-md-4"
-                        style="
-                display: flex;
-                align-items: center;
-                justify-content: center;
-              "
-                >
-                    <img
-                            src="img/course_img1.png"
-                            class="img-fluid rounded-start"
-                            alt="..."
-                    />
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title">Курс Фитотерапия</h5>
-                        <p class="card-text">
-                            <small class="text-body-secondary"
-                            >something here (optional)</small
-                            >
-                        </p>
-                        <a href="#" class="btn btn-primary">Перейти</a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <!-- card end -->
-        <h3 class="mt-4">Ваши активные курсы:</h3>
-        <!-- list start -->
+
+{% block content %}
+<div class="container d-flex" style="margin-top: 100px;">
+    {# left bar #}
+    <div class='col-md-3' style="
+    /* border: 3px solid blue;   */
+    padding: 20px;">
+        <h2 style="margin-top: 40px;"> Список лекций</h2>
         <ul class="list-group">
-            <li class="list-group-item">
-                <a href="#" style="text-decoration: none"> Курс Йога </a>
-            </li>
-            <li class="list-group-item">
-                <a href="#" style="text-decoration: none"> Курс Фитомедицина </a>
-            </li>
+            <li class="list-group-item"> <a href="{% url 'mainapp:lesson1_1' %}" style="text-decoration: none">
+                    Лекция1 Введение
+                </a> </li>
+            <li class="list-group-item"> <a href="{% url 'mainapp:lesson1_1' %}" style="text-decoration: none">
+                    Лекция2 Выведение
+                </a> </li>
         </ul>
-        <!-- list end -->
-        <h3 class="mt-4">Ваши пройденные курсы:</h3>
-        <!-- list start -->
-        <ul class="list-group">
-            <li class="list-group-item">
-                <a href="#" style="text-decoration: none"> Курс Йога </a>
-            </li>
-            <li class="list-group-item">
-                <a href="#" style="text-decoration: none"> Курс Фитомедицина </a>
-            </li>
-        </ul>
-        <!-- list end -->
     </div>
-    <!-- end of main content -->
+    {# end of left bar #}
+    {# main content #}
+    <div class='col-md-9' style="
+    /* border:3px solid blue;  */
+    padding: 20px; ">
+        <h1>Курс: Здоровый образ жизни</h1>
+
+        <figure class="figure mt-3">
+            <img src="{% static 'img/course_img1.png' %}" class="figure-img img-fluid rounded"
+                style="width: 200px; height: 200px;" alt="...">
+        </figure>
+        <p>Курс Здоровый образ жизни ббудет интетесен тем, кто следит за своим здоровьем</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Suscipit neque obcaecati consequuntur et
+            corporis eum, eos quos blanditiis itaque ex animi molestiae, voluptatum nisi illo voluptates minima
+            autem inventore laudantium!</p>
+        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Odio nemo repudiandae provident sequi
+            labore, laboriosam iure consectetur, quos nihil praesentium id quibusdam, vitae inventore cupiditate
+            dignissimos cumque! Accusantium, quasi debitis.</p>
+        <input class="btn btn-primary" type="button" value="Записаться">
+        {# comments to course #}
+            <div class="d-flex">
+                <h3 style="margin: 20px 20px 0 0;">Oтзывы о курсе</h3>
+                <ul class="list-group" style="margin: 20px; ">
+                    <li class="list-group-item mblank-2">
+                        User1:    Какая-то фигня
+                        </li>
+                    <li class="list-group-item mblank-2">
+                            User2: А может не фигня
+                        </li>
+                </ul>
+
+            </div>
+            <div class="mb-3 mt-4">
+                <h4>Ваш комментарий к курсу</h4>
+                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+            </div>
+            <input class="btn btn-primary" type="button" value="Опубликовать">
+         {# end of comments to course #}
+    </div>
+    {# end of main content #}
+
+
+
+
 </div>
 {% endblock %}

@@ -9,10 +9,10 @@
         <h3 style="margin-top: 70px">Рекомендуем вам</h3>
         <ul class="list-group">
             <li class="list-group-item">
-                <a href="#" style="text-decoration: none"> Курс Йога </a>
+                <a href="{% url 'mainapp:course1' %}" style="text-decoration: none"> Курс Йога </a>
             </li>
             <li class="list-group-item">
-                <a href="#" style="text-decoration: none"> Курс Фитомедицина </a>
+                <a href="{% url 'mainapp:course1' %}" style="text-decoration: none"> Курс Фитомедицина </a>
             </li>
         </ul>
     </div>
@@ -37,7 +37,7 @@
               "
                 >
                     <img
-                            src="img/course_img1.png"
+                            src="{% static 'img/course_img1.png' %}"
                             class="img-fluid rounded-start"
                             alt="..."
                     />
@@ -50,7 +50,7 @@
                             >something here (optional)</small
                             >
                         </p>
-                        <a href="#" class="btn btn-primary">Перейти</a>
+                        <a href="{% url 'mainapp:course1' %}" class="btn btn-primary">Перейти</a>
                     </div>
                 </div>
             </div>
@@ -60,10 +60,10 @@
         <!-- list start -->
         <ul class="list-group">
             <li class="list-group-item">
-                <a href="#" style="text-decoration: none"> Курс Йога </a>
+                <a href="{% url 'mainapp:course1' %}" style="text-decoration: none"> Курс Йога </a>
             </li>
             <li class="list-group-item">
-                <a href="#" style="text-decoration: none"> Курс Фитомедицина </a>
+                <a href="{% url 'mainapp:course1' %}" style="text-decoration: none"> Курс Фитомедицина </a>
             </li>
         </ul>
         <!-- list end -->
@@ -71,10 +71,10 @@
         <!-- list start -->
         <ul class="list-group">
             <li class="list-group-item">
-                <a href="#" style="text-decoration: none"> Курс Йога </a>
+                <a href="{% url 'mainapp:course1' %}" style="text-decoration: none"> Курс Йога </a>
             </li>
             <li class="list-group-item">
-                <a href="#" style="text-decoration: none"> Курс Фитомедицина </a>
+                <a href="{% url 'mainapp:course1' %}" style="text-decoration: none"> Курс Фитомедицина </a>
             </li>
         </ul>
         <!-- list end -->
