@@ -13,6 +13,7 @@ authors = [
 ]
 dependencies = [
     "Django==4.2.5",
+    "django-ckeditor>=6.7.0",
 ]
 requires-python = ">=3.10"
 license = {text = "MIT"}

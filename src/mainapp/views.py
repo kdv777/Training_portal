@@ -30,6 +30,11 @@ class Lesson1_1PageView(TemplateView):
 class Courses_categoryPageView(TemplateView):
     template_name = "mainapp/courses_category.html"
 
+class CabinetView(TemplateView):
+    template_name = "mainapp/cabinet.html"
+
 
 class InProgressPageView(TemplateView):
     template_name = "mainapp/in_progress.html"
+
+

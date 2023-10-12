@@ -1,0 +1,84 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block content %}
+<!-- Блок Course-->
+<div class="container d-flex" style="margin-top: 100px;">
+    <!-- left bar -->
+    <div class="col-md-3" style=" padding: 20px 40px 20px 20px;">
+        <h3 style="margin-top: 70px">Рекомендуем вам</h3>
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a href="{% url 'mainapp:course1' %}" style="text-decoration: none"> Курс Йога </a>
+            </li>
+            <li class="list-group-item">
+                <a href="{% url 'mainapp:course1' %}" style="text-decoration: none"> Курс Фитомедицина </a>
+            </li>
+        </ul>
+    </div>
+    <!-- end of left bar -->
+    <!-- main content -->
+    <div
+            class="col-md-9"
+            style="max-width: 540px; padding: 20px"
+    >
+        <h1>Здравствуйте, first_name</h1>
+        <h3 class="mt-4">Вы сейчас изучаете:</h3>
+        <!-- card start -->
+
+        <div class="card mb-3" style="max-width: 540px">
+            <div class="row g-0">
+                <div
+                        class="col-md-4"
+                        style="
+                display: flex;
+                align-items: center;
+                justify-content: center;
+              "
+                >
+                    <img
+                            src="{% static 'img/course_img1.png' %}"
+                            class="img-fluid rounded-start"
+                            alt="..."
+                    />
+                </div>
+                <div class="col-md-8">
+                    <div class="card-body">
+                        <h5 class="card-title">Курс Фитотерапия</h5>
+                        <p class="card-text">
+                            <small class="text-body-secondary"
+                            >something here (optional)</small
+                            >
+                        </p>
+                        <a href="{% url 'mainapp:course1' %}" class="btn btn-primary">Перейти</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- card end -->
+        <h3 class="mt-4">Ваши активные курсы:</h3>
+        <!-- list start -->
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a href="{% url 'mainapp:course1' %}" style="text-decoration: none"> Курс Йога </a>
+            </li>
+            <li class="list-group-item">
+                <a href="{% url 'mainapp:course1' %}" style="text-decoration: none"> Курс Фитомедицина </a>
+            </li>
+        </ul>
+        <!-- list end -->
+        <h3 class="mt-4">Ваши пройденные курсы:</h3>
+        <!-- list start -->
+        <ul class="list-group">
+            <li class="list-group-item">
+                <a href="{% url 'mainapp:course1' %}" style="text-decoration: none"> Курс Йога </a>
+            </li>
+            <li class="list-group-item">
+                <a href="{% url 'mainapp:course1' %}" style="text-decoration: none"> Курс Фитомедицина </a>
+            </li>
+        </ul>
+        <!-- list end -->
+    </div>
+    <!-- end of main content -->
+</div>
+{% endblock %}
