@@ -20,5 +20,5 @@ urlpatterns = [
         name="courses_category",
     ),
     path("ckeditor/", include("ckeditor_uploader.urls"), name="ckeditor_upload"),
-    path("cabinet/", views.cabinet.as_view(), name="cabinet"),
+    path("cabinet/", views.CabinetView.as_view(), name="cabinet"),
 ]
