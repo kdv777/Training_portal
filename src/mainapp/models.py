@@ -53,7 +53,7 @@ class Lesson(TimestampMixin):
     video_url = models.URLField(blank=True)
 
     def __str__(self):
-        return "{} - {}".format(self.course.name, self.title)
+        return "{} - {}".format(self.course.name, self.post.title)
 
 
 class News(TimestampMixin):
