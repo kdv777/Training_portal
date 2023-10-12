@@ -1,8 +1,26 @@
 from django.views.generic import TemplateView
+from django.db import models
+from mainapp.models import News, Post
+from django.shortcuts import render
+from django.http import HttpResponse
+from django.views.generic import ListView
+
+# -------------- Class-Based- Views -----------
+# class MainPageView(TemplateView):
+#     template_name = "mainapp/index.html"
 
 
-class MainPageView(TemplateView):
-    template_name = "mainapp/index.html"
+# class MainPageView(TemplateView):
+def MainPageView(request):
+    content = {}
+    list_of_news = News.objects.all().order_by("created_at")[:3]
+    list_of_posts =Post.objects.all()
+    print(f'news : {list_of_news[0].__dir__()}')
+    content["list_of_news"] = list_of_news
+    content["list_of_posts"] = list_of_posts
+
+    return render(request, 'mainapp/index.html', content )
+
 
 
 class ContactsPageView(TemplateView):

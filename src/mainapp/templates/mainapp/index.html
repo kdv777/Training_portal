@@ -195,6 +195,7 @@
                 <h2>Новости</h2>
             </div>
             <div class="row mt-4">
+                {% comment %}
                 <div class="col-md-4">
                     <div class="card mb-4">
 
@@ -205,26 +206,21 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                {% endcomment %}
+                {% for n in list_of_news  %}
+                  <div class="col-md-4">
                     <div class="card mb-4">
 
                         <div class="card-body">
-                            <h5 class="card-title">Заголовок новости 2</h5>
-                            <p class="card-text">Описание новости 2.</p>
+                            <h5 class="card-title">{{n.}}</h5>
+                            <p class="card-text">Описание новости 1.</p>
                             <a href="#" class="btn btn-primary">Подробнее</a>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
-                    <div class="card mb-4">
+                {% endfor %}
 
-                        <div class="card-body">
-                            <h5 class="card-title">Заголовок новости 3</h5>
-                            <p class="card-text">Описание новости 3.</p>
-                            <a href="#" class="btn btn-primary">Подробнее</a>
-                        </div>
-                    </div>
-                </div>
+
             </div>
         </div>
         {# КОНЕЦ Блок Новости #}
