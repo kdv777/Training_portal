@@ -70,6 +70,15 @@
                     <button class="btn btn-outline-success" type="submit">Поиск</button>
                 </form>
                 <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link active" href="{% url 'authapp:logout' %}">
+                            <button class="btn btn-primary" type="submit" style="margin-left: 20px">
+                                Выйти
+                            </button>
+                        </a>
+                    </li>
+                    {% else %}
                     <li class="nav-item">
                         <a class="nav-link active" href="{% url 'authapp:login' %}">
                             <button
@@ -88,6 +97,7 @@
                             </button>
                         </a>
                     </li>
+                    {% endif %}
                 </div>
             </div>
         </div>
