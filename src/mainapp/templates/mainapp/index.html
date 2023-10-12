@@ -11,18 +11,21 @@
         <div style="background-color: #F3F4F6;padding: 20px;border-radius: 10px;">
             <form class="d-flex" role="search">
                 <input class="form-control me-4" type="search" placeholder="Поиск" aria-label="Поиск">
+                {% comment %}
                 <div class="form-check" style="width: 250px;">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                     <label class="form-check-label" for="flexCheckDefault">
                         С сертификатами
                     </label>
                 </div>
+
                 <div class="form-check" style="width: 250px;">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
                     <label class="form-check-label" for="flexCheckDefault">
                         Бесплатные
                     </label>
                 </div>
+                {% endcomment %}
                 <button class="btn btn-outline-success" type="submit">Поиск</button>
             </form>
         </div>
@@ -41,7 +44,8 @@
                                  class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
                         </div>
                         <div class="d-flex flex-column justify-content-between " style="mardin-left:5px;">
-                            <h5 class="card-title" style="color: #3E50CB;"><a href="{% url 'mainapp:courses_category' %}">Категория 1</a></h5>
+                            <h5 class="card-title" style="color: #3E50CB;"><a
+                                    href="{% url 'mainapp:courses_category' %}">Категория 1</a></h5>
                             <a href="{% url 'mainapp:courses_category' %}" class="card-link">2 курса</a>
                         </div>
 
@@ -59,7 +63,8 @@
                                  class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
                         </div>
                         <div class="d-flex flex-column justify-content-between " style="mardin-left:5px;">
-                            <h5 class="card-title" style="color: #3E50CB;"><a href="{% url 'mainapp:courses_category' %}">Категория 2</a></h5>
+                            <h5 class="card-title" style="color: #3E50CB;"><a
+                                    href="{% url 'mainapp:courses_category' %}">Категория 2</a></h5>
                             <a href="{% url 'mainapp:courses_category' %}" class="card-link">2 курса</a>
                         </div>
 
@@ -77,7 +82,8 @@
                                  class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
                         </div>
                         <div class="d-flex flex-column justify-content-between " style="mardin-left:5px;">
-                            <h5 class="card-title" style="color: #3E50CB;"><a href="{% url 'mainapp:courses_category' %}">Категория 3</a></h5>
+                            <h5 class="card-title" style="color: #3E50CB;"><a
+                                    href="{% url 'mainapp:courses_category' %}">Категория 3</a></h5>
                             <a href="{% url 'mainapp:courses_category' %}" class="card-link">2 курса</a>
                         </div>
 
@@ -95,7 +101,8 @@
                                  class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
                         </div>
                         <div class="d-flex flex-column justify-content-between " style="mardin-left:5px;">
-                            <h5 class="card-title" style="color: #3E50CB;"><a href="{% url 'mainapp:courses_category' %}">Категория 4</a></h5>
+                            <h5 class="card-title" style="color: #3E50CB;"><a
+                                    href="{% url 'mainapp:courses_category' %}">Категория 4</a></h5>
                             <a href="{% url 'mainapp:courses_category' %}" class="card-link">2 курса</a>
                         </div>
 
@@ -113,7 +120,8 @@
                                  class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
                         </div>
                         <div class="d-flex flex-column justify-content-between " style="mardin-left:5px;">
-                            <h5 class="card-title" style="color: #3E50CB;"><a href="{% url 'mainapp:courses_category' %}">Категория 5</a></h5>
+                            <h5 class="card-title" style="color: #3E50CB;"><a
+                                    href="{% url 'mainapp:courses_category' %}">Категория 5</a></h5>
                             <a href="{% url 'mainapp:courses_category' %}" class="card-link">2 курса</a>
                         </div>
 
@@ -131,7 +139,8 @@
                                  class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
                         </div>
                         <div class="d-flex flex-column justify-content-between " style="mardin-left:5px;">
-                            <h5 class="card-title" style="color: #3E50CB;"><a href="{% url 'mainapp:courses_category' %}">Категория 6</a></h5>
+                            <h5 class="card-title" style="color: #3E50CB;"><a
+                                    href="{% url 'mainapp:courses_category' %}">Категория 6</a></h5>
                             <a href="{% url 'mainapp:courses_category' %}" class="card-link">2 курса</a>
                         </div>
 
@@ -149,7 +158,8 @@
                                  class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
                         </div>
                         <div class="d-flex flex-column justify-content-between " style="mardin-left:5px;">
-                            <h5 class="card-title" style="color: #3E50CB;"><a href="{% url 'mainapp:courses_category' %}">Категория 7</a></h5>
+                            <h5 class="card-title" style="color: #3E50CB;"><a
+                                    href="{% url 'mainapp:courses_category' %}">Категория 7</a></h5>
                             <a href="{% url 'mainapp:courses_category' %}" class="card-link">2 курса</a>
                         </div>
 
@@ -166,7 +176,8 @@
                                  class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
                         </div>
                         <div class="d-flex flex-column justify-content-between " style="mardin-left:5px;">
-                            <h5 class="card-title" style="color: #3E50CB;"><a href="{% url 'mainapp:courses_category' %}">Категория 8</a></h5>
+                            <h5 class="card-title" style="color: #3E50CB;"><a
+                                    href="{% url 'mainapp:courses_category' %}">Категория 8</a></h5>
                             <a href="{% url 'mainapp:courses_category' %}" class="card-link">2 курса</a>
                         </div>
 
