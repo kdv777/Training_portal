@@ -50,5 +50,14 @@ pdm run python src/manage.py collectstatic
 pdm run python src/manage.py migrate
 pdm run python src/manage.py runserver
 ```
-
-
+# Создание фикстуры
+```bash
+Папку fixtures предварительно необходимо создать внутри приложения (mainapp, authapp) (/mainapp/fixtures)
+Далее выполняем команду для создания фикстуры для соответствующего приложения
+python manage.py dumpdata mainapp > mainapp/fixtures/001_mainapp.json
+python manage.py dumpdata authapp > authapp/fixtures/001_authapp.json
+```
+# Загрузка фикстур
+```bash
+python manage.py loaddata ./mainapp/fixtures/001_mainapp.json
+python manage.py loaddata ./authapp/fixtures/001_authapp.json
