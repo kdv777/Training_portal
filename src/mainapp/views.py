@@ -10,27 +10,39 @@ from django.views.generic import ListView
 #     template_name = "mainapp/index.html"
 
 
-# class MainPageView(TemplateView):
-def MainPageView(request):
-    content = {}
-    list_of_news = News.objects.all().order_by("created_at")[:3]
-    list_of_posts =Post.objects.all()
-    print(f'news : {list_of_news[0].__dir__()}')
-    content["list_of_news"] = list_of_news
-    content["list_of_posts"] = list_of_posts
+class MainPageView(TemplateView):
+    template_name = "mainapp/index.html"
+    def get(self, request):
+        context = {}
+        list_of_news = News.objects.all().order_by("created_at")[:3]
+        list_of_posts =Post.objects.all()
+        print(f'news : {list_of_news[0].__dir__()}')
+        context["list_of_news"] = list_of_news
+        context["list_of_posts"] = list_of_posts
+        return render(request, 'mainapp/index.html', context)
 
-    return render(request, 'mainapp/index.html', content )
+class NewsDetailsView(TemplateView):
+    template_name = "mainapp/news_details.html"
+    def get(self,request,pk):
+        context = {}
+        news = get_object_or_404(News, pk=pk)
+        list_of_posts = Post.objects.all()
+        # print(f'news : {list_of_news[0].__dir__()}')
+        context["news"] = news
+        context["list_of_posts"] = list_of_posts
+        return render(request, 'mainapp/news_details.html', context)
 
-def news_details(request,pk):
-    content = {}
-    news = get_object_or_404(News, pk=pk)
-    list_of_posts =Post.objects.all()
-    # print(f'news : {list_of_news[0].__dir__()}')
-    content["news"] = news
-    content["list_of_posts"] = list_of_posts
 
-    return render(request, 'mainapp/news_details.html', content)
-
+class NewsListPageView(TemplateView):
+    template_name = "mainapp/news_list.html"
+    def get(self,request):
+        context = {}
+        list_of_news = News.objects.all().order_by("created_at")[:3]
+        list_of_posts = Post.objects.all()
+        # print(f'news : {list_of_news[0].__dir__()}')
+        context["news_list"] = list_of_news
+        context["post_list"] = list_of_posts
+        return render(request, 'mainapp/news_list.html', context)
 
 
 class ContactsPageView(TemplateView):
