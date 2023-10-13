@@ -10,4 +10,5 @@ class User(AbstractUser):
         related_name="students",
         null=True,
         blank=True,
+        db_constraint=False,
     )
