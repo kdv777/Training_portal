@@ -1,0 +1,28 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="row" style="margin-top: 100px;margin-bottom: 50px;">
+
+    <div class="col-lg-8">
+        {% for post in list_of_posts.all %}
+        {% if post.id == news.post_id %}
+        {# card start #}
+        <div class="card my-2">
+            <div class="card-body shadow">
+                <h5 class="card-title">{{ post.title }}</h5>
+                <h6 class="card-subtitle mb-2 text-muted">2023-10-09 20-50-26</h6>
+                <p class="card-text">{{ post.body|linebreaks }}</p>
+            </div>
+        </div>
+        {# card end #}
+        {% endif %}
+        {% endfor %}
+
+
+    </div>
+
+    {# end block about #}
+
+    {% endblock %}

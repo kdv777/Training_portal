@@ -19,10 +19,11 @@ class Category(TimestampMixin):
 
     def __str__(self):
         return self.name
-    
+
     class Meta:
-        verbose_name = ("Category")
-        verbose_name_plural = ("Categories")
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+
 
 class Course(TimestampMixin):
     name = models.CharField(max_length=128, unique=True)
@@ -63,10 +64,12 @@ class News(TimestampMixin):
     post = models.OneToOneField(Post, on_delete=models.CASCADE, related_name="news")
     img_url = models.URLField(blank=True)
 
+    objects = models.Manager()
+
     class Meta:
-        verbose_name = ("News")
-        verbose_name_plural = ("News")
-        
+        verbose_name = "News"
+        verbose_name_plural = "News"
+
 
 class Article(TimestampMixin):
     post = models.OneToOneField(Post, on_delete=models.CASCADE, related_name="article")

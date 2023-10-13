@@ -1,0 +1,199 @@
+[
+{
+  "model": "mainapp.post",
+  "pk": 1,
+  "fields": {
+    "created_at": "2023-10-12T20:57:35.486Z",
+    "updated_at": "2023-10-13T10:14:33.036Z",
+    "title": "News number 1",
+    "text": "Here is a short description of  post\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.",
+    "body": "<p>Here is a long description of &nbsp;post<br />\r\n<strong>Lorem ipsum dolor</strong>, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p><strong>Lorem ipsum dolor</strong>, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p><strong>Lorem ipsum dolor</strong>, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p><strong>Lorem ipsum dolor</strong>, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>",
+    "author": 1,
+    "slug": "news1"
+  }
+},
+{
+  "model": "mainapp.post",
+  "pk": 2,
+  "fields": {
+    "created_at": "2023-10-12T21:04:15.931Z",
+    "updated_at": "2023-10-13T10:14:48.918Z",
+    "title": "News number 2",
+    "text": "Here is a chort description of post 2\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.",
+    "body": "<p>Here is a long description of post 2<br />\r\n<strong>Lorem ipsum dolor, sit amet consectetur adipisicing</strong> elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p><strong>Lorem ipsum dolor, sit amet consectetur adipisicing</strong> elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p><strong>Lorem ipsum dolor, sit amet consectetur adipisicing</strong> elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p><strong>Lorem ipsum dolor, sit amet consectetur adipisicing</strong> elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>",
+    "author": 1,
+    "slug": "news2"
+  }
+},
+{
+  "model": "mainapp.post",
+  "pk": 3,
+  "fields": {
+    "created_at": "2023-10-12T21:05:49.670Z",
+    "updated_at": "2023-10-13T10:15:08.365Z",
+    "title": "News number 3",
+    "text": "Here is a chort description of post 3\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.",
+    "body": "<p><strong>Here is a chort description of post 3</strong><br />\r\n<strong>Lorem ipsum dolor, sit amet </strong>consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p><strong>Lorem ipsum dolor, sit amet </strong>consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>",
+    "author": 1,
+    "slug": "news3"
+  }
+},
+{
+  "model": "mainapp.post",
+  "pk": 4,
+  "fields": {
+    "created_at": "2023-10-12T21:07:02.449Z",
+    "updated_at": "2023-10-13T10:15:23.981Z",
+    "title": "News number 4",
+    "text": "Here is a chort description of post 4\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.",
+    "body": "<p><strong>Here is a long description of post 3</strong><br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p><strong>Here is a chort description of post 3</strong><br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p>Here is a chort description of post 3<br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p>Here is a chort description of post 3<br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>",
+    "author": 1,
+    "slug": "news4"
+  }
+},
+{
+  "model": "mainapp.post",
+  "pk": 5,
+  "fields": {
+    "created_at": "2023-10-12T21:07:57.902Z",
+    "updated_at": "2023-10-13T10:15:40.503Z",
+    "title": "News number 5",
+    "text": "Here is a chort description of post 5\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.",
+    "body": "<p><strong>Here is a chort description of post5</strong><br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p><strong>Here is a chort description of post5</strong><br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p>Here is a chort description of post5<br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p>Here is a chort description of post5<br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>",
+    "author": 1,
+    "slug": "news5"
+  }
+},
+{
+  "model": "mainapp.post",
+  "pk": 6,
+  "fields": {
+    "created_at": "2023-10-12T21:09:38.253Z",
+    "updated_at": "2023-10-13T10:15:59.018Z",
+    "title": "News number 6",
+    "text": "Here is a chort description of post6\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.",
+    "body": "<p><strong>Here is a chort description of post6</strong><br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p><strong>Here is a chort description of post6</strong><br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p>Here is a chort description of post6<br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p>Here is a chort description of post6<br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>",
+    "author": 1,
+    "slug": "news6"
+  }
+},
+{
+  "model": "mainapp.post",
+  "pk": 7,
+  "fields": {
+    "created_at": "2023-10-12T21:10:40.941Z",
+    "updated_at": "2023-10-13T10:16:16.092Z",
+    "title": "News number 7",
+    "text": "Here is a chort description of post7\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.",
+    "body": "<p><strong>Here is a long description of post7</strong><br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p>Here is a long description of post7<br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p>Here is a long description of post7<br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>",
+    "author": 1,
+    "slug": "news7"
+  }
+},
+{
+  "model": "mainapp.post",
+  "pk": 8,
+  "fields": {
+    "created_at": "2023-10-12T21:13:03.388Z",
+    "updated_at": "2023-10-13T10:16:33.566Z",
+    "title": "News number 8",
+    "text": "Here is a long description of post8\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.",
+    "body": "<p><strong>Here is a long description of post8</strong><br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p>Here is a long description of post8<br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p>Here is a long description of post8<br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>",
+    "author": 1,
+    "slug": "news8"
+  }
+},
+{
+  "model": "mainapp.post",
+  "pk": 9,
+  "fields": {
+    "created_at": "2023-10-12T21:13:29.394Z",
+    "updated_at": "2023-10-13T10:16:54.464Z",
+    "title": "News number 9",
+    "text": "Here is a long description of post8\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.",
+    "body": "<p><strong>Here is a long description of post8</strong><br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p>Here is a long description of post8<br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>\r\n\r\n<p>Here is a long description of post8<br />\r\nLorem ipsum dolor, sit amet consectetur adipisicing elit. Ratione praesentium exercitationem earum, sequi consequatur totam itaque corporis repellendus ad non. Repudiandae tempore, veniam fugit libero consequuntur autem velit facilis natus.</p>",
+    "author": 1,
+    "slug": "news9"
+  }
+},
+{
+  "model": "mainapp.news",
+  "pk": 1,
+  "fields": {
+    "created_at": "2023-10-12T21:02:06.577Z",
+    "updated_at": "2023-10-12T21:15:03.232Z",
+    "post": 1,
+    "img_url": ""
+  }
+},
+{
+  "model": "mainapp.news",
+  "pk": 2,
+  "fields": {
+    "created_at": "2023-10-12T21:04:19.921Z",
+    "updated_at": "2023-10-12T21:15:22.819Z",
+    "post": 2,
+    "img_url": ""
+  }
+},
+{
+  "model": "mainapp.news",
+  "pk": 3,
+  "fields": {
+    "created_at": "2023-10-12T21:05:52.376Z",
+    "updated_at": "2023-10-12T21:15:42.165Z",
+    "post": 3,
+    "img_url": ""
+  }
+},
+{
+  "model": "mainapp.news",
+  "pk": 4,
+  "fields": {
+    "created_at": "2023-10-12T21:07:05.764Z",
+    "updated_at": "2023-10-12T21:16:08.800Z",
+    "post": 4,
+    "img_url": ""
+  }
+},
+{
+  "model": "mainapp.news",
+  "pk": 5,
+  "fields": {
+    "created_at": "2023-10-12T21:08:01.245Z",
+    "updated_at": "2023-10-12T21:16:21.777Z",
+    "post": 5,
+    "img_url": ""
+  }
+},
+{
+  "model": "mainapp.news",
+  "pk": 6,
+  "fields": {
+    "created_at": "2023-10-12T21:09:42.205Z",
+    "updated_at": "2023-10-12T21:16:32.661Z",
+    "post": 6,
+    "img_url": ""
+  }
+},
+{
+  "model": "mainapp.news",
+  "pk": 7,
+  "fields": {
+    "created_at": "2023-10-12T21:12:14.722Z",
+    "updated_at": "2023-10-12T21:16:42.892Z",
+    "post": 7,
+    "img_url": ""
+  }
+},
+{
+  "model": "mainapp.news",
+  "pk": 8,
+  "fields": {
+    "created_at": "2023-10-12T21:13:32.509Z",
+    "updated_at": "2023-10-12T21:17:05.970Z",
+    "post": 9,
+    "img_url": ""
+  }
+}
+]

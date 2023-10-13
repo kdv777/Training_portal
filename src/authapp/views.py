@@ -1,13 +1,13 @@
+from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.shortcuts import redirect
-from django.views import View
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, View
 
 from authapp.models import User
 
 
 class LoginPageView(TemplateView):
-    template_name = "authapp/login.html"
+    template_name = "mainapp/login.html"
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -23,6 +23,8 @@ class LoginPageView(TemplateView):
         if user is not None:
             login(request, user)
             return redirect("mainapp:index")
+        else:
+            messages.error(self.request, "Invalid username or password")
         return redirect("authapp:login")
 
 
