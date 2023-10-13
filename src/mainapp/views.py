@@ -16,7 +16,7 @@ class MainPageView(TemplateView):
         context = {}
         list_of_news = News.objects.all().order_by("created_at")[:3]
         list_of_posts =Post.objects.all()
-        print(f'news : {list_of_news[0].__dir__()}')
+        # print(f'news : {list_of_news[0].__dir__()}')
         context["list_of_news"] = list_of_news
         context["list_of_posts"] = list_of_posts
         return render(request, 'mainapp/index.html', context)
