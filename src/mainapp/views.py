@@ -1,7 +1,7 @@
 from django.views.generic import TemplateView
 from django.db import models
 from mainapp.models import News, Post
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
 from django.views.generic import ListView
 
@@ -20,6 +20,16 @@ def MainPageView(request):
     content["list_of_posts"] = list_of_posts
 
     return render(request, 'mainapp/index.html', content )
+
+def news_details(request,pk):
+    content = {}
+    news = get_object_or_404(News, pk=pk)
+    list_of_posts =Post.objects.all()
+    # print(f'news : {list_of_news[0].__dir__()}')
+    content["news"] = news
+    content["list_of_posts"] = list_of_posts
+
+    return render(request, 'mainapp/news_details.html', content)
 
 
 

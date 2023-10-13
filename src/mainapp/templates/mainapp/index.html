@@ -207,14 +207,19 @@
                     </div>
                 </div>
                 {% endcomment %}
-                {% for n in list_of_news  %}
-                  <div class="col-md-4">
+                {% for news in list_of_news %}
+                <div class="col-md-4">
                     <div class="card mb-4">
 
                         <div class="card-body">
-                            <h5 class="card-title">{{n.}}</h5>
-                            <p class="card-text">Описание новости 1.</p>
-                            <a href="#" class="btn btn-primary">Подробнее</a>
+                            {% for post in list_of_posts.all %}
+                            {% if post.id == news.post_id %}
+                            <h5 class="card-title">{{ post.title}}</h5>
+                            <p class="card-text">{{post.text|truncatechars:200 }}...</p>
+                            <a href="{% url 'mainapp:news_details' news.pk %}"
+                               class="btn btn-primary">Подробнее</a>
+                            {% endif %}
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
