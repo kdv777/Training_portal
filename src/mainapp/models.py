@@ -63,6 +63,8 @@ class News(TimestampMixin):
     post = models.OneToOneField(Post, on_delete=models.CASCADE, related_name="news")
     img_url = models.URLField(blank=True)
 
+    objects = models.Manager()
+
     class Meta:
         verbose_name = ("News")
         verbose_name_plural = ("News")
