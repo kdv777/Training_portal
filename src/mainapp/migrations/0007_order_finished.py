@@ -5,15 +5,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('mainapp', '0006_alter_category_options_alter_news_options'),
+        ("mainapp", "0006_alter_category_options_alter_news_options"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='order',
-            name='finished',
+            model_name="order",
+            name="finished",
             field=models.BooleanField(default=False),
         ),
     ]

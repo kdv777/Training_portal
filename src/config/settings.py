@@ -142,5 +142,5 @@ AUTH_USER_MODEL = "authapp.User"
 
 DEFAULT_AUTO_FIELD = "django.db.models.AutoField"
 
-LOGIN_REDIRECT_URL = '/mainapp/cabinet/'
-LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = "/mainapp/cabinet/"
+LOGIN_URL = "/login/"

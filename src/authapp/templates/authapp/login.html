@@ -3,30 +3,25 @@
 
 {% block content %}
 <div class="container mb-5" style="margin-top: 100px; max-width: 500px;">
-    <h2>Зарегистрируйтесь:</h2>
+    <h2>Войдите в систему</h2>
     <form method="post" class="mt-5">{% csrf_token %}
         <div class="row mb-3">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Имя пользователя</label>
+            <label for="inputEmail3" class="col-sm-2 col-form-label">Login</label>
             <div class="col-sm-10">
                 <input type="text" name="username" class="form-control" id="inputEmail3">
             </div>
         </div>
         <div class="row mb-3">
-            <label for="inputPassword3" class="col-sm-2 col-form-label">Пароль</label>
+            <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
             <div class="col-sm-10">
                 <input type="password" name="password" class="form-control" id="inputPassword3">
             </div>
         </div>
-        <div class="row mb-3">
-            <label for="confirmPassword3" class="col-sm-2 col-form-label">Подтверждение пароля</label>
-            <div class="col-sm-10">
-                <input type="password" name="password_confirm" class="form-control" id="confirmPassword3">
-            </div>
-        </div>
 
         <div class="d-flex gap-4 mt-5">
-            <button type="submit" class="btn btn-primary">Регистрация</button>
+            <button type="submit" class="btn btn-primary">Войти</button>
         </div>
     </form>
 </div>
+
 {% endblock %}

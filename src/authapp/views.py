@@ -1,35 +1,56 @@
-from django.contrib import auth
-from django.contrib.auth import authenticate, login
-from django.shortcuts import render, redirect
-from django.views.generic import TemplateView, View
-from authapp.forms import UserRegisterForm, UserLoginForm, \
-    UserEditForm
-from django.contrib.auth.views import LoginView
-from django.urls import reverse_lazy
 from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout
+from django.shortcuts import redirect
+from django.views.generic import TemplateView, View
+
+from authapp.models import User
 
 
-class LoginPageView(LoginView):
+class LoginPageView(TemplateView):
     template_name = "mainapp/login.html"
-    redirect_authentacated_user = True
 
-    def get_success_url(self):
-        return reverse_lazy('mainapp:cabinet')
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect("mainapp:index")
+        return super().get(request, *args, **kwargs)
 
-    def form_invalid(self, form):
-        messages.error(self.request, 'Invalid username or password')
-        return self.render_to_response(self.get_context_data(form=form))
-
-
-class LogoutPageView(TemplateView):
-    def logout(self, request):
-        auth.logout(request)
-        return render(request, "mainapp/index.html" )
+    def post(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect("mainapp:index")
+        user = authenticate(
+            username=request.POST.get("username"), password=request.POST.get("password")
+        )
+        if user is not None:
+            login(request, user)
+            return redirect("mainapp:index")
+        else:
+            messages.error(self.request, "Invalid username or password")
+        return redirect("authapp:login")
 
 
 class RegisterPageView(TemplateView):
     template_name = "authapp/register.html"
 
+    def get(self, request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return redirect("mainapp:index")
+        return super().get(request, *args, **kwargs)
 
-class LogoutPageView(TemplateView):
-    template_name = "mainapp/index.html"
+    def post(self, request, *args, **kwargs):
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+        password_confirm = request.POST.get("password_confirm")
+        if not all([username, password, password_confirm]):
+            return redirect("authapp:register")
+        if password != password_confirm:
+            return redirect("authapp:register")
+        user = User(username=username)
+        user.set_password(password)
+        user.save()
+        return redirect("authapp:login")
+
+
+class LogoutView(View):
+    def get(self, request, *args, **kwargs):
+        logout(request)
+        return redirect("mainapp:index")
