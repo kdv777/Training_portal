@@ -47,7 +47,8 @@
                             <li>
                                 <hr class="dropdown-divider"/>
                             </li>
-                            <li><a class="dropdown-item" href="{% url 'mainapp:in_progress' %}">Что-то еще здесь</a></li>
+                            <li><a class="dropdown-item" href="{% url 'mainapp:in_progress' %}">Что-то еще здесь</a>
+                            </li>
                         </ul>
                     </li>
                     <li class="nav-item">
@@ -60,34 +61,52 @@
                         <a class="nav-link active" aria-current="page" href="{% url 'mainapp:contacts' %}">Контакты</a>
                     </li>
                 </ul>
-                <form class="d-flex" role="search">
+                <form class="d-flex my-auto me-3" role="search">
                     <input
-                            class="form-control me-2"
+                            class="form-control me-3"
                             type="search"
                             placeholder="Поиск"
                             aria-label="Поиск"
                     />
                     <button class="btn btn-outline-success" type="submit">Поиск</button>
                 </form>
-                <div class="d-grid gap-2 d-md-flex justify-content-md-end">
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'authapp:login' %}">
+                <div class="d-grid gap-3 d-md-flex justify-content-md-end">
+                    {% if user.is_authenticated %}
+                    <li style="display: flex; align-items: center;">
+
+                        <p style="color: white; margin: 0 5 0 20px;">{{ user.username }}</p>
+                    </li>
+                    <li class="nav-item" style="display: flex; align-items: center;">
+                        <a class="nav-link active my-auto" href="{% url 'logout' %}">
                             <button
                                     class="btn btn-primary"
                                     type="submit"
                                     style="margin-left: 20px"
                             >
+                                Выйти
+                            </button>
+                        </a>
+                    </li>
+                    {% else %}
+                    <li class="nav-item " style="display: flex; align-items: center;">
+                        <a class="nav-link active" href="{% url 'authapp:login' %}">
+                            <button
+                                    class="btn btn-primary my-auto"
+                                    type="submit"
+                                    style="margin-left: 20px;"
+                            >
                                 Войти
                             </button>
                         </a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link active" href="{% url 'authapp:register' %}">
-                            <button class="btn btn-primary" type="submit">
-                                Зарегистрироваться
-                            </button>
+                    <li class="nav-item my-auto" style="display: flex; align-items: center;">
+                        <a class="nav-link active  href=" {% url 'authapp:register' %}">
+                        <button class="btn btn-primary my-auto" type="submit">
+                            Зарегистрироваться
+                        </button>
                         </a>
                     </li>
+                    {% endif %}
                 </div>
             </div>
         </div>
