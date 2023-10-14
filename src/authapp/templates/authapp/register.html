@@ -23,9 +23,9 @@
                 <input type="password" name="password_confirm" class="form-control" id="confirmPassword3">
             </div>
         </div>
-        {% if error %}
+        {% if message %}
         <div class="row mb-3">
-            <p style="color: red;"> {{ error }}</p>
+            <p style="color: red;"> {{ message }}</p>
         </div>
         {% endif %}
 

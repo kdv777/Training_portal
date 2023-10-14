@@ -13,8 +13,7 @@ class LoginPageView(TemplateView):
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            # return redirect("mainapp:index")
-            return render(request, "mainapp/index.html", context)
+            return redirect("mainapp:index")
         # return super().get(request, *args, **kwargs)
         return render(request, "authapp/login.html", context)
 
@@ -29,8 +28,8 @@ class LoginPageView(TemplateView):
             login(request, user)
             return redirect("mainapp:index")
         else:
-            # messages.error(self.request, "Invalid username or password")
-            context["error"] = "Invalid username or password"
+            # messages.message(self.request, "Invalid username or password")
+            context["message"] = "Invalid username or password"
             return render(request, "authapp/login.html", context)
 
 
@@ -51,20 +50,20 @@ class RegisterPageView(TemplateView):
         password_confirm = request.POST.get("password_confirm")
         if not all([username, password, password_confirm]):
             # return redirect("register")
-            context["error"] = "Введите все поля"
+            context["message"] = "Введите все поля"
             return render(request,"authapp/register.html", context)
         if password != password_confirm:
-            context["error"] = "Введите пароль правильно"
+            context["message"] = "Введите пароль правильно"
             return render(request, "authapp/register.html", context)
         user = User(username=username)
         user.set_password(password)
         try:
             user.save()
-            context = {}
             # return redirect("login")
-            return render(request, "authapp/login.html")
+            context["message"] = "Registration successful, please login"
+            return render(request, "authapp/register.html", context)
         except Exception:
-            context["error"] = "Username Already in use"
+            context["message"] = "Username Already in use"
             return render(request,"authapp/register.html", context)
 
 
