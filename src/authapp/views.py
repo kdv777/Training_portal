@@ -16,7 +16,7 @@ class LoginPageView(LoginView):
         return reverse_lazy("mainapp:cabinet")
 
     def form_invalid(self, form):
-        messages.error(self.request, "Invalid username or password")
+        messages.error(self.request, "Неверный логин или пароль")
         return self.render_to_response(self.get_context_data(form=form))
 
 
@@ -33,10 +33,10 @@ class RegisterPageView(TemplateView):
         password = request.POST.get("password")
         password_confirm = request.POST.get("password_confirm")
         if not all([username, password, password_confirm]):
-            messages.error(self.request, "Not all fields are filled")
+            messages.error(self.request, "Не все поля заполнены")
             return redirect("authapp:register")
         if password != password_confirm:
-            messages.error(self.request, "Passwords do not match")
+            messages.error(self.request, "Пароли не совпадают")
             return redirect("authapp:register")
         user = User(username=username)
         user.set_password(password)
