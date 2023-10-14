@@ -18,11 +18,12 @@ from django.contrib.auth.views import LogoutView
 from django.urls import include, path
 from django.views.generic import RedirectView
 
-from authapp.views import LoginPageView
+from authapp.views import LoginPageView, RegisterPageView
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path("login/", LoginPageView.as_view(), name="login"),
+    path("register/", RegisterPageView.as_view(), name="register"),
     path("logout/", LogoutView.as_view(next_page="mainapp:index"), name="logout"),
     path("", RedirectView.as_view(url="mainapp/")),
     path("mainapp/", include("mainapp.urls")),
