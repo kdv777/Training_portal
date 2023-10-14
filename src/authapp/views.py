@@ -23,6 +23,7 @@ class LoginPageView(LoginView):
 class RegisterPageView(TemplateView):
     template_name = "authapp/register.html"
 
+
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect("mainapp:index")
@@ -32,6 +33,7 @@ class RegisterPageView(TemplateView):
         username = request.POST.get("username")
         password = request.POST.get("password")
         password_confirm = request.POST.get("password_confirm")
+        is_teacher = request.POST.get("is_teacher")
         if not all([username, password, password_confirm]):
             messages.error(self.request, "Не все поля заполнены")
             return redirect("authapp:register")
@@ -40,7 +42,13 @@ class RegisterPageView(TemplateView):
             return redirect("authapp:register")
         user = User(username=username)
         user.set_password(password)
+        if is_teacher:
+            user.is_teacher = True
+        else:
+            user.is_teacher = False
+        # print(user.is_teacher)
         user.save()
+
         login(request, user)
         return redirect("mainapp:cabinet")
 
