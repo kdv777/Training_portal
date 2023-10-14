@@ -7,7 +7,7 @@ from authapp.models import User
 
 
 class LoginPageView(TemplateView):
-    template_name = "mainapp/login.html"
+    template_name = "authapp/login.html"
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
