@@ -36,155 +36,27 @@
         </div>
         <div class="row row-cols-4">
             {# card start #}
+            {% for item in category %}
             <div class="col">
                 <div class="card category_card">
                     <div class="card-body shadow d-flex flex-row ">
                         <div>
-                            <img src="{% static 'img/category_img1.png' %}"
+                            <img src="{% static 'img/cat_1.jpg' %}"
                                  class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
                         </div>
                         <div class="d-flex flex-column justify-content-between " style="mardin-left:5px;">
                             <h5 class="card-title" style="color: #3E50CB;"><a
-                                    href="{% url 'mainapp:courses_category' %}">Категория 1</a></h5>
-                            <a href="{% url 'mainapp:courses_category' %}" class="card-link">2 курса</a>
+                                    href="{% url 'mainapp:courses_category' item.pk %}">{{ item.name }}</a></h5>
+                            <a href="{% url 'mainapp:courses_category' item.pk %}" class="card-link">2 курса</a>
                         </div>
 
                     </div>
                 </div>
             </div>
+            {% endfor %}
             {# card end #}
 
-            {# card start #}
-            <div class="col">
-                <div class="card category_card">
-                    <div class="card-body shadow d-flex flex-row ">
-                        <div>
-                            <img src="{% static 'img/category_img1.png' %}"
-                                 class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
-                        </div>
-                        <div class="d-flex flex-column justify-content-between " style="mardin-left:5px;">
-                            <h5 class="card-title" style="color: #3E50CB;"><a
-                                    href="{% url 'mainapp:courses_category' %}">Категория 2</a></h5>
-                            <a href="{% url 'mainapp:courses_category' %}" class="card-link">2 курса</a>
-                        </div>
 
-                    </div>
-                </div>
-            </div>
-            {# card end #}
-
-            {# card start #}
-            <div class="col">
-                <div class="card category_card">
-                    <div class="card-body shadow d-flex flex-row ">
-                        <div>
-                            <img src="{% static 'img/category_img1.png' %}"
-                                 class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
-                        </div>
-                        <div class="d-flex flex-column justify-content-between " style="mardin-left:5px;">
-                            <h5 class="card-title" style="color: #3E50CB;"><a
-                                    href="{% url 'mainapp:courses_category' %}">Категория 3</a></h5>
-                            <a href="{% url 'mainapp:courses_category' %}" class="card-link">2 курса</a>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            {# card end #}
-
-            {# card start #}
-            <div class="col">
-                <div class="card category_card">
-                    <div class="card-body shadow d-flex flex-row ">
-                        <div>
-                            <img src="{% static 'img/category_img1.png' %}"
-                                 class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
-                        </div>
-                        <div class="d-flex flex-column justify-content-between " style="mardin-left:5px;">
-                            <h5 class="card-title" style="color: #3E50CB;"><a
-                                    href="{% url 'mainapp:courses_category' %}">Категория 4</a></h5>
-                            <a href="{% url 'mainapp:courses_category' %}" class="card-link">2 курса</a>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            {# card end #}
-
-            {# card start #}
-            <div class="col">
-                <div class="card category_card">
-                    <div class="card-body shadow d-flex flex-row ">
-                        <div>
-                            <img src="{% static 'img/category_img1.png' %}"
-                                 class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
-                        </div>
-                        <div class="d-flex flex-column justify-content-between " style="mardin-left:5px;">
-                            <h5 class="card-title" style="color: #3E50CB;"><a
-                                    href="{% url 'mainapp:courses_category' %}">Категория 5</a></h5>
-                            <a href="{% url 'mainapp:courses_category' %}" class="card-link">2 курса</a>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            {# card end #}
-
-            {# card start #}
-            <div class="col">
-                <div class="card category_card">
-                    <div class="card-body shadow d-flex flex-row ">
-                        <div>
-                            <img src="{% static 'img/category_img1.png' %}"
-                                 class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
-                        </div>
-                        <div class="d-flex flex-column justify-content-between " style="mardin-left:5px;">
-                            <h5 class="card-title" style="color: #3E50CB;"><a
-                                    href="{% url 'mainapp:courses_category' %}">Категория 6</a></h5>
-                            <a href="{% url 'mainapp:courses_category' %}" class="card-link">2 курса</a>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            {# card end #}
-
-            {# card start #}
-            <div class="col">
-                <div class="card category_card">
-                    <div class="card-body shadow d-flex flex-row ">
-                        <div>
-                            <img src="{% static 'img/category_img1.png' %}"
-                                 class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
-                        </div>
-                        <div class="d-flex flex-column justify-content-between " style="mardin-left:5px;">
-                            <h5 class="card-title" style="color: #3E50CB;"><a
-                                    href="{% url 'mainapp:courses_category' %}">Категория 7</a></h5>
-                            <a href="{% url 'mainapp:courses_category' %}" class="card-link">2 курса</a>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            {# card end #}
-            {# card start #}
-            <div class="col">
-                <div class="card category_card">
-                    <div class="card-body shadow d-flex flex-row ">
-                        <div>
-                            <img src="{% static 'img/category_img1.png' %}"
-                                 class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
-                        </div>
-                        <div class="d-flex flex-column justify-content-between " style="mardin-left:5px;">
-                            <h5 class="card-title" style="color: #3E50CB;"><a
-                                    href="{% url 'mainapp:courses_category' %}">Категория 8</a></h5>
-                            <a href="{% url 'mainapp:courses_category' %}" class="card-link">2 курса</a>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            {# card end #}
 
         </div>
 
@@ -194,6 +66,7 @@
             <div style="margin-top: 40px;">
                 <h2>Новости</h2>
             </div>
+
             <div class="row mt-4">
                 {% comment %}
                 <div class="col-md-4">
@@ -209,17 +82,15 @@
                 {% endcomment %}
                 {% for news in list_of_news %}
                 <div class="col-md-4">
-                    <div class="card mb-4">
-
+                    <div class="card mb-4 ">
+                        <img src="{% static news.img_url %}" class="card-img-top" alt="..." style="width:300px; height:200px;">
                         <div class="card-body">
-                            {% for post in list_of_posts.all %}
-                            {% if post.id == news.post_id %}
-                            <h5 class="card-title">{{ post.title}}</h5>
-                            <p class="card-text">{{post.text|truncatechars:200 }}...</p>
+
+                            <h5 class="card-title">{{ news.post.title }}</h5>
+                            <p class="card-text">{{ news.post.text|truncatechars:200 }}...</p>
                             <a href="{% url 'mainapp:news_details' news.pk %}"
                                class="btn btn-primary">Подробнее</a>
-                            {% endif %}
-                            {% endfor %}
+
                         </div>
                     </div>
                 </div>

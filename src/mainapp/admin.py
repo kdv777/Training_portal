@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from mainapp.models import (Article, Category, Comment, Course, Lesson, News,
-                            Post)
+                            Post, Order)
 
 
 @admin.register(Category)

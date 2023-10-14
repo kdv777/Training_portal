@@ -8,22 +8,16 @@
 
     <div class="col-lg-8">
         {% for news in news_list %}
-        {# news card start #}
-        {% for post in post_list %}
-        {% if news.post_id == post.id %}
         <div class="card my-2">
             <div class="card-body shadow">
-                <h5 class="card-title">{{ post.title }}</h5>
+                <h5 class="card-title">{{ news.post.title }}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">{{ news.created_at }}</h6>
-                <p class="card-text">{{ post.text|truncatechars:300  }}</p>
+                <p class="card-text">{{ news.post.text|truncatechars:200  }}</p>
                  <a href="{% url 'mainapp:news_details' news.pk %}"
                                class="btn btn-primary">Подробнее</a>
             </div>
         </div>
-        {% endif %}
-        {% endfor %}
 
-        {# news card end #}
         {% endfor %}
 
     </div>
