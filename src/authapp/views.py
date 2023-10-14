@@ -9,12 +9,12 @@ context ={}
 
 class LoginPageView(TemplateView):
     global context
-
     template_name = "authapp/login.html"
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
-            return redirect("mainapp:index")
+            # return redirect("mainapp:index")
+            return render(request, "mainapp/index.html", context)
         # return super().get(request, *args, **kwargs)
         return render(request, "authapp/login.html", context)
 
@@ -33,8 +33,9 @@ class LoginPageView(TemplateView):
             context["error"] = "Invalid username or password"
             return render(request, "authapp/login.html", context)
 
+
 class RegisterPageView(TemplateView):
-    template_name = "authapp/register.html"
+    template_name = "authapp:register.html"
     global context
 
     def get(self, request, *args, **kwargs):
@@ -44,7 +45,7 @@ class RegisterPageView(TemplateView):
         return render(request, "authapp/register.html", context)
 
     def post(self, request, *args, **kwargs):
-        context ={}
+        context = {}
         username = request.POST.get("username")
         password = request.POST.get("password")
         password_confirm = request.POST.get("password_confirm")
@@ -59,7 +60,9 @@ class RegisterPageView(TemplateView):
         user.set_password(password)
         try:
             user.save()
-            return redirect("login")
+            context = {}
+            # return redirect("login")
+            return render(request, "authapp/login.html")
         except Exception:
             context["error"] = "Username Already in use"
             return render(request,"authapp/register.html", context)
@@ -69,4 +72,5 @@ class RegisterPageView(TemplateView):
 class LogoutView(View):
     def get(self, request, *args, **kwargs):
         logout(request)
-        return redirect("mainapp:index")
+        # return redirect("mainapp:index")
+        return render(request, "mainapp/index.html")
