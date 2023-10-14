@@ -1,4 +1,4 @@
-{% extends 'authapp/base.html' %}
+{% extends 'mainapp/base.html' %}
 {% load static %}
 
 {% block content %}
@@ -17,6 +17,11 @@
                 <input type="password" name="password" class="form-control" id="inputPassword3">
             </div>
         </div>
+        {% if error %}
+        <div class="row mb-3">
+          <p style="color: red;"> {{ error }}</p>
+        </div>
+        {% endif %}
 
         <div class="d-flex gap-4 mt-5">
             <button type="submit" class="btn btn-primary">Войти</button>

@@ -1,20 +1,25 @@
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.shortcuts import redirect
+from django.shortcuts import redirect, render
 from django.views.generic import TemplateView, View
 
 from authapp.models import User
 
+context ={}
 
 class LoginPageView(TemplateView):
+    global context
+
     template_name = "authapp/login.html"
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect("mainapp:index")
-        return super().get(request, *args, **kwargs)
+        # return super().get(request, *args, **kwargs)
+        return render(request, "authapp/login.html", context)
 
     def post(self, request, *args, **kwargs):
+        context = {}
         if request.user.is_authenticated:
             return redirect("mainapp:index")
         user = authenticate(
@@ -24,30 +29,41 @@ class LoginPageView(TemplateView):
             login(request, user)
             return redirect("mainapp:index")
         else:
-            messages.error(self.request, "Invalid username or password")
-        return redirect("authapp:login")
-
+            # messages.error(self.request, "Invalid username or password")
+            context["error"] = "Invalid username or password"
+            return render(request, "authapp/login.html", context)
 
 class RegisterPageView(TemplateView):
     template_name = "authapp/register.html"
+    global context
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
             return redirect("mainapp:index")
-        return super().get(request, *args, **kwargs)
+        # return super().get(request, *args, **kwargs)
+        return render(request, "authapp/register.html", context)
 
     def post(self, request, *args, **kwargs):
+        context ={}
         username = request.POST.get("username")
         password = request.POST.get("password")
         password_confirm = request.POST.get("password_confirm")
         if not all([username, password, password_confirm]):
-            return redirect("authapp:register")
+            # return redirect("register")
+            context["error"] = "Введите все поля"
+            return render(request,"authapp/register.html", context)
         if password != password_confirm:
-            return redirect("authapp:register")
+            context["error"] = "Введите пароль правильно"
+            return render(request, "authapp/register.html", context)
         user = User(username=username)
         user.set_password(password)
-        user.save()
-        return redirect("authapp:login")
+        try:
+            user.save()
+            return redirect("login")
+        except Exception:
+            context["error"] = "Username Already in use"
+            return render(request,"authapp/register.html", context)
+
 
 
 class LogoutView(View):
