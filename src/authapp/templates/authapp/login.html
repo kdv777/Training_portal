@@ -1,27 +1,34 @@
 {% extends 'authapp/base.html' %}
 {% load static %}
 
+{# from https://www.pythontutorial.net/django-tutorial/django-loginview/ #}
+
 {% block content %}
 <div class="container mb-5" style="margin-top: 100px; max-width: 500px;">
     <h2>Войдите в систему</h2>
-    <form method="post" class="mt-5">{% csrf_token %}
-        <div class="row mb-3">
-            <label for="inputEmail3" class="col-sm-2 col-form-label">Login</label>
-            <div class="col-sm-10">
-                <input type="text" name="username" class="form-control" id="inputEmail3">
-            </div>
-        </div>
-        <div class="row mb-3">
-            <label for="inputPassword3" class="col-sm-2 col-form-label">Password</label>
-            <div class="col-sm-10">
-                <input type="password" name="password" class="form-control" id="inputPassword3">
-            </div>
-        </div>
+    <form class="mt-5" method="post" novalidate>
+        {% csrf_token %}
 
+
+		{% for field in form %}
+		<div style="width: 100px; display: inline-block; margin-top:10px;">
+	    		{{ field.label_tag }}
+			</div>
+	        	{{ field }}
+	        	{% if field.errors %}
+	        		<small>{{ field.errors|striptags }}</small>
+	        	{% endif %}
+        <br>
+		{% endfor %}
+
+		<hr>
         <div class="d-flex gap-4 mt-5">
-            <button type="submit" class="btn btn-primary">Войти</button>
+            <button type="submit" class="btn btn-primary" value="Login" >Войти</button>
         </div>
-    </form>
+        		<hr>
+
+	</form>
 </div>
 
 {% endblock %}
+

@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.contrib.auth import logout
+from django.contrib.auth import login, logout
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
@@ -9,7 +9,7 @@ from authapp.models import User
 
 
 class LoginPageView(LoginView):
-    template_name = "mainapp/login.html"
+    template_name = "authapp/login.html"
     redirect_authentacated_user = True
 
     def get_success_url(self):
@@ -39,7 +39,8 @@ class RegisterPageView(TemplateView):
         user = User(username=username)
         user.set_password(password)
         user.save()
-        return redirect("authapp:login")
+        login(request, user)
+        return redirect("mainapp:cabinet")
 
 
 class LogoutView(View):

@@ -78,11 +78,7 @@
                     </li>
                     <li class="nav-item" style="display: flex; align-items: center;">
                         <a class="nav-link active my-auto" href="{% url 'logout' %}">
-                            <button
-                                    class="btn btn-primary"
-                                    type="submit"
-                                    style="margin-left: 20px"
-                            >
+                            <button class="btn btn-primary" type="submit" style="margin-left: 20px">
                                 Выйти
                             </button>
                         </a>
@@ -90,17 +86,13 @@
                     {% else %}
                     <li class="nav-item " style="display: flex; align-items: center;">
                         <a class="nav-link active" href="{% url 'authapp:login' %}">
-                            <button
-                                    class="btn btn-primary my-auto"
-                                    type="submit"
-                                    style="margin-left: 20px;"
-                            >
+                            <button class="btn btn-primary my-auto" type="submit" style="margin-left: 20px;">
                                 Войти
                             </button>
                         </a>
                     </li>
                     <li class="nav-item my-auto" style="display: flex; align-items: center;">
-                        <a class="nav-link active  href=" {% url 'authapp:register' %}">
+                        <a class="nav-link active"  href="{% url 'authapp:register' %}">
                         <button class="btn btn-primary my-auto" type="submit">
                             Зарегистрироваться
                         </button>
