@@ -18,14 +18,10 @@
 
 
 		{% for field in form %}
-		<div style="width: 100px; display: inline-block; margin-top:10px;">
-	    		{{ field.label_tag }}
-			</div>
-	        	{{ field }}
-	        	{% if field.errors %}
-	        		<small>{{ field.errors|striptags }}</small>
-	        	{% endif %}
-        <br>
+		<label for="{{ field.name }}" class="col-sm-7 col-form-label">{{ field.label_tag }}</label>
+		<div class="col-sm-8" if="{{ field.name }}">
+			{{ field }}
+		</div>
 		{% endfor %}
 
 		<hr>
