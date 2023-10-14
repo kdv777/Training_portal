@@ -46,7 +46,7 @@ class RegisterPageView(TemplateView):
             user.is_teacher = True
         else:
             user.is_teacher = False
-        print(user.is_teacher)
+        # print(user.is_teacher)
         user.save()
 
         login(request, user)
