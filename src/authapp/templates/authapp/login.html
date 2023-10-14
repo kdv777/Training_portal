@@ -6,6 +6,13 @@
 {% block content %}
 <div class="container mb-5" style="margin-top: 100px; max-width: 500px;">
     <h2>Войдите в систему</h2>
+	{% if messages %}
+		{% for message in messages %}
+			<div class="row mb-3">
+				<p style="color: red;">{{ message }}</p>
+			</div>
+		{% endfor %}
+	{% endif %}
     <form class="mt-5" method="post" novalidate>
         {% csrf_token %}
 

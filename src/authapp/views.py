@@ -33,8 +33,10 @@ class RegisterPageView(TemplateView):
         password = request.POST.get("password")
         password_confirm = request.POST.get("password_confirm")
         if not all([username, password, password_confirm]):
+            messages.error(self.request, "Not all fields are filled")
             return redirect("authapp:register")
         if password != password_confirm:
+            messages.error(self.request, "Passwords do not match")
             return redirect("authapp:register")
         user = User(username=username)
         user.set_password(password)
