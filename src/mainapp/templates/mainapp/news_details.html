@@ -13,7 +13,7 @@
             <div class="card-body shadow">
                 <h5 class="card-title">{{ post.title }}</h5>
                 <h6 class="card-subtitle mb-2 text-muted">2023-10-09 20-50-26</h6>
-                <p class="card-text">{{ post.body|linebreaks }}</p>
+                <p class="card-text">{{ post.body|safe }}</p>
             </div>
         </div>
         {# card end #}
