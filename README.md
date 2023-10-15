@@ -44,11 +44,20 @@ git push origin -d <branch_name>
 ```
 
 # Как запустить проект локально
-```bash
+```bash 
+через pdm
 pdm install 
 pdm run python src/manage.py collectstatic
 pdm run python src/manage.py migrate
 pdm run python src/manage.py runserver
+через pip
+pip install -r requirements.txt
+pip freeze
+cd src
+python manage.py collectstatic
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
 ```
 # Создание фикстуры
 ```bash
