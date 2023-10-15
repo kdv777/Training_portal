@@ -96,3 +96,15 @@ class CabinetView(TemplateView):
 
 class InProgressPageView(TemplateView):
     template_name = "mainapp/in_progress.html"
+
+class CategoriesPageView(TemplateView):
+    template_name = "mainapp/categories.html"
+
+    def get_context_data(self, **kwargs):
+        # Get all previous data
+        context = super().get_context_data(**kwargs)
+
+        # Create your own data
+        context["categories"] = Category.objects.all()
+
+        return context
