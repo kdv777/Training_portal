@@ -6,6 +6,7 @@ from mainapp.models import News, Post, Category, Course
 # -------------- Class-Based- Views -----------
 # class MainPageView(TemplateView):
 #     template_name = "mainapp/index.html"
+from config.settings import BASE_DIR
 
 
 class MainPageView(TemplateView):
@@ -26,7 +27,9 @@ class MainPageView(TemplateView):
 
         # Create your own data
         context["category"] = Category.objects.all()
+        print(context["category"].__dir__())
         context["list_of_news"] = News.objects.all().order_by("created_at")[:3]
+        context["base_dir"] = str(BASE_DIR).replace("\\", "/")
         return context
 
 
