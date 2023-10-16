@@ -36,6 +36,7 @@
         {% for cat in categories %}
         <div class="col" style="margin:5px">
 
+
             <div class="card" >
                 <div>
                     <img src="{% static 'img/cat_1.jpg' %}"
@@ -45,6 +46,7 @@
                     <h5 class="card-title" style="color: #3E50CB;">{{ cat.name }}</h5>
 
                     <a href="{% url 'mainapp:courses_category' cat.pk %}" class="card-link">2 курса</a>
+
                 </div>
             </div>
         </div>
