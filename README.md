@@ -59,5 +59,11 @@ python manage.py dumpdata authapp > authapp/fixtures/001_authapp.json
 ```
 # Загрузка фикстур
 ```bash
+Удаляем старую базу
+python manage.py makemigrations
+python manage.py migrate
 python manage.py loaddata ./mainapp/fixtures/001_mainapp.json
 python manage.py loaddata ./authapp/fixtures/001_authapp.json
+```
+
+
