@@ -18,8 +18,13 @@ urlpatterns = [
     path("categories", views.CategoriesPageView.as_view(), name="categories"),
     path(
         "courses_category/<int:pk>/",
-        views.Courses_categoryPageView.as_view(),
+        views.CoursesCategoryPageView.as_view(),
         name="courses_category",
+    ),
+    path(
+        "course/<int:pk>/",
+        views.CourseDetailPageView.as_view(),
+        name="course_detail",
     ),
     path("ckeditor/", include("ckeditor_uploader.urls"), name="ckeditor_upload"),
     path("cabinet/", views.CabinetView.as_view(), name="cabinet"),
