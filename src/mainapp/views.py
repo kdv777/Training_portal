@@ -123,26 +123,26 @@ class CabinetView(TemplateView):
             filter(finished=True)
         # print(f'course_done:{courses_done_id[0].id}')
         courses_done_id=[]
-        print(courses_done)
+        # print(courses_done)
         for item in courses_done :
             courses_done_id.append(item.course.id)
-        print(f'course_done:{courses_done_id}')
+        # print(f'course_done:{courses_done_id}')
         context["courses_done"] = Course.objects.all(). \
             filter( id__in=courses_done_id)
 
         courses_active = Order.objects.all(). \
             filter(buyer=self.request.user.id). \
             filter(finished=False)
-        print(f'courses_active:{courses_active}')
+        # print(f'courses_active:{courses_active}')
         courses_active_id= []
         for item in courses_active :
             courses_active_id.append(item.course.id)
-        print(f'course_active:{courses_active_id}')
+        # print(f'course_active:{courses_active_id}')
         context["courses_active"] = Course.objects.all(). \
             filter( id__in=courses_active_id)
 
-        context["base_dir"] = str(BASE_DIR).replace("\\", "/")
-        print(context['base_dir'])
+        # context["base_dir"] = str(BASE_DIR).replace("\\", "/")
+        # print(context['base_dir'])
         return context
 
 
