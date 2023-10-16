@@ -95,11 +95,11 @@ class Lesson1_1PageView(TemplateView):
     template_name = "mainapp/lesson1_1.html"
 
 
-class Courses_categoryPageView(TemplateView):
+class CoursesCategoryPageView(TemplateView):
     template_name = "mainapp/courses_category.html"
 
     def get_context_data(self, pk=None, **kwargs):
-        context = super(Courses_categoryPageView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
         context["category"] = get_object_or_404(Category, pk=pk)
         context["courses_category"] = Course.objects.all().filter(category=pk)
         return context
