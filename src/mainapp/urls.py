@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.urls import include, path
 
 from mainapp import views
@@ -21,6 +22,6 @@ urlpatterns = [
         name="courses_category",
     ),
     path("ckeditor/", include("ckeditor_uploader.urls"), name="ckeditor_upload"),
-    path("cabinet/", views.CabinetView.as_view(), name="cabinet"),
+    path("cabinet/", login_required(views.CabinetView.as_view()), name="cabinet"),
     path("news_details/<int:pk>/", views.NewsDetailsView.as_view(), name="news_details"),
 ]

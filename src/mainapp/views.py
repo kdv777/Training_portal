@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import TemplateView
 
@@ -27,6 +28,7 @@ class MainPageView(TemplateView):
         # Create your own data
         context["category"] = Category.objects.all()
         context["list_of_news"] = News.objects.all().order_by("created_at")[:3]
+        context["courses"] = Course.objects.all()
         return context
 
 
@@ -88,6 +90,7 @@ class Courses_categoryPageView(TemplateView):
         context["category"] = get_object_or_404(Category, pk=pk)
         context["courses_category"] = Course.objects.all().filter(category=pk)
         return context
+
 
 
 class CabinetView(TemplateView):

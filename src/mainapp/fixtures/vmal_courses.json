@@ -1,0 +1,92 @@
+[
+{
+  "model": "mainapp.course",
+  "pk": 1,
+  "fields": {
+    "created_at": "2023-10-14T08:03:59.616Z",
+    "updated_at": "2023-10-15T23:50:27.540Z",
+    "name": "Course1 Your health",
+    "description": "This course is about how to manage your health condition",
+    "author": 1,
+    "img_url": "http://www.uor-zvenigorod.ru/files/styles/photos/public/field/image/1_str_a1_plakat_page-0001.jpg",
+    "price": 100,
+    "active": true,
+    "slug": "course1",
+    "category": [
+      3
+    ]
+  }
+},
+{
+  "model": "mainapp.course",
+  "pk": 2,
+  "fields": {
+    "created_at": "2023-10-14T08:07:09.899Z",
+    "updated_at": "2023-10-15T23:49:10.805Z",
+    "name": "Course2 Drive safely",
+    "description": "This course is about how to drive car safely",
+    "author": 7,
+    "img_url": "https://www.elit.ua/photos/news/28/2826w218h151.jpg",
+    "price": 50,
+    "active": true,
+    "slug": "course2",
+    "category": [
+      2
+    ]
+  }
+},
+{
+  "model": "mainapp.course",
+  "pk": 3,
+  "fields": {
+    "created_at": "2023-10-14T08:09:32.380Z",
+    "updated_at": "2023-10-15T23:47:52.526Z",
+    "name": "Course3  Sailboat",
+    "description": "This course is about how to drive saleboat",
+    "author": 8,
+    "img_url": "https://35.img.avito.st/image/1/HpCaRra_snns40B_qiIg42zltHMkJbaLKOWwfyLjsHkuow",
+    "price": 150,
+    "active": true,
+    "slug": "course3",
+    "category": [
+      2
+    ]
+  }
+},
+{
+  "model": "mainapp.course",
+  "pk": 4,
+  "fields": {
+    "created_at": "2023-10-14T08:11:55.951Z",
+    "updated_at": "2023-10-15T23:46:38.712Z",
+    "name": "Course4 Garden",
+    "description": "This is course about Garden",
+    "author": 7,
+    "img_url": "https://zaozbib.ru/uploads/posts/2023-07/thumbs/1689573611_zastavka.jpg",
+    "price": 200,
+    "active": true,
+    "slug": "course4",
+    "category": [
+      2
+    ]
+  }
+},
+{
+  "model": "mainapp.course",
+  "pk": 5,
+  "fields": {
+    "created_at": "2023-10-14T12:56:31.068Z",
+    "updated_at": "2023-10-15T23:46:22.003Z",
+    "name": "Course5 How to grow carrot",
+    "description": "This course is about how to grow carrot",
+    "author": 7,
+    "img_url": "https://r3.mt.ru/r26/photo9918/20068877344-0/jpg/bp.jpeg",
+    "price": 5,
+    "active": true,
+    "slug": "course5",
+    "category": [
+      4
+    ]
+  }
+}
+]

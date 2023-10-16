@@ -1,0 +1,42 @@
+[
+{
+  "model": "mainapp.category",
+  "pk": 1,
+  "fields": {
+    "created_at": "2023-10-14T08:03:31.483Z",
+    "updated_at": "2023-10-15T23:15:48.541Z",
+    "name": "Category1 Food",
+    "img_url": "http://www.uor-zvenigorod.ru/files/styles/photos/public/field/image/1_str_a1_plakat_page-0001.jpg"
+  }
+},
+{
+  "model": "mainapp.category",
+  "pk": 2,
+  "fields": {
+    "created_at": "2023-10-15T21:44:28.967Z",
+    "updated_at": "2023-10-15T23:16:02.065Z",
+    "name": "Category2 Sport",
+    "img_url": "https://i.ytimg.com/vi/pMC2uuvmNYE/maxresdefault.jpg"
+  }
+},
+{
+  "model": "mainapp.category",
+  "pk": 3,
+  "fields": {
+    "created_at": "2023-10-15T21:47:53.750Z",
+    "updated_at": "2023-10-15T23:16:14.205Z",
+    "name": "Category3 Health",
+    "img_url": "https://uolala.s3.amazonaws.com/event-covers/b-clase-gratuita-de-kundalini-yoga-20150904105857203-31164f.jpg"
+  }
+},
+{
+  "model": "mainapp.category",
+  "pk": 4,
+  "fields": {
+    "created_at": "2023-10-15T21:49:30.600Z",
+    "updated_at": "2023-10-15T23:16:36.967Z",
+    "name": "Category4 Garden",
+    "img_url": "https://i.mycdn.me/i?r=AzEPZsRbOZEKgBhR0XGMT1RkU5Kp2Efar9OXZ0srPaUAi6aKTM5SRkZCeTgDn6uOyic"
+  }
+}
+]
