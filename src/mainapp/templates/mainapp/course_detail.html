@@ -1,0 +1,63 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+
+{% block content %}
+        <!-- Блок Course-->
+        <div class="container d-flex" style="margin-top: 100px;">
+            <!-- left bar -->
+            <div class='col-md-3' style="
+            /* border: 3px solid blue;   */
+            padding: 20px;">
+                <h2 style="margin-top: 40px;"> Список лекций</h2>
+                <ul class="list-group">
+                    <li class="list-group-item"> <a href="#" style="text-decoration: none">
+                            Лекция1 Введение
+                        </a> </li>
+                    <li class="list-group-item"> <a href="#" style="text-decoration: none">
+                            Лекция2 Выведение
+                        </a> </li>
+                </ul>
+            </div>
+            <!-- end of left bar -->
+            <!-- main content -->
+            <div class='col-md-9' style="
+            /* border:3px solid blue;  */
+            padding: 20px; ">
+                <h1>Курс: {{ course.name }}</h1>
+
+                <figure class="figure mt-3">
+                    <img src="/static/{{ course.img_url }}" class="figure-img img-fluid rounded"
+                        style="width: 200px; height: 200px;" alt="...">
+                </figure>
+                <p>{{ course.description }}</p>
+                <input class="btn btn-primary" type="button" value="Записаться">
+                <!-- comments to course -->
+                    <div class="d-flex">
+                        <h3 style="margin: 20px 20px 0 0;">Oтзывы о курсе</h3>
+                        <ul class="list-group" style="margin: 20px; ">
+                            <li class="list-group-item mblank-2">
+                                User1:    Какая-то фигня
+                                </li>
+                            <li class="list-group-item mblank-2">
+                                    User2: А может не фигня
+                                </li>
+                        </ul>
+
+                    </div>
+                    <div class="mb-3 mt-4">
+                        <h4>Ваш комментарий к курсу</h4>
+                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                    </div>
+                    <input class="btn btn-primary" type="button" value="Опубликовать">
+                 <!-- end of comments to course -->
+            </div>
+            <!-- end of main content -->
+
+
+
+
+        </div>
+        <!-- КОНЕЦ Блок Course-->
+{% endblock %}
+

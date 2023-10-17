@@ -15,20 +15,21 @@ class TimestampMixin(models.Model):
 
 class Category(TimestampMixin):
     name = models.CharField(max_length=128, unique=True)
-    img_url = models.URLField(blank=True)
+    img_url = models.TextField(blank=True)
 
     def __str__(self):
         return self.name
-    
+
     class Meta:
-        verbose_name = ("Category")
-        verbose_name_plural = ("Categories")
+        verbose_name = "Category"
+        verbose_name_plural = "Categories"
+
 
 class Course(TimestampMixin):
     name = models.CharField(max_length=128, unique=True)
     description = models.TextField(blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="courses")
-    img_url = models.URLField(blank=True)
+    img_url = models.TextField(blank=True)
     category = models.ManyToManyField(Category, related_name="courses")
     price = models.PositiveIntegerField(default=0)
     active = models.BooleanField(default=True)
@@ -54,6 +55,7 @@ class Lesson(TimestampMixin):
     post = models.OneToOneField(Post, on_delete=models.CASCADE, related_name="lesson")
     order = models.PositiveIntegerField(default=0)
     video_url = models.URLField(blank=True)
+    media_link = models.TextField(blank=True)
 
     def __str__(self):
         return "{} - {}".format(self.course.name, self.post.title)
@@ -61,14 +63,14 @@ class Lesson(TimestampMixin):
 
 class News(TimestampMixin):
     post = models.OneToOneField(Post, on_delete=models.CASCADE, related_name="news")
-    img_url = models.URLField(blank=True)
+    img_url = models.TextField(blank=True)
 
     objects = models.Manager()
 
     class Meta:
-        verbose_name = ("News")
-        verbose_name_plural = ("News")
-        
+        verbose_name = "News"
+        verbose_name_plural = "News"
+
 
 class Article(TimestampMixin):
     post = models.OneToOneField(Post, on_delete=models.CASCADE, related_name="article")
@@ -110,4 +112,5 @@ class Order(TimestampMixin):
     finished = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.course.name
+        return f'' \
+               f'{self.buyer.username}  {self.course.name}'

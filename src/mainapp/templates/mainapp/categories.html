@@ -2,18 +2,17 @@
 {% load static %}
 
 
-{% block content %}
 
-{# Блок Категории #}
-<div class="container" style="margin-top: 100px;">
-    <h2>Список категорий</h2>
-</div>
-<div class="container" >
+{% block content %}
+   {# Блок Категории #}
+   <div class="container" style="margin-top: 100px;margin-bottom: 50px">
     <div style="background-color: #F3F4F6;padding: 20px;border-radius: 10px;">
         <form class="d-flex" role="search">
             <input class="form-control me-4" type="search" placeholder="Поиск" aria-label="Поиск">
             <div class="form-check" style="width: 250px;">
+                 {% comment %}
                 <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault">
+
                 <label class="form-check-label" for="flexCheckDefault">
                     С сертификатами
                 </label>
@@ -24,60 +23,51 @@
                     Бесплатные
                 </label>
             </div>
+            {% endcomment %}
             <button class="btn btn-outline-success" type="submit">Поиск</button>
         </form>
     </div>
 
-    <!-- start cards -->
-    <div style="margin-top: 20px;"></div>
+    <div style="margin-top: 40px;">
+        <h2>Категории</h2>
+    </div>
+    <div class="row row-cols-4">
+        {# card start#}
+        {% for cat in categories %}
+        <div class="col" style="margin:5px">
 
-    <div class="card mb-3" style="max-width: 540px">
-        <div class="row g-0">
-            <div class="col-md-4" style="display: flex; align-items: center; justify-content: center">
-                <img src="{% static 'img/category_img1.png' %}" class="img-fluid rounded-start" alt="..."/>
-            </div>
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h5 class="card-title">Здоровый образ жизни</h5>
-                    <p class="card-text">
-                        Это описание категории про здоровый образ жизни с
-                        вспомогательным текстом ниже в качестве естественного перехода к
-                        дополнительному контенту.
-                    </p>
-                    <p class="card-text">
-                        <small class="text-body-secondary">Последнее обновление 10 мин. назад</small>
-                    </p>
-                    <a href="{% url 'mainapp:courses_category' %}" class="btn btn-primary">Перейти</a>
+
+            <div class="card" >
+                <div>
+                    <img src="{% static 'img/cat_1.jpg' %}"
+                                 class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
+                </div>
+                <div class="card-body shadow d-flex flex-column justify-content-between">
+                    <h5 class="card-title" style="color: #3E50CB;">{{ cat.name }}</h5>
+
+                    <a href="{% url 'mainapp:courses_category' cat.pk %}" class="card-link">2 курса</a>
+
                 </div>
             </div>
         </div>
+        {% endfor %}
+
+
+       
     </div>
-    <!-- end of card -->
-    <!-- start cards -->
-    <div class="card mb-3" style="max-width: 540px">
-        <div class="row g-0">
-            <div class="col-md-4" style="display: flex; align-items: center; justify-content: center">
-                <img src="{% static 'img/category_img2.webp' %}" class="img-fluid rounded-start" alt="..."/>
-            </div>
-            <div class="col-md-8">
-                <div class="card-body">
-                    <h5 class="card-title">СПОРТ СПОРТ СПОРТ</h5>
-                    <p class="card-text">
-                        Это описание категории про различные виды спорта с
-                        вспомогательным текстом ниже в качестве естественного перехода к
-                        дополнительному контенту.
-                    </p>
-                    <p class="card-text">
-                        <small class="text-body-secondary">Последнее обновление 25 мин. назад</small>
-                    </p>
-                    <a href="{% url 'mainapp:courses_category' %}" class="btn btn-primary">Перейти</a>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!-- end of card -->
+       
 </div>
-<!-- КОНЕЦ Блок Категории-->
+<div class="row justify-content-center align-items-center mt-3 mb-n3">
+  <nav aria-label="Page navigation example">
+    <ul class="pagination">
+      <li class="page-item"><a class="page-link" href="#">Previous</a></li>
+      <li class="page-item"><a class="page-link" href="#">1</a></li>
+      <li class="page-item"><a class="page-link" href="#">2</a></li>
+      <li class="page-item"><a class="page-link" href="#">3</a></li>
+      <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
+  </nav>
+</div>
 {# End blocl Category #}
 
 {% endblock %}
