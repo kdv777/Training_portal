@@ -26,7 +26,7 @@
         <h1>Здравствуйте, {{ user.username }}</h1>
         <h3 class="mt-4">Вы сейчас изучаете:</h3>
         <!-- card start -->
-
+        {% if course_now %}
         <div class="card mb-3" style="max-width: 540px">
             <div class="row g-0">
                 {% if course_now %}
@@ -58,6 +58,11 @@
             </div>
             {% endif %}
         </div>
+
+        {% else %}
+
+        <h2> <br> Пока здесь курса нет <br>  </h2>
+        {% endif %}
         <!-- card end -->
         <h3 class="mt-4">Ваши активные курсы:</h3>
         <!-- list start -->
