@@ -1,10 +1,9 @@
 from django.shortcuts import get_object_or_404, render, redirect
 from django.views.generic import TemplateView
 
-from mainapp.models import News, Post, Category, Course, Order
-from authapp.models import  User
+from mainapp.models import News, Post, Category, Course, Order, Lesson
+from authapp.models import User
 from config.settings import BASE_DIR
-
 
 # -------------- Class-Based- Views -----------
 # class MainPageView(TemplateView):
@@ -81,6 +80,7 @@ class NewsPageView(TemplateView):
 class Course1PageView(TemplateView):
     template_name = "mainapp/course1.html"
 
+
 class CourseDetailPageView(TemplateView):
     template_name = "mainapp/course_detail.html"
 
@@ -88,11 +88,8 @@ class CourseDetailPageView(TemplateView):
         # context = super(Courses_categoryPageView, self).get_context_data(**kwargs)
         context = super().get_context_data(**kwargs)
         context["course"] = get_object_or_404(Course, pk=pk)
+        context["lesson"] = Lesson.objects.all().filter(course=pk)
         return context
-
-
-class Lesson1_1PageView(TemplateView):
-    template_name = "mainapp/lesson1_1.html"
 
 
 class CoursesCategoryPageView(TemplateView):
@@ -102,6 +99,26 @@ class CoursesCategoryPageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["category"] = get_object_or_404(Category, pk=pk)
         context["courses_category"] = Course.objects.all().filter(category=pk)
+        return context
+
+
+class LessonDetailPageView(TemplateView):
+    template_name = "mainapp/lesson_detail.html"
+
+    def get_context_data(self, pk=None, **kwargs):
+        # context = super(Courses_categoryPageView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+        context["lesson"] = get_object_or_404(Lesson, pk=pk)
+        return context
+
+
+class LessonsCoursePageView(TemplateView):
+    template_name = "mainapp/lessons_course.html"
+
+    def get_context_data(self, pk=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["course"] = get_object_or_404(Course, pk=pk)
+        context["lessons_course"] = Lesson.objects.all().filter(course=pk)
         return context
 
 
@@ -122,33 +139,33 @@ class CabinetView(TemplateView):
             filter(buyer=self.request.user.id). \
             filter(finished=True)
         # print(f'course_done:{courses_done_id[0].id}')
-        courses_done_id=[]
+        courses_done_id = []
         # print(courses_done)
-        for item in courses_done :
+        for item in courses_done:
             courses_done_id.append(item.course.id)
         # print(f'course_done:{courses_done_id}')
         context["courses_done"] = Course.objects.all(). \
-            filter( id__in=courses_done_id)
+            filter(id__in=courses_done_id)
 
         courses_active = Order.objects.all(). \
             filter(buyer=self.request.user.id). \
             filter(finished=False)
         # print(f'courses_active:{courses_active}')
-        courses_active_id= []
-        for item in courses_active :
+        courses_active_id = []
+        for item in courses_active:
             courses_active_id.append(item.course.id)
         # print(f'course_active:{courses_active_id}')
         context["courses_active"] = Course.objects.all(). \
-            filter( id__in=courses_active_id)
+            filter(id__in=courses_active_id)
 
         # context["base_dir"] = str(BASE_DIR).replace("\\", "/")
         # print(context['base_dir'])
         return context
 
 
-
 class InProgressPageView(TemplateView):
     template_name = "mainapp/in_progress.html"
+
 
 class CategoriesPageView(TemplateView):
     template_name = "mainapp/categories.html"

@@ -12,9 +12,8 @@ urlpatterns = [
     path("login/", views.LoginPageView.as_view(), name="login"),
     path("news_list/", views.NewsListPageView.as_view(), name="news_list"),
     path("in_progress/", views.InProgressPageView.as_view(), name="in_progress"),
-    path("course_detail/", views.Course1PageView.as_view(), name="course_detail"),
-    path("course1/", views.Course1PageView.as_view(), name="course1"),
-    path("lesson1_1/", views.Lesson1_1PageView.as_view(), name="lesson1_1"),
+    path("course_detail/", views.CourseDetailPageView.as_view(), name="course_detail"),
+    # path("course1/", views.Course1PageView.as_view(), name="course1"),
     path("categories", views.CategoriesPageView.as_view(), name="categories"),
     path(
         "courses_category/<int:pk>/",
@@ -26,6 +25,17 @@ urlpatterns = [
         views.CourseDetailPageView.as_view(),
         name="course_detail",
     ),
+    path(
+        "lessons_course/<int:pk>/",
+        views.LessonsCoursePageView.as_view(),
+        name="lessons_course",
+    ),
+    path(
+        "lesson/<int:pk>/",
+        views.LessonDetailPageView.as_view(),
+        name='lesson_detail'
+    ),
+
     path("ckeditor/", include("ckeditor_uploader.urls"), name="ckeditor_upload"),
     path("cabinet/", views.CabinetView.as_view(), name="cabinet"),
     path("news_details/<int:pk>/", views.NewsDetailsView.as_view(), name="news_details"),
