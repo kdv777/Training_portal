@@ -105,15 +105,13 @@ class RatingStar(TimestampMixin):
 
 
 class Order(TimestampMixin):
-    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="orders")
-    buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
-    created_at = models.DateTimeField(auto_now_add=True)
+    courses = models.ManyToManyField(Course, related_name="orders")
+    buyer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="orders")
     is_paid = models.BooleanField(default=False)
     finished = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'' \
-               f'{self.buyer.username}  {self.course.name}'
+        return f'{self.buyer.username}  {self.course.name}'
     
     def add_item(self, course: Course):
         self.courses.add(course)
@@ -128,7 +126,7 @@ class Order(TimestampMixin):
         self.save()  # не забываем писать в базу изменения
 
     def get_total(self):
-        return sum([course.price for course in self.courses.all()])  #Course.price лучше сделать DecimalField
+        return sum([course.price for course in self.courses.all()])  #  Course.price лучше сделать DecimalField
 
 
 
@@ -181,7 +179,7 @@ class Basket(TimestampMixin):
     def pay(self):                             # Метод для оплаты товаров
         total_price = self.calculate_total_price()
 		
-        print(total_price)                     
+        print(total_price)
 
         order = self.get_order()               # Помечаем заказ оплаченным
         order.is_paid = True
