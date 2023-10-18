@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy, reverse
@@ -8,7 +8,6 @@ from django.views.generic import TemplateView, View, UpdateView
 
 from authapp.models import User
 
-from authapp.forms import UserUpdateForm
 
 
 class LoginPageView(LoginView):
@@ -62,12 +61,10 @@ class LogoutView(View):
         return redirect("mainapp:index")
 
 
-class UserUpdateView(UpdateView):
+class UserUpdateView(LoginRequiredMixin, UpdateView):
     template_name_suffix = '_update_form'
     model = User
     fields = [ "first_name", "last_name", "email"]
-    # fields = '__all__'
-
 
     def get_success_url(self):
         return reverse_lazy('mainapp:cabinet')

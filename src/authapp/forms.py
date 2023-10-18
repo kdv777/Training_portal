@@ -17,13 +17,6 @@ class UserRegisterForm(UserCreationForm):  # create user profile
             field.help_text = ""
 
 
-class UserUpdateForm(UserChangeForm):
-    class Meta:
-        template_name = "update.html"
-        model = User
-        fields = '__all__'
-
-
 class UserLoginForm(AuthenticationForm):  # Authentication
     class Meta:
         model = User

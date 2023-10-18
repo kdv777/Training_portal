@@ -47,16 +47,21 @@
                             <li>
                                 <hr class="dropdown-divider"/>
                             </li>
-                            <li><a class="dropdown-item" style="color: #fff;" href="{% url 'authapp:logout' %}">Выйти</a></li>
+                            <li><a class="dropdown-item" style="color: #fff;"
+                                   href="{% url 'authapp:logout' %}">Выйти</a></li>
                             {% elif user and user.is_authenticated %}
-                            <li><a class="dropdown-item" style="color: #fff;" href="{% url 'mainapp:cabinet' %}">Личный кабинет</a></li>
-                            <li><a class="dropdown-item" style="color: #fff;" href="{% url 'authapp:update' user.id %}">Профиль</a></li>
+                            <li><a class="dropdown-item" style="color: #fff;" href="{% url 'mainapp:cabinet' %}">Личный
+                                кабинет</a></li>
+                            <li><a class="dropdown-item" style="color: #fff;" href="{% url 'authapp:update' user.id %}">Профиль</a>
+                            </li>
                             <li>
                                 <hr class="dropdown-divider"/>
                             </li>
-                            <li><a class="dropdown-item" style="color: #fff;" href="{% url 'authapp:logout' %}">Выйти</a></li>
+                            <li><a class="dropdown-item" style="color: #fff;"
+                                   href="{% url 'authapp:logout' %}">Выйти</a></li>
                             {% else %}
-                            <li><a class="dropdown-item" style="color: #fff;" href="{% url 'authapp:login' %}">Войти</a></li>
+                            <li><a class="dropdown-item" style="color: #fff;" href="{% url 'authapp:login' %}">Войти</a>
+                            </li>
                             {% endif %}
                         </ul>
                     </li>
