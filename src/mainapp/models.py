@@ -112,4 +112,5 @@ class Order(TimestampMixin):
     finished = models.BooleanField(default=False)
 
     def __str__(self):
-        return self.course.name
+        return f'' \
+               f'{self.buyer.username}  {self.course.name}'
