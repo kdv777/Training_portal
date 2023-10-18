@@ -1,7 +1,11 @@
 from django.urls import include, path
+from rest_framework import routers
 
 from mainapp import views
 from mainapp.apps import MainappConfig
+
+router = routers.DefaultRouter()
+router.register(r"orders", views.OrderViewSet)
 
 app_name = MainappConfig.name
 
@@ -28,5 +32,9 @@ urlpatterns = [
     ),
     path("ckeditor/", include("ckeditor_uploader.urls"), name="ckeditor_upload"),
     path("cabinet/", views.CabinetView.as_view(), name="cabinet"),
-    path("news_details/<int:pk>/", views.NewsDetailsView.as_view(), name="news_details"),
+    path(
+        "news_details/<int:pk>/", views.NewsDetailsView.as_view(), name="news_details"
+    ),
 ]
+
+urlpatterns += router.urls

@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     "authapp",
     "ckeditor",
     "ckeditor_uploader",
+    "rest_framework",
     # 'news',
 ]
 

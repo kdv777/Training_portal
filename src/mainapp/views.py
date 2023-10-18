@@ -1,11 +1,14 @@
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import TemplateView
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
 
 # -------------- Class-Based- Views -----------
 # class MainPageView(TemplateView):
 #     template_name = "mainapp/index.html"
 from config.settings import BASE_DIR
 from mainapp.models import Category, Course, News, Order, Post
+from mainapp.serializers import OrderSerializer
 
 
 class MainPageView(TemplateView):
@@ -164,3 +167,9 @@ class CategoriesPageView(TemplateView):
         context["categories"] = Category.objects.all()
 
         return context
+
+
+class OrderViewSet(ModelViewSet):
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
