@@ -105,85 +105,53 @@ class RatingStar(TimestampMixin):
 
 
 class Order(TimestampMixin):
-    courses = models.ManyToManyField(Course, related_name="orders")
-    buyer = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name="orders")
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="orders")
+    buyer = models.ForeignKey(User, on_delete=models.CASCADE, related_name="orders")
+    created_at = models.DateTimeField(auto_now_add=True)
     is_paid = models.BooleanField(default=False)
     finished = models.BooleanField(default=False)
 
     def __str__(self):
-        return f'{self.buyer.username}  {self.course.name}'
-    
-    def add_item(self, course: Course):
-        self.courses.add(course)
-        self.save()  # не забываем писать в базу изменения
-	
-    def del_item(self, course: Course):
-        self.courses.remove(course)
-        self.save()  # не забываем писать в базу изменения
-
-    def del_all_items(self):
-        self.courses.clear()
-        self.save()  # не забываем писать в базу изменения
-
-    def get_total(self):
-        return sum([course.price for course in self.courses.all()])  #  Course.price лучше сделать DecimalField
-
+        return f'' \
+               f'{self.buyer.username}  {self.course.name}'
 
 
 class Basket(TimestampMixin):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='basket') 	# Один пользователь может иметь только одну корзину 
     orders = models.ManyToManyField(Order, related_name='baskets')                      # В корзину будем добавлять заказы и удалять после оплаты
     
-    def get_order(self) -> Order:
-        orders = self.orders.all()
 
-        if not orders:
-            order, _ = Order.objects.get_or_create(buyer=self.user, finished=False)  # Проверяем нет ли у пользователя уже незавершенных заказов
-            basket.orders.add(order)
-            basket.save()
-            
-        elif len(orders) > 1:
-            basket = orders.clear()                           # удаляем связи корзины с заказами
+    def make_order(self, course: Course):    # Создание заказа
+        new_order = Order.objects.create(
+            course=course,
+            buyer=self.user
+        )
 
-            Order.objects.filter(
-                 user=self.user,
-                 is_finished=False
-            ).delete()                                        # удаляем все несформированные заказы пользователя
+        self.orders.add(new_order)
+        self.save()
 
-            order = Order.objects.create(buyer=self.user)     # создаем новый заказ
-            basket.orders.add(order)                          # кладем в корзину
-            basket.save()                                     # записываем в базу
+    def del_order(self, order: Order):       # Удаление заказа
+        self.orders.remove(order)
+        order.delete()
+        self.save()
 
-        else:
-            order = orders.first()                            # просто получаем заказ
-
-        return order
-
-    def add_product(self, product: Course):    # Метод для добавления товара в корзину
-        self.get_order().add_item(product)
-
-    def del_product(self, product: Course):    # Метод для удаления товара из корзины
-        self.get_order().del_item(product)
 
     def clear_cart(self):                      # Метод для очистки корзины
-        self.get_order().del_all_items()
+        orders = self.orders.all()
+        orders.delete()                  
+        self.orders.clear()
+        self
 
     def calculate_total_price(self) -> int:    # Метод для подсчета общей стоимости товаров в корзине
-        return self.get_order().get_total()
-
-    def submit_order(self):
-        order = self.get_order()
-        order.finished = True
-        order.save()
+        return sum([order.course.price for order in self.orders.all()])
 
     def pay(self):                             # Метод для оплаты товаров
         total_price = self.calculate_total_price()
 		
-        print(total_price)
+        print(total_price)                     # Здесь должна быть логика оплаты товаров
 
-        order = self.get_order()               # Помечаем заказ оплаченным
-        order.is_paid = True
-        order.save()                           # Сохраняем в базу
-
-        self.orders.remove(order)              # Удаляем оплаченный заказ из корзины
-        self.save()                            # Сохраняем пустую корзину для новых заказов =Р
+        for order in self.orders.all():
+            order.is_paid = True
+            self.orders.remove(order)
+                          
+        self.save() 
