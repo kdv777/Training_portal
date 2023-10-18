@@ -1,15 +1,11 @@
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, render
 from django.views.generic import TemplateView
-
-from mainapp.models import News, Post, Category, Course, Order
-from authapp.models import  User
-from config.settings import BASE_DIR
-
 
 # -------------- Class-Based- Views -----------
 # class MainPageView(TemplateView):
 #     template_name = "mainapp/index.html"
 from config.settings import BASE_DIR
+from mainapp.models import Category, Course, News, Order, Post
 
 
 class MainPageView(TemplateView):
@@ -81,6 +77,7 @@ class NewsPageView(TemplateView):
 class Course1PageView(TemplateView):
     template_name = "mainapp/course1.html"
 
+
 class CourseDetailPageView(TemplateView):
     template_name = "mainapp/course_detail.html"
 
@@ -116,39 +113,45 @@ class CabinetView(TemplateView):
         # Create your own data
 
         # print(User)
-        context["course_now"] = get_object_or_404(Course, pk=self.request.user.course.id)
+        course_now = self.request.user.course
+        if course_now:
+            context["course_now"] = get_object_or_404(
+                Course, pk=self.request.user.course.id
+            )
 
-        courses_done = Order.objects.all(). \
-            filter(buyer=self.request.user.id). \
-            filter(finished=True)
+        courses_done = (
+            Order.objects.all().filter(buyer=self.request.user.id).filter(finished=True)
+        )
         # print(f'course_done:{courses_done_id[0].id}')
-        courses_done_id=[]
+        courses_done_id = []
         # print(courses_done)
-        for item in courses_done :
+        for item in courses_done:
             courses_done_id.append(item.course.id)
         # print(f'course_done:{courses_done_id}')
-        context["courses_done"] = Course.objects.all(). \
-            filter( id__in=courses_done_id)
+        context["courses_done"] = Course.objects.all().filter(id__in=courses_done_id)
 
-        courses_active = Order.objects.all(). \
-            filter(buyer=self.request.user.id). \
-            filter(finished=False)
+        courses_active = (
+            Order.objects.all()
+            .filter(buyer=self.request.user.id)
+            .filter(finished=False)
+        )
         # print(f'courses_active:{courses_active}')
-        courses_active_id= []
-        for item in courses_active :
+        courses_active_id = []
+        for item in courses_active:
             courses_active_id.append(item.course.id)
         # print(f'course_active:{courses_active_id}')
-        context["courses_active"] = Course.objects.all(). \
-            filter( id__in=courses_active_id)
+        context["courses_active"] = Course.objects.all().filter(
+            id__in=courses_active_id
+        )
 
         # context["base_dir"] = str(BASE_DIR).replace("\\", "/")
         # print(context['base_dir'])
         return context
 
 
-
 class InProgressPageView(TemplateView):
     template_name = "mainapp/in_progress.html"
+
 
 class CategoriesPageView(TemplateView):
     template_name = "mainapp/categories.html"
