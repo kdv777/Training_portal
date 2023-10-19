@@ -1,11 +1,14 @@
 from django.shortcuts import get_object_or_404, render
-from django.views.generic import TemplateView
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, CreateView
 
 # -------------- Class-Based- Views -----------
 # class MainPageView(TemplateView):
 #     template_name = "mainapp/index.html"
 from config.settings import BASE_DIR
 from mainapp.models import Category, Course, News, Order, Post
+
+from mainapp.models import Lesson
 
 
 class MainPageView(TemplateView):
@@ -144,6 +147,9 @@ class CabinetView(TemplateView):
             id__in=courses_active_id
         )
 
+        context["courses_teacher"] = Course.objects.all().filter(author=self.request.user.id)
+
+
         # context["base_dir"] = str(BASE_DIR).replace("\\", "/")
         # print(context['base_dir'])
         return context
@@ -164,3 +170,16 @@ class CategoriesPageView(TemplateView):
         context["categories"] = Category.objects.all()
 
         return context
+
+
+class CourseCreateView(CreateView):
+    model = Course
+    template_name = 'mainapp/course_form.html'
+    success_url = reverse_lazy('mainapp:courses')
+    fields = '__all__'
+
+class LessonCreateView(CreateView):
+    model = Lesson
+    template_name = 'mainapp/lesson_form.html'
+    success_url = reverse_lazy('mainapp:index')
+    fields = '__all__'
