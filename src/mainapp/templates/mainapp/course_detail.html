@@ -3,7 +3,9 @@
 
 
 {% block content %}
-        <!-- Блок Course-->
+        <!-- Блок Lesson-->
+
+
         <div class="container d-flex" style="margin-top: 100px;">
             <!-- left bar -->
             <div class='col-md-3' style="
@@ -11,12 +13,11 @@
             padding: 20px;">
                 <h2 style="margin-top: 40px;"> Список лекций</h2>
                 <ul class="list-group">
-                    <li class="list-group-item"> <a href="#" style="text-decoration: none">
-                            Лекция1 Введение
+                    {% for item in lesson %}
+                    <li class="list-group-item"> <a href="{% url 'mainapp:lesson_detail' item.pk %}" style="text-decoration: none">
+                          Лекция {{ item.order }}. {{ item.post.title }}
                         </a> </li>
-                    <li class="list-group-item"> <a href="#" style="text-decoration: none">
-                            Лекция2 Выведение
-                        </a> </li>
+                    {% endfor %}
                 </ul>
             </div>
             <!-- end of left bar -->

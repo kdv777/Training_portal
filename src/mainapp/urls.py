@@ -28,6 +28,17 @@ urlpatterns = [
         views.CourseDetailPageView.as_view(),
         name="course_detail",
     ),
+    path(
+        "lessons_course/<int:pk>/",
+        views.LessonsCoursePageView.as_view(),
+        name="lessons_course",
+    ),
+    path(
+        "lesson/<int:pk>/",
+        views.LessonDetailPageView.as_view(),
+        name='lesson_detail'
+    ),
+
     path("ckeditor/", include("ckeditor_uploader.urls"), name="ckeditor_upload"),
     path("cabinet/", views.CabinetView.as_view(), name="cabinet"),
     path("news_details/<int:pk>/", views.NewsDetailsView.as_view(), name="news_details"),

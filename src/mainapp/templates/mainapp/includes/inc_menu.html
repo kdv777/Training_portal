@@ -41,6 +41,7 @@
                         </a>
                         <ul class="dropdown-menu">
 
+
                             {% if user and user.is_superuser %}
                             <li><a class="dropdown-item" style="color: #fff;" href="{% url 'admin:index' %}">Админ.панель</a>
                             </li>
