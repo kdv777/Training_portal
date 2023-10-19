@@ -26,7 +26,7 @@
         <h1>Здравствуйте, {{ user.username }}</h1>
         {% if user.is_teacher %}
 
-        {% enfif %}
+        {% endif %}
         {% if user.is_teacher == None %}
         <h3 class="mt-4">Вы сейчас изучаете:</h3>
         <!-- card start -->
@@ -90,7 +90,7 @@
         <!-- list end -->
     </div>
     <!-- end of main content -->
-    {% enfif %}
+    {% endif %}
 </div>
 {% endif %}
 {% endblock %}

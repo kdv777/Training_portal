@@ -24,19 +24,13 @@
     <form class="mt-5" method="post" novalidate>
         {% csrf_token %}
 
-        {% for field in PostForm %}
+        {% for field in form %}
         <label for="{{ field.name }}" class="col-sm-7 col-form-label">{{ field.label_tag }}</label>
         <div class="col-sm-8" if="{{ field.name }}">
             {{ field }}
         </div>
         {% endfor %}
 
-        {% for field in LessonForm %}
-        <label for="{{ field.name }}" class="col-sm-7 col-form-label">{{ field.label_tag }}</label>
-        <div class="col-sm-8" if="{{ field.name }}">
-            {{ field }}
-        </div>
-        {% endfor %}
 
         <hr>
         <div class="d-flex gap-4 mt-5">

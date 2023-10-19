@@ -8,6 +8,8 @@ from django.views.generic import TemplateView, CreateView
 from config.settings import BASE_DIR
 from mainapp.models import Category, Course, News, Order, Post
 
+from mainapp.models import Lesson
+
 
 class MainPageView(TemplateView):
     template_name = "mainapp/index.html"
@@ -171,4 +173,10 @@ class CourseCreateView(CreateView):
     model = Course
     template_name = 'mainapp/course_form.html'
     success_url = reverse_lazy('mainapp:courses')
+    fields = '__all__'
+
+class LessonCreateView(CreateView):
+    model = Lesson
+    template_name = 'mainapp/lesson_form.html'
+    success_url = reverse_lazy('mainapp:index')
     fields = '__all__'
