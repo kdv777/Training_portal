@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, render
-from django.views.generic import TemplateView
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, TemplateView
 from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -9,7 +10,7 @@ from rest_framework.viewsets import ModelViewSet
 # class MainPageView(TemplateView):
 #     template_name = "mainapp/index.html"
 from config.settings import BASE_DIR
-from mainapp.models import Category, Course, News, Order, Post
+from mainapp.models import Category, Course, Lesson, News, Order, Post
 from mainapp.serializers import OrderSerializer
 
 
@@ -90,11 +91,8 @@ class CourseDetailPageView(TemplateView):
         # context = super(Courses_categoryPageView, self).get_context_data(**kwargs)
         context = super().get_context_data(**kwargs)
         context["course"] = get_object_or_404(Course, pk=pk)
+        context["lesson"] = Lesson.objects.all().filter(course=pk)
         return context
-
-
-class Lesson1_1PageView(TemplateView):
-    template_name = "mainapp/lesson1_1.html"
 
 
 class CoursesCategoryPageView(TemplateView):
@@ -104,6 +102,26 @@ class CoursesCategoryPageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["category"] = get_object_or_404(Category, pk=pk)
         context["courses_category"] = Course.objects.all().filter(category=pk)
+        return context
+
+
+class LessonDetailPageView(TemplateView):
+    template_name = "mainapp/lesson_detail.html"
+
+    def get_context_data(self, pk=None, **kwargs):
+        # context = super(Courses_categoryPageView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+        context["lesson"] = get_object_or_404(Lesson, pk=pk)
+        return context
+
+
+class LessonsCoursePageView(TemplateView):
+    template_name = "mainapp/lessons_course.html"
+
+    def get_context_data(self, pk=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["course"] = get_object_or_404(Course, pk=pk)
+        context["lessons_course"] = Lesson.objects.all().filter(course=pk)
         return context
 
 
@@ -133,6 +151,7 @@ class CabinetView(TemplateView):
         for item in courses_done:
             courses_done_id.append(item.course.id)
         # print(f'course_done:{courses_done_id}')
+
         context["courses_done"] = Course.objects.all().filter(id__in=courses_done_id)
 
         courses_active = (
@@ -147,6 +166,10 @@ class CabinetView(TemplateView):
         # print(f'course_active:{courses_active_id}')
         context["courses_active"] = Course.objects.all().filter(
             id__in=courses_active_id
+        )
+
+        context["courses_teacher"] = Course.objects.all().filter(
+            author=self.request.user.id
         )
 
         # context["base_dir"] = str(BASE_DIR).replace("\\", "/")
@@ -203,3 +226,17 @@ class OrderViewSet(ModelViewSet):
         return Response(
             serializer.data, status=status.HTTP_201_CREATED, headers=headers
         )
+
+
+class CourseCreateView(CreateView):
+    model = Course
+    template_name = "mainapp/course_form.html"
+    success_url = reverse_lazy("mainapp:courses")
+    fields = "__all__"
+
+
+class LessonCreateView(CreateView):
+    model = Lesson
+    template_name = "mainapp/lesson_form.html"
+    success_url = reverse_lazy("mainapp:index")
+    fields = "__all__"

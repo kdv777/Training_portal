@@ -16,6 +16,8 @@ urlpatterns = [
     path("in_progress/", views.InProgressPageView.as_view(), name="in_progress"),
     path("course_detail/", views.Course1PageView.as_view(), name="course_detail"),
     path("course1/", views.Course1PageView.as_view(), name="course1"),
+    path("course_create/", views.CourseCreateView.as_view(), name="course_create"),
+    path("lesson_create/", views.LessonCreateView.as_view(), name="lesson_create"),
     path("lesson1_1/", views.Lesson1_1PageView.as_view(), name="lesson1_1"),
     path("categories", views.CategoriesPageView.as_view(), name="categories"),
     path(
@@ -27,6 +29,14 @@ urlpatterns = [
         "course/<int:pk>/",
         views.CourseDetailPageView.as_view(),
         name="course_detail",
+    ),
+    path(
+        "lessons_course/<int:pk>/",
+        views.LessonsCoursePageView.as_view(),
+        name="lessons_course",
+    ),
+    path(
+        "lesson/<int:pk>/", views.LessonDetailPageView.as_view(), name="lesson_detail"
     ),
     path("ckeditor/", include("ckeditor_uploader.urls"), name="ckeditor_upload"),
     path("cabinet/", views.CabinetView.as_view(), name="cabinet"),

@@ -1,9 +1,10 @@
 from django.contrib import messages
 from django.contrib.auth import login, logout
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.views import LoginView
 from django.shortcuts import redirect
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, View
+from django.views.generic import TemplateView, UpdateView, View
 
 from authapp.models import User
 
@@ -22,7 +23,6 @@ class LoginPageView(LoginView):
 
 class RegisterPageView(TemplateView):
     template_name = "authapp/register.html"
-
 
     def get(self, request, *args, **kwargs):
         if request.user.is_authenticated:
@@ -57,3 +57,12 @@ class LogoutView(View):
     def get(self, request, *args, **kwargs):
         logout(request)
         return redirect("mainapp:index")
+
+
+class UserUpdateView(LoginRequiredMixin, UpdateView):
+    template_name_suffix = "_update_form"
+    model = User
+    fields = ["first_name", "last_name", "email"]
+
+    def get_success_url(self):
+        return reverse_lazy("mainapp:cabinet")
