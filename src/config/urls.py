@@ -21,7 +21,7 @@ from django.views.generic import RedirectView
 from authapp.views import LoginPageView
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    path("admin/", admin.site.urls, name="admin"),
     path("login/", LoginPageView.as_view(), name="login"),
     path("logout/", LogoutView.as_view(next_page="mainapp:index"), name="logout"),
     path("", RedirectView.as_view(url="mainapp/")),

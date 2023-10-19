@@ -1,14 +1,18 @@
 from django.shortcuts import get_object_or_404, render, redirect
-from django.views.generic import TemplateView
-
 from mainapp.models import News, Post, Category, Course, Order, Lesson
 from authapp.models import User
 from config.settings import BASE_DIR
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, CreateView
+
 
 # -------------- Class-Based- Views -----------
 # class MainPageView(TemplateView):
 #     template_name = "mainapp/index.html"
 from config.settings import BASE_DIR
+from mainapp.models import Category, Course, News, Order, Post
+
+from mainapp.models import Lesson
 
 
 class MainPageView(TemplateView):
@@ -133,30 +137,40 @@ class CabinetView(TemplateView):
         # Create your own data
 
         # print(User)
-        context["course_now"] = get_object_or_404(Course, pk=self.request.user.course.id)
+        course_now = self.request.user.course
+        if course_now:
+            context["course_now"] = get_object_or_404(
+                Course, pk=self.request.user.course.id
+            )
 
-        courses_done = Order.objects.all(). \
-            filter(buyer=self.request.user.id). \
-            filter(finished=True)
+        courses_done = (
+            Order.objects.all().filter(buyer=self.request.user.id).filter(finished=True)
+        )
         # print(f'course_done:{courses_done_id[0].id}')
         courses_done_id = []
         # print(courses_done)
         for item in courses_done:
             courses_done_id.append(item.course.id)
         # print(f'course_done:{courses_done_id}')
-        context["courses_done"] = Course.objects.all(). \
-            filter(id__in=courses_done_id)
 
-        courses_active = Order.objects.all(). \
-            filter(buyer=self.request.user.id). \
-            filter(finished=False)
+        context["courses_done"] = Course.objects.all().filter(id__in=courses_done_id)
+
+        courses_active = (
+            Order.objects.all()
+            .filter(buyer=self.request.user.id)
+            .filter(finished=False)
+        )
         # print(f'courses_active:{courses_active}')
         courses_active_id = []
         for item in courses_active:
             courses_active_id.append(item.course.id)
         # print(f'course_active:{courses_active_id}')
-        context["courses_active"] = Course.objects.all(). \
-            filter(id__in=courses_active_id)
+        context["courses_active"] = Course.objects.all().filter(
+            id__in=courses_active_id
+        )
+
+        context["courses_teacher"] = Course.objects.all().filter(author=self.request.user.id)
+
 
         # context["base_dir"] = str(BASE_DIR).replace("\\", "/")
         # print(context['base_dir'])
@@ -178,3 +192,16 @@ class CategoriesPageView(TemplateView):
         context["categories"] = Category.objects.all()
 
         return context
+
+
+class CourseCreateView(CreateView):
+    model = Course
+    template_name = 'mainapp/course_form.html'
+    success_url = reverse_lazy('mainapp:courses')
+    fields = '__all__'
+
+class LessonCreateView(CreateView):
+    model = Lesson
+    template_name = 'mainapp/lesson_form.html'
+    success_url = reverse_lazy('mainapp:index')
+    fields = '__all__'

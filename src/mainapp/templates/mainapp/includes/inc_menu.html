@@ -31,28 +31,44 @@
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                     <li class="nav-item dropdown">
                         <a
-                                class="nav-link dropdown-toggle"
+                                class="nav-link dropdown-toggle active"
                                 href="#"
                                 role="button"
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
                         >
-                            Каталог курсов
+                            Личн.кабинет
                         </a>
                         <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="{% url 'mainapp:course_detail' %}">Курс 1</a></li>
-                            <li><a class="dropdown-item" href="{% url 'mainapp:course_detail' %}">Курс 2</a></li>
-                            <li><a class="dropdown-item" href="{% url 'mainapp:course_detail' %}">Курс 3</a></li>
-                            <li><a class="dropdown-item" href="{% url 'mainapp:course_detail' %}">Курс 4</a></li>
+
+
+                            {% if user and user.is_superuser %}
+                            <li><a class="dropdown-item" style="color: #fff;" href="{% url 'admin:index' %}">Админ.панель</a>
+                            </li>
                             <li>
                                 <hr class="dropdown-divider"/>
                             </li>
-                            <li><a class="dropdown-item" href="{% url 'mainapp:in_progress' %}">Что-то еще здесь</a>
+                            <li><a class="dropdown-item" style="color: #fff;"
+                                   href="{% url 'authapp:logout' %}">Выйти</a></li>
+                            {% elif user and user.is_authenticated %}
+                            <li><a class="dropdown-item" style="color: #fff;" href="{% url 'mainapp:cabinet' %}">Личный
+                                кабинет</a></li>
+                            <li><a class="dropdown-item" style="color: #fff;" href="{% url 'authapp:update' user.id %}">Профиль</a>
                             </li>
+                            <li>
+                                <hr class="dropdown-divider"/>
+                            </li>
+                            <li><a class="dropdown-item" style="color: #fff;"
+                                   href="{% url 'authapp:logout' %}">Выйти</a></li>
+                            {% else %}
+                            <li><a class="dropdown-item" style="color: #fff;" href="{% url 'authapp:login' %}">Войти</a>
+                            </li>
+                            {% endif %}
                         </ul>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="{% url 'mainapp:categories' %}">Категории</a>
+                        <a class="nav-link active" aria-current="page"
+                           href="{% url 'mainapp:categories' %}">Категории</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{% url 'mainapp:news_list' %}">Новости</a>
@@ -92,10 +108,10 @@
                         </a>
                     </li>
                     <li class="nav-item my-auto" style="display: flex; align-items: center;">
-                        <a class="nav-link active"  href="{% url 'authapp:register' %}">
-                        <button class="btn btn-primary my-auto" type="submit">
-                            Зарегистрироваться
-                        </button>
+                        <a class="nav-link active" href="{% url 'authapp:register' %}">
+                            <button class="btn btn-primary my-auto" type="submit">
+                                Зарегистрироваться
+                            </button>
                         </a>
                     </li>
                     {% endif %}
