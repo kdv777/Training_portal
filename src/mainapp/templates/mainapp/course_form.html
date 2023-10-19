@@ -25,7 +25,7 @@
         {% csrf_token %}
 
 
-        {% for field in CourseForm %}
+        {% for field in form %}
         <label for="{{ field.name }}" class="col-sm-7 col-form-label">{{ field.label_tag }}</label>
         <div class="col-sm-8" if="{{ field.name }}">
             {{ field }}

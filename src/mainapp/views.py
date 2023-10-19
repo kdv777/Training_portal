@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, render
-from django.views.generic import TemplateView
+from django.urls import reverse_lazy
+from django.views.generic import TemplateView, CreateView
 
 # -------------- Class-Based- Views -----------
 # class MainPageView(TemplateView):
@@ -164,3 +165,10 @@ class CategoriesPageView(TemplateView):
         context["categories"] = Category.objects.all()
 
         return context
+
+
+class CourseCreateView(CreateView):
+    model = Course
+    template_name = 'mainapp/course_form.html'
+    success_url = reverse_lazy('mainapp:courses')
+    fields = '__all__'
