@@ -1,11 +1,19 @@
 {% extends 'mainapp/base.html' %}
 {% load static %}
 
-{# from https://www.pythontutorial.net/django-tutorial/django-loginview/ #}
 
 {% block content %}
+{% comment %}
+<div style="margin-top: 100px;"></div>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Update">
+</form>
+{% endcomment %}
+
 <div class="container mb-5" style="margin-top: 100px; max-width: 500px;">
-    <h2>Войдите в систему</h2>
+    <h2>Ваши данные:</h2>
 	{% if messages %}
 		{% for message in messages %}
 			<div class="row mb-3">
@@ -26,7 +34,7 @@
 
 		<hr>
         <div class="d-flex gap-4 mt-5">
-            <button type="submit" class="btn btn-primary" value="Login" >Войти</button>
+            <button type="submit" class="btn btn-primary" value="Update" >Сохранить</button>
         </div>
         		<hr>
 
@@ -34,4 +42,6 @@
 </div>
 
 {% endblock %}
+
+
 
