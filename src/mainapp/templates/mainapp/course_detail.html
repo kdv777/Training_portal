@@ -31,7 +31,13 @@
                         style="width: 200px; height: 200px;" alt="...">
                 </figure>
                 <p>{{ course.description }}</p>
+
+                 {% if user.is_teacher == None %}
                 <input class="btn btn-primary" type="button" value="Записаться">
+                {% endif %}
+                {% if user.is_teacher %}
+                        <a href="{% url 'mainapp:lesson_create' %}" class="mt-4 btn btn-primary">Создать лекцию</a>
+                {% endif %}
                 <!-- comments to course -->
                     <div class="d-flex">
                         <h3 style="margin: 20px 20px 0 0;">Oтзывы о курсе</h3>

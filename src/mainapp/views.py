@@ -147,6 +147,9 @@ class CabinetView(TemplateView):
             id__in=courses_active_id
         )
 
+        context["courses_teacher"] = Course.objects.all().filter(author=self.request.user.id)
+
+
         # context["base_dir"] = str(BASE_DIR).replace("\\", "/")
         # print(context['base_dir'])
         return context
