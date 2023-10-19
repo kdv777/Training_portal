@@ -169,7 +169,17 @@ class CategoriesPageView(TemplateView):
         return context
 
 
+class CartPageView(TemplateView):
+    template_name = "mainapp/cart.html"
+
+
 class OrderViewSet(ModelViewSet):
-    queryset = Order.objects.all()
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = Order.objects.all()
+        is_paid = self.request.query_params.get("is_paid", None)
+        if is_paid is not None:
+            queryset = queryset.filter(is_paid=is_paid)
+        return queryset

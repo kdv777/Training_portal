@@ -5,8 +5,6 @@ from mainapp import views
 from mainapp.apps import MainappConfig
 
 router = routers.DefaultRouter()
-router.register(r"orders", views.OrderViewSet)
-
 app_name = MainappConfig.name
 
 urlpatterns = [
@@ -35,6 +33,8 @@ urlpatterns = [
     path(
         "news_details/<int:pk>/", views.NewsDetailsView.as_view(), name="news_details"
     ),
+    path("cart/", views.CartPageView.as_view(), name="cart"),
 ]
 
+router.register(r"orders", views.OrderViewSet, basename="orders")
 urlpatterns += router.urls
