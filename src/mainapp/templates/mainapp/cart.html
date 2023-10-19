@@ -1,0 +1,72 @@
+{% extends 'authapp/base.html' %}
+{% load static %}
+
+{# from https://www.pythontutorial.net/django-tutorial/django-loginview/ #}
+{% block js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript">
+    function update_cart(){
+            $.ajax({
+                url: "{% url 'mainapp:orders-list' %}",
+                type: "GET",
+                data: {
+                    is_paid: 0
+                },
+                success: function(data){
+                    for (let i = 0; i < data.length; i++) {
+                        $("#cart_items").append(
+                            "<tr><td>"
+                            + data[i].product_name
+                            + "</td><td><div class='btn btn-danger' onclick='delete_from_cart("+
+                            + data[i].id
+                            + ")'>"
+                            + "Удалить</div></td></tr>"
+
+                        );
+                    }
+                },
+                error: function(){
+                    alert("Не могу загрузить корзину");
+                }
+            })
+        }
+    function delete_from_cart(order_id){
+        csrftoken = $("[name=csrfmiddlewaretoken]").val();
+        $.ajax({
+            url: "{% url 'mainapp:orders-detail' pk=0 %}".replace("0", order_id),
+            type: "DELETE",
+            beforeSend: function(xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+            success: function(data){
+                $("#cart_items").empty();
+                update_cart();
+            },
+            error: function(){
+                alert("Не получилось удалить курс");
+            }
+        })
+    }
+	$(document).ready(function(){
+        update_cart();
+	})
+</script>
+{% endblock %}
+
+{% block content %}
+<div class="container mb-5" style="margin-top: 100px; max-width: 500px;">
+    <h2>Корзина</h2>
+    {% csrf_token %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Курс</th>
+                <th scope="col">Удалить</th>
+            </tr>
+        </thead>
+	    <tbody id="cart_items"></tbody>
+    </table>
+</div>
+
+{% endblock %}
+

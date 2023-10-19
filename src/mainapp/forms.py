@@ -1,8 +1,3 @@
-from django import forms
-
-
-from mainapp.models import Course, Lesson, Post
-
 # ref: https://stackoverflow.com/questions/2374224/django-working-with-multiple-forms/2374240#2374240
 #
 # class CourseForm(forms.ModelForm):
@@ -40,4 +35,3 @@ from mainapp.models import Course, Lesson, Post
 #                 field.widget.attrs['class'] = 'form-control'
 #                 field.help_text = ''
 #
-

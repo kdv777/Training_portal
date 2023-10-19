@@ -1,6 +1,37 @@
 {% extends 'mainapp/base.html' %}
 {% load static %}
 
+{% block js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript">
+function add_to_cart(course_id){
+    csrftoken = $("[name=csrfmiddlewaretoken]").val();
+    $.ajax({
+        url: "{% url 'mainapp:orders-list'%}",
+        type: "POST",
+        data: {
+            course: course_id,
+            buyer: {{ user.id }},
+            csrfmiddlewaretoken: csrftoken
+        },
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        },
+        success: function(data){
+            alert("Курс добавлен в корзину");
+        },
+        error: function(jqXHR){
+            if (jqXHR.status == 409){
+                alert("Курс уже в корзине");
+            }
+            else {
+                alert("Не получилось добавить курс в корзину");
+            }
+        }
+    })
+}
+</script>
+{% endblock %}
 
 {% block content %}
         <!-- Блок Lesson-->
@@ -32,9 +63,9 @@
                         style="width: 200px; height: 200px;" alt="...">
                 </figure>
                 <p>{{ course.description }}</p>
-
-                 {% if user.is_teacher == None %}
-                <input class="btn btn-primary" type="button" value="Записаться">
+                {% if user.is_teacher == None %}
+                    {% csrf_token %}
+                    <input class="btn btn-primary" type="button" value="Добавить в корзину" onclick="add_to_cart({{ course.id }})">
                 {% endif %}
                 {% if user.is_teacher %}
                         <a href="{% url 'mainapp:lesson_create' %}" class="mt-4 btn btn-primary">Создать лекцию</a>

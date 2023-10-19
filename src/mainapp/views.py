@@ -1,18 +1,17 @@
-from django.shortcuts import get_object_or_404, render, redirect
-from mainapp.models import News, Post, Category, Course, Order, Lesson
-from authapp.models import User
-from config.settings import BASE_DIR
+from django.shortcuts import get_object_or_404, render
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView
-
+from django.views.generic import CreateView, TemplateView
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewSet
 
 # -------------- Class-Based- Views -----------
 # class MainPageView(TemplateView):
 #     template_name = "mainapp/index.html"
 from config.settings import BASE_DIR
-from mainapp.models import Category, Course, News, Order, Post
-
-from mainapp.models import Lesson
+from mainapp.models import Category, Course, Lesson, News, Order, Post
+from mainapp.serializers import OrderSerializer
 
 
 class MainPageView(TemplateView):
@@ -169,8 +168,9 @@ class CabinetView(TemplateView):
             id__in=courses_active_id
         )
 
-        context["courses_teacher"] = Course.objects.all().filter(author=self.request.user.id)
-
+        context["courses_teacher"] = Course.objects.all().filter(
+            author=self.request.user.id
+        )
 
         # context["base_dir"] = str(BASE_DIR).replace("\\", "/")
         # print(context['base_dir'])
@@ -194,14 +194,49 @@ class CategoriesPageView(TemplateView):
         return context
 
 
+class CartPageView(TemplateView):
+    template_name = "mainapp/cart.html"
+
+
+class OrderViewSet(ModelViewSet):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = Order.objects.filter(buyer=self.request.user)
+        is_paid = self.request.query_params.get("is_paid", None)
+        if is_paid is not None:
+            queryset = queryset.filter(is_paid=is_paid)
+        return queryset
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        if Order.objects.filter(
+            course=serializer.validated_data["course"], buyer=self.request.user
+        ).exists():
+            return Response(
+                {"error": "You already have this course"},
+                status=status.HTTP_409_CONFLICT,
+            )
+
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
+
+
 class CourseCreateView(CreateView):
     model = Course
-    template_name = 'mainapp/course_form.html'
-    success_url = reverse_lazy('mainapp:courses')
-    fields = '__all__'
+    template_name = "mainapp/course_form.html"
+    success_url = reverse_lazy("mainapp:courses")
+    fields = "__all__"
+
 
 class LessonCreateView(CreateView):
     model = Lesson
-    template_name = 'mainapp/lesson_form.html'
-    success_url = reverse_lazy('mainapp:index')
-    fields = '__all__'
+    template_name = "mainapp/lesson_form.html"
+    success_url = reverse_lazy("mainapp:index")
+    fields = "__all__"
