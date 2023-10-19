@@ -1,6 +1,37 @@
 {% extends 'mainapp/base.html' %}
 {% load static %}
 
+{% block js %}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript">
+function add_to_cart(course_id){
+    csrftoken = $("[name=csrfmiddlewaretoken]").val();
+    $.ajax({
+        url: "{% url 'mainapp:orders-list'%}",
+        type: "POST",
+        data: {
+            course: course_id,
+            buyer: {{ user.id }},
+            csrfmiddlewaretoken: csrftoken
+        },
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        },
+        success: function(data){
+            alert("Курс добавлен в корзину");
+        },
+        error: function(jqXHR){
+            if (jqXHR.status == 409){
+                alert("Курс уже в корзине");
+            }
+            else {
+                alert("Не получилось добавить курс в корзину");
+            }
+        }
+    })
+}
+</script>
+{% endblock %}
 
 {% block content %}
         <!-- Блок Course-->
@@ -31,7 +62,8 @@
                         style="width: 200px; height: 200px;" alt="...">
                 </figure>
                 <p>{{ course.description }}</p>
-                <input class="btn btn-primary" type="button" value="Записаться">
+                {% csrf_token %}
+                <input class="btn btn-primary" type="button" value="Добавить в корзину" onclick="add_to_cart({{ course.id }})">
                 <!-- comments to course -->
                     <div class="d-flex">
                         <h3 style="margin: 20px 20px 0 0;">Oтзывы о курсе</h3>

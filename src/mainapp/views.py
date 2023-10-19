@@ -1,6 +1,8 @@
 from django.shortcuts import get_object_or_404, render
 from django.views.generic import TemplateView
+from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 
 # -------------- Class-Based- Views -----------
@@ -178,8 +180,26 @@ class OrderViewSet(ModelViewSet):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        queryset = Order.objects.all()
+        queryset = Order.objects.filter(buyer=self.request.user)
         is_paid = self.request.query_params.get("is_paid", None)
         if is_paid is not None:
             queryset = queryset.filter(is_paid=is_paid)
         return queryset
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        if Order.objects.filter(
+            course=serializer.validated_data["course"], buyer=self.request.user
+        ).exists():
+            return Response(
+                {"error": "You already have this course"},
+                status=status.HTTP_409_CONFLICT,
+            )
+
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
