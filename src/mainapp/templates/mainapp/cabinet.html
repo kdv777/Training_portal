@@ -21,87 +21,93 @@
     <!-- main content -->
     <div
             class="col-md-9"
-            style="max-width: 540px; padding: 20px"
-    >
-        <h1>Здравствуйте, {{ user.username }}</h1>
-        {% if user.is_teacher %}
-        <h3 class="mt-4">Ваши созданные курсы:</h3>
-        <!-- list start -->
-        <ul class="mt-3 list-group">
-            {% for item3 in courses_teacher %}
-            <li class="list-group-item">
-                <a href="{% url 'mainapp:course_detail' item3.id  %}" style="text-decoration: none"> {{ item3.name }}</a>
-            </li>
-            {% endfor%}
-        </ul>
-        <a href="{% url 'mainapp:course_create' %}" class="mt-4 btn btn-primary">Создать курс</a>
-        {% endif %}
-        {% if user.is_teacher == None %}
-        <h3 class="mt-4">Вы сейчас изучаете:</h3>
-        <!-- card start -->
-        {% if course_now %}
-        <div class="card mb-3" style="max-width: 540px">
-            <div class="row g-0">
-                {% if course_now %}
-                <div
-                        class="col-md-4"
-                        style="
+            style="max-width: 540px; padding: 20px">
+
+    <h1>Здравствуйте, {{ user.username }}</h1>
+        {#  Teacher section #}
+    {% if user.is_teacher %}
+    <h3 class="mt-4">Ваши созданные курсы:</h3>
+    <!-- list start -->
+    <ul class="mt-3 list-group">
+        {% for item3 in courses_teacher %}
+        <li class="list-group-item">
+            <a href="{% url 'mainapp:course_detail' item3.id  %}"
+               style="text-decoration: none"> {{ item3.name }}</a>
+        </li>
+        {% endfor%}
+    </ul>
+    <a href="{% url 'mainapp:course_create' %}" class="mt-4 btn btn-primary">Создать курс</a>
+    {% endif %}
+                {#  End Teacher section #}
+        {#  Student section #}
+    {% if user.is_teacher == False %}
+    <h3 class="mt-4">Вы сейчас изучаете:</h3>
+    <!-- card start -->
+    {% if course_now %}
+    <div class="card mb-3" style="max-width: 540px">
+        <div class="row g-0">
+            {% if course_now %}
+            <div
+                    class="col-md-4"
+                    style="
                 display: flex;
                 align-items: center;
                 justify-content: center;
               "
-                >
-                    <img
-                            src="/static/{{ course_now.img_url }}"
-                            class="img-fluid rounded-start"
-                            alt="..."
-                    />
-                </div>
-                <div class="col-md-8">
-                    <div class="card-body">
-                        <h5 class="card-title"> {{ course_now.name }} </h5>
-                        <p class="card-text">
-                            <small class="text-body-secondary"
-                            >something here (optional)</small
-                            >
-                        </p>
-                        <a href="{% url 'mainapp:course_detail' course_now.id  %}" class="btn btn-primary">Перейти</a>
-                    </div>
+            >
+                <img
+                        src="/static/{{ course_now.img_url }}"
+                        class="img-fluid rounded-start"
+                        alt="..."
+                />
+            </div>
+            <div class="col-md-8">
+                <div class="card-body">
+                    <h5 class="card-title"> {{ course_now.name }} </h5>
+                    <p class="card-text">
+                        <small class="text-body-secondary"
+                        >something here (optional)</small
+                        >
+                    </p>
+                    <a href="{% url 'mainapp:course_detail' course_now.id  %}" class="btn btn-primary">Перейти</a>
                 </div>
             </div>
-            {% endif %}
         </div>
-
-        {% else %}
-
-        <h2><br> Пока здесь курса нет <br></h2>
         {% endif %}
-        <!-- card end -->
-        <h3 class="mt-4">Ваши активные курсы:</h3>
-        <!-- list start -->
-        {% for item1 in courses_active %}
-        <ul class="list-group">
-            <li class="list-group-item">
-                <a href="{% url 'mainapp:course_detail' item1.id  %}" style="text-decoration: none"> {{ item1.name
-                    }}</a>
-            </li>
-            {% endfor %}
-        </ul>
-        <!-- list end -->
-        <h3 class="mt-4">Ваши пройденные курсы:</h3>
-        <!-- list start -->
-        <ul class="list-group">
-            {% for item2 in courses_done %}
-            <li class="list-group-item">
-                <a href="{% url 'mainapp:course_detail' item2.id  %}" style="text-decoration: none"> {{ item2.name
-                    }}</a>
-            </li>
-            {% endfor%}
-        </ul>
-        <!-- list end -->
     </div>
-    <!-- end of main content -->
+
+    {% else %}
+
+    <h2><br> Пока здесь курса нет <br></h2>
     {% endif %}
+    <!-- card end -->
+    <h3 class="mt-4">Ваши активные курсы:</h3>
+    <!-- list start -->
+    {% for item1 in courses_active %}
+    <ul class="list-group">
+        <li class="list-group-item">
+            <a href="{% url 'mainapp:course_detail' item1.id  %}"
+               style="text-decoration: none"> {{ item1.name }}</a>
+        </li>
+        {% endfor %}
+    </ul>
+    <!-- list end -->
+    <h3 class="mt-4">Ваши пройденные курсы:</h3>
+    <!-- list start -->
+    <ul class="list-group">
+        {% for item2 in courses_done %}
+        <li class="list-group-item">
+            <a href="{% url 'mainapp:course_detail' item2.id  %}"
+               style="text-decoration: none"> {{ item2.name }}</a>
+        </li>
+        {% endfor%}
+    </ul>
+    <!-- list end -->
+                {#  End of Student section #}
+    {% endif %}
+</div>
+<!-- end of main content -->
+
 </div>
 {% endif %}
 {% endblock %}
