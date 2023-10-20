@@ -37,7 +37,7 @@
             <!--            </div>-->
 
             <select class="form-select" aria-label="cat_id" name="cat_id" id="cat_id" >
-                <option>Выберите категорию из списка</option>
+             <!--    <option>Выберите категорию из списка</option>-->
                 {% for cat in allcategs %}
                 <option selected name="cat_id" value="{{cat.id}}">{{ cat.name }}</option>
                 {% endfor %}
