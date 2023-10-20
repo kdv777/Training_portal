@@ -1,4 +1,6 @@
-from django.shortcuts import get_object_or_404, render
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, render, redirect
+# from django.template import context
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView
 from rest_framework import status
@@ -190,7 +192,6 @@ class CategoriesPageView(TemplateView):
 
         # Create your own data
         context["categories"] = Category.objects.all()
-
         return context
 
 
@@ -228,11 +229,11 @@ class OrderViewSet(ModelViewSet):
         )
 
 
-class CourseCreateView(CreateView):
-    model = Course
-    template_name = "mainapp/course_form.html"
-    success_url = reverse_lazy("mainapp:courses")
-    fields = "__all__"
+# class CourseCreateView(CreateView):
+#     model = Course
+#     template_name = "mainapp/course_form.html"
+#     success_url = reverse_lazy("mainapp:courses")
+#     fields = "__all__"
 
 
 class LessonCreateView(CreateView):
@@ -240,3 +241,54 @@ class LessonCreateView(CreateView):
     template_name = "mainapp/lesson_form.html"
     success_url = reverse_lazy("mainapp:index")
     fields = "__all__"
+
+
+class CourseCreateView(TemplateView):
+    template_name = "mainapp/course_create_form.html"
+
+    # def get(self, request):
+    #     if request.user.is_teacher==False:
+    #         return redirect("mainapp:index")
+    #         context = super().get_context_data(**kwargs)
+    #         context['allcategs'] = Category.objects.all()
+    #     return render(request, "mainapp/news_list.html", context)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['allcategs'] = Category.objects.all()
+        return context
+
+    def post(self, request, *args, **kwargs):
+        course_name = request.POST.get("name")
+        course_description = request.POST.get("description")
+        course_img_url = request.POST.get("img_url")
+        course_price = request.POST.get("price")
+        course_cat_id = request.POST.get("cat_id")
+
+        print(f'course_name: {course_name}')
+        print(f'course_description: {course_description}')
+        print(f'course_img_url: {course_img_url}')
+        print(f'course_price: {course_price}')
+        print(f'course_categ: {course_cat_id}')
+        print(f'course_author: {request.user.username}')
+
+        if not all([course_name, course_description, course_img_url, course_price, course_cat_id]):
+            messages.error(self.request, "Не все поля заполнены")
+            return redirect("mainapp:course_create")
+        course_names_all  = [el.name for el in Course.objects.all()]
+        if course_name in course_names_all:
+            messages.error(self.request, "Курс с таким именем уже есть")
+            return redirect("authapp:register")
+        course_category = get_object_or_404(Category, id=course_cat_id)
+        course = Course()
+        course.name = course_name
+        course.description = course_description
+        course.img_url = course_img_url
+        course.price = course_price
+        # course.category = course_category
+        course.author = request.user
+        course.slug = str(course_name.lower().replace(" ","-")[:20])
+        instance = course.save()
+        # instance[0].id
+        course.category.add(course_category)
+        return redirect("mainapp:cabinet")
