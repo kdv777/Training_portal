@@ -1,5 +1,5 @@
 from django.contrib import messages
-from django.shortcuts import get_object_or_404, render, redirect
+from django.shortcuts import get_object_or_404, redirect, render
 # from django.template import context
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView
@@ -199,6 +199,14 @@ class CartPageView(TemplateView):
     template_name = "mainapp/cart.html"
 
 
+class PaymentPageView(TemplateView):
+    template_name = "mainapp/payment.html"
+
+    def get(self, request, *args, **kwargs):
+        Order.objects.filter(is_paid=False, buyer=request.user).update(is_paid=True)
+        return super().get(request, *args, **kwargs)
+
+
 class OrderViewSet(ModelViewSet):
     serializer_class = OrderSerializer
     permission_classes = [IsAuthenticated]
@@ -255,7 +263,7 @@ class CourseCreateView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['allcategs'] = Category.objects.all()
+        context["allcategs"] = Category.objects.all()
         return context
 
     def post(self, request, *args, **kwargs):
@@ -265,17 +273,25 @@ class CourseCreateView(TemplateView):
         course_price = request.POST.get("price")
         course_cat_id = request.POST.get("cat_id")
 
-        print(f'course_name: {course_name}')
-        print(f'course_description: {course_description}')
-        print(f'course_img_url: {course_img_url}')
-        print(f'course_price: {course_price}')
-        print(f'course_categ: {course_cat_id}')
-        print(f'course_author: {request.user.username}')
+        print(f"course_name: {course_name}")
+        print(f"course_description: {course_description}")
+        print(f"course_img_url: {course_img_url}")
+        print(f"course_price: {course_price}")
+        print(f"course_categ: {course_cat_id}")
+        print(f"course_author: {request.user.username}")
 
-        if not all([course_name, course_description, course_img_url, course_price, course_cat_id]):
+        if not all(
+            [
+                course_name,
+                course_description,
+                course_img_url,
+                course_price,
+                course_cat_id,
+            ]
+        ):
             messages.error(self.request, "Не все поля заполнены")
             return redirect("mainapp:course_create")
-        course_names_all  = [el.name for el in Course.objects.all()]
+        course_names_all = [el.name for el in Course.objects.all()]
         if course_name in course_names_all:
             messages.error(self.request, "Курс с таким именем уже есть")
             return redirect("authapp:register")
@@ -287,8 +303,7 @@ class CourseCreateView(TemplateView):
         course.price = course_price
         # course.category = course_category
         course.author = request.user
-        course.slug = str(course_name.lower().replace(" ","-")[:20])
-        instance = course.save()
-        # instance[0].id
+        course.slug = str(course_name.lower().replace(" ", "-")[:20])
+        course.save()
         course.category.add(course_category)
         return redirect("mainapp:cabinet")
