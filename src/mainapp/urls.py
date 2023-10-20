@@ -44,6 +44,7 @@ urlpatterns = [
         "news_details/<int:pk>/", views.NewsDetailsView.as_view(), name="news_details"
     ),
     path("cart/", views.CartPageView.as_view(), name="cart"),
+    path("payment/", views.PaymentPageView.as_view(), name="payment"),
 ]
 
 router.register(r"orders", views.OrderViewSet, basename="orders")

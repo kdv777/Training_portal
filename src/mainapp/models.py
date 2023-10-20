@@ -111,6 +111,11 @@ class Order(TimestampMixin):
     is_paid = models.BooleanField(default=False)
     finished = models.BooleanField(default=False)
 
+    class Meta:
+        unique_together = (
+            "course",
+            "buyer",
+        )
+
     def __str__(self):
-        return f'' \
-               f'{self.buyer.username}  {self.course.name}'
+        return f"" f"{self.buyer.username}  {self.course.name}"
