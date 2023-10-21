@@ -60,8 +60,8 @@ function add_to_cart(course_id){
                 <h1>Курс: {{ course.name }}</h1>
 
                 <figure class="figure mt-3">
-                    <img src="/static/{{ course.img_url }}" class="figure-img img-fluid rounded">
-<!--                        <img src="{% static 'img/course_img1.png' %}" class="img-fluid rounded-start" width="300" alt="...">-->
+<!--                    <img src="/static/{{ course.img_url }}" class="figure-img img-fluid rounded">-->
+                        <img src="{% static 'img/course_img1.png' %}" class="img-fluid rounded-start" width="300" alt="...">
 
                 </figure>
                 <p>{{ course.description }}</p>
