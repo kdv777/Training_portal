@@ -32,11 +32,11 @@
                 <h2> Список курсов  в категории "{{ category.name }}"</h2>
             </div>
             
-             Карточка курса
+
             {% comment %}
-            <div class="card mb-3" style="max-width: 540px;">
+            <div class="card mb-8" style="max-width: 540px;">
                 <div class="row g-0">
-                    <div class="col-md-4" style="display:flex; align-items:center;
+                    <div class="col-md-8" style="display:flex; align-items:center;
                     justify-content: center;">
                         <img src="{% static 'img/course_img1.png' %}" class="img-fluid rounded-start" alt="...">
                     </div>
@@ -53,12 +53,12 @@
             {% endcomment %}
 
             {% for course in courses_category %}
-            <div class="card mb-3" style="max-width: 540px;">
+            <div class="card mb-8" style="margin-top: 30px;margin-bottom:30px;">
                 <div class="row g-0">
-                    <div class="col-md-4" style="display:flex; align-items:center;justify-content: center;">
-                        <img src="{% static 'img/course_img2.png' %}" class="img-fluid rounded-start" alt="...">
+                    <div class="col" style="display:flex; align-items:center;justify-content: center;">
+                        <img src="{% static course.img_url %}" class="img-fluid rounded-start" alt="...">
                     </div>
-                    <div class="col-md-8">
+                    <div class="col">
                         <div class="card-body">
                         <h5 class="card-title">{{ course.name }}</h5>
                         <p class="card-text">{{ course.description }}</p>

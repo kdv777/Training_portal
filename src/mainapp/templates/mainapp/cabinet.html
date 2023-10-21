@@ -5,16 +5,15 @@
 <!-- Блок Course-->
 {% if user.is_authenticated %}
 <div class="container d-flex" style="margin-top: 100px;">
-    <!-- left bar -->
+        <!-- left bar -->
     <div class="col-md-3" style=" padding: 20px 40px 20px 20px;">
         <h3 style="margin-top: 70px">Рекомендуем вам</h3>
         <ul class="list-group">
+            {% for course in courses_top %}
             <li class="list-group-item">
-                <a href="{% url 'mainapp:course1' %}" style="text-decoration: none"> Курс Йога </a>
+                <a href="{% url 'mainapp:course_detail' course.pk %}" style="text-decoration: none"> Курс: {{ course.name }} </a>
             </li>
-            <li class="list-group-item">
-                <a href="{% url 'mainapp:course1' %}" style="text-decoration: none"> Курс Фитомедицина </a>
-            </li>
+            {% endfor %}
         </ul>
     </div>
     <!-- end of left bar -->
