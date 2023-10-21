@@ -32,7 +32,7 @@
                 <h2> Список курсов  в категории "{{ category.name }}"</h2>
             </div>
             
-            <!-- Карточка курса-->
+             Карточка курса
             {% comment %}
             <div class="card mb-3" style="max-width: 540px;">
                 <div class="row g-0">
@@ -63,7 +63,7 @@
                         <h5 class="card-title">{{ course.name }}</h5>
                         <p class="card-text">{{ course.description }}</p>
                         <p class="card-text"><small class="text-body-secondary">Последнее обновление 3 мин. назад</small></p>
-                        <a href="{% url 'mainapp:course_detail' %}" class="btn btn-primary">Перейти</a>
+                        <a href="{% url 'mainapp:course_detail' course.pk %}" class="btn btn-primary">Перейти</a>
                         </div>
                     </div>
                 </div>

@@ -6,12 +6,22 @@ from django.http import FileResponse, JsonResponse
 from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView, View
 from django.shortcuts import get_object_or_404, render
 
+from django.contrib import messages
+from django.shortcuts import get_object_or_404, redirect, render
+# from django.template import context
+from django.urls import reverse_lazy
+from django.views.generic import CreateView, TemplateView
+from rest_framework import status
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.viewsets import ModelViewS
 
 # -------------- Class-Based- Views -----------
 # class MainPageView(TemplateView):
 #     template_name = "mainapp/index.html"
 from config.settings import BASE_DIR
-from mainapp.models import Category, Course, News, Order, Post
+from mainapp.models import Category, Course, Lesson, News, Order, Post
+from mainapp.serializers import OrderSerializer
 
 logger = logging.getLogger(__name__)
 
@@ -94,11 +104,8 @@ class CourseDetailPageView(TemplateView):
         # context = super(Courses_categoryPageView, self).get_context_data(**kwargs)
         context = super().get_context_data(**kwargs)
         context["course"] = get_object_or_404(Course, pk=pk)
+        context["lesson"] = Lesson.objects.all().filter(course=pk)
         return context
-
-
-class Lesson1_1PageView(TemplateView):
-    template_name = "mainapp/lesson1_1.html"
 
 
 class CoursesCategoryPageView(TemplateView):
@@ -108,6 +115,26 @@ class CoursesCategoryPageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["category"] = get_object_or_404(Category, pk=pk)
         context["courses_category"] = Course.objects.all().filter(category=pk)
+        return context
+
+
+class LessonDetailPageView(TemplateView):
+    template_name = "mainapp/lesson_detail.html"
+
+    def get_context_data(self, pk=None, **kwargs):
+        # context = super(Courses_categoryPageView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+        context["lesson"] = get_object_or_404(Lesson, pk=pk)
+        return context
+
+
+class LessonsCoursePageView(TemplateView):
+    template_name = "mainapp/lessons_course.html"
+
+    def get_context_data(self, pk=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["course"] = get_object_or_404(Course, pk=pk)
+        context["lessons_course"] = Lesson.objects.all().filter(course=pk)
         return context
 
 
@@ -137,6 +164,7 @@ class CabinetView(TemplateView):
         for item in courses_done:
             courses_done_id.append(item.course.id)
         # print(f'course_done:{courses_done_id}')
+
         context["courses_done"] = Course.objects.all().filter(id__in=courses_done_id)
 
         courses_active = (
@@ -151,6 +179,10 @@ class CabinetView(TemplateView):
         # print(f'course_active:{courses_active_id}')
         context["courses_active"] = Course.objects.all().filter(
             id__in=courses_active_id
+        )
+
+        context["courses_teacher"] = Course.objects.all().filter(
+            author=self.request.user.id
         )
 
         # context["base_dir"] = str(BASE_DIR).replace("\\", "/")
@@ -171,7 +203,78 @@ class CategoriesPageView(TemplateView):
 
         # Create your own data
         context["categories"] = Category.objects.all()
+        return context
 
+
+class CartPageView(TemplateView):
+    template_name = "mainapp/cart.html"
+
+
+class PaymentPageView(TemplateView):
+    template_name = "mainapp/payment.html"
+
+    def get(self, request, *args, **kwargs):
+        Order.objects.filter(is_paid=False, buyer=request.user).update(is_paid=True)
+        return super().get(request, *args, **kwargs)
+
+
+class OrderViewSet(ModelViewSet):
+    serializer_class = OrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = Order.objects.filter(buyer=self.request.user)
+        is_paid = self.request.query_params.get("is_paid", None)
+        if is_paid is not None:
+            queryset = queryset.filter(is_paid=is_paid)
+        return queryset
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+
+        if Order.objects.filter(
+            course=serializer.validated_data["course"], buyer=self.request.user
+        ).exists():
+            return Response(
+                {"error": "You already have this course"},
+                status=status.HTTP_409_CONFLICT,
+            )
+
+        self.perform_create(serializer)
+        headers = self.get_success_headers(serializer.data)
+        return Response(
+            serializer.data, status=status.HTTP_201_CREATED, headers=headers
+        )
+
+
+# class CourseCreateView(CreateView):
+#     model = Course
+#     template_name = "mainapp/course_form.html"
+#     success_url = reverse_lazy("mainapp:courses")
+#     fields = "__all__"
+
+
+class LessonCreateView(CreateView):
+    model = Lesson
+    template_name = "mainapp/lesson_form.html"
+    success_url = reverse_lazy("mainapp:index")
+    fields = "__all__"
+
+
+class CourseCreateView(TemplateView):
+    template_name = "mainapp/course_create_form.html"
+
+    # def get(self, request):
+    #     if request.user.is_teacher==False:
+    #         return redirect("mainapp:index")
+    #         context = super().get_context_data(**kwargs)
+    #         context['allcategs'] = Category.objects.all()
+    #     return render(request, "mainapp/news_list.html", context)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["allcategs"] = Category.objects.all()
         return context
 
 # Logging
@@ -196,3 +299,44 @@ class LogDownloadView(UserPassesTestMixin, View):
 
     def get(self, *args, **kwargs):
         return FileResponse(open(settings.LOG_FILE, "rb"))
+    def post(self, request, *args, **kwargs):
+        course_name = request.POST.get("name")
+        course_description = request.POST.get("description")
+        course_img_url = request.POST.get("img_url")
+        course_price = request.POST.get("price")
+        course_cat_id = request.POST.get("cat_id")
+
+        print(f"course_name: {course_name}")
+        print(f"course_description: {course_description}")
+        print(f"course_img_url: {course_img_url}")
+        print(f"course_price: {course_price}")
+        print(f"course_categ: {course_cat_id}")
+        print(f"course_author: {request.user.username}")
+
+        if not all(
+            [
+                course_name,
+                course_description,
+                course_img_url,
+                course_price,
+                course_cat_id,
+            ]
+        ):
+            messages.error(self.request, "Не все поля заполнены")
+            return redirect("mainapp:course_create")
+        course_names_all = [el.name for el in Course.objects.all()]
+        if course_name in course_names_all:
+            messages.error(self.request, "Курс с таким именем уже есть")
+            return redirect("authapp:register")
+        course_category = get_object_or_404(Category, id=course_cat_id)
+        course = Course()
+        course.name = course_name
+        course.description = course_description
+        course.img_url = course_img_url
+        course.price = course_price
+        # course.category = course_category
+        course.author = request.user
+        course.slug = str(course_name.lower().replace(" ", "-")[:20])
+        course.save()
+        course.category.add(course_category)
+        return redirect("mainapp:cabinet")

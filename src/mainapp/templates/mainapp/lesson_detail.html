@@ -1,44 +1,41 @@
 {% extends 'mainapp/base.html' %}
 {% load static %}
 
-
-
 {% block content %}
-{# Блок Course #}
+{# Блок Lesson #}
 <div class="container " style="display: flex; margin-top: 100px;">
     {# left bar #}
     <div class='col-md-3' style="
     /* border: 3px solid blue;   */
     padding: 20px;">
         <h2 style="margin-top: 40px;"> Список лекций</h2>
-        <ul class="list-group">
-            <li class="list-group-item"> <a href="#" style="text-decoration: none">
-                    Лекция1 Введение
-                </a> </li>
-            <li class="list-group-item"> <a href="#" style="text-decoration: none">
-                    Лекция2 Выведение
-                </a> </li>
-        </ul>
+            <ul class="list-group">
+                {% for item in lessons_course %}
+                    <li class="list-group-item"> <a href="{% url 'mainapp:lesson_detail' item.course.pk  %}" style="text-decoration: none">
+                          Лекция {{ item.order }}. {{ item.post.title }}
+                        </a> </li>
+                    {% endfor %}
+                </ul>
     </div>
     {# end of left bar #}
     {# main content #}
     <div class='col-md-9' style="
     /* border:3px solid blue;  */
     padding: 20px; ">
-        <h1>Курс: Здоровый образ жизни</h1>
-        <h2>Лекция 1 Введение</h2>
+        <h1>Курс {{ lesson.course.name }}</h1>
+        <h2>Лекция {{lesson.order}}. {{lesson.post.title}}</h2>
 
         <figure class="figure mt-3">
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/0BAV0-Qntbo?si=LJ7AaPd0u8X6VcWf"
+            <iframe width="560" height="315" src={{lesson.video_url}}
                 title="YouTube video player" frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowfullscreen></iframe>
         </figure>
-        <p>Курс Здоровый образ жизни будет интетесен тем, кто следит за своим здоровьем</p>
+        <p>{{ lesson.post.text }}</p>
 
         <input class="btn btn-primary" type="button" value="Следующая лекция">
         <div class="mb-3 mt-4">
-            <h4>Ваш комментарий к курсу</h4>
+            <h4>Ваш комментарий к уроку</h4>
             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
         </div>
         <input class="btn btn-primary" type="button" value="Опубликовать">

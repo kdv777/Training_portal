@@ -1,9 +1,43 @@
 {% extends 'mainapp/base.html' %}
 {% load static %}
 
+{% block js %}
+{{ block.super }}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript">
+function add_to_cart(course_id){
+    csrftoken = $("[name=csrfmiddlewaretoken]").val();
+    $.ajax({
+        url: "{% url 'mainapp:orders-list'%}",
+        type: "POST",
+        data: {
+            course: course_id,
+            buyer: {{ user.id }},
+            csrfmiddlewaretoken: csrftoken
+        },
+        beforeSend: function(xhr) {
+            xhr.setRequestHeader("X-CSRFToken", csrftoken);
+        },
+        success: function(data){
+            alert("Курс добавлен в корзину");
+        },
+        error: function(jqXHR){
+            if (jqXHR.status == 409){
+                alert("Курс уже в корзине");
+            }
+            else {
+                alert("Не получилось добавить курс в корзину");
+            }
+        }
+    })
+}
+</script>
+{% endblock %}
 
 {% block content %}
-        <!-- Блок Course-->
+        <!-- Блок Lesson-->
+
+
         <div class="container d-flex" style="margin-top: 100px;">
             <!-- left bar -->
             <div class='col-md-3' style="
@@ -11,12 +45,11 @@
             padding: 20px;">
                 <h2 style="margin-top: 40px;"> Список лекций</h2>
                 <ul class="list-group">
-                    <li class="list-group-item"> <a href="#" style="text-decoration: none">
-                            Лекция1 Введение
+                    {% for item in lesson %}
+                    <li class="list-group-item"> <a href="{% url 'mainapp:lesson_detail' item.pk %}" style="text-decoration: none">
+                          Лекция {{ item.order }}. {{ item.post.title }}
                         </a> </li>
-                    <li class="list-group-item"> <a href="#" style="text-decoration: none">
-                            Лекция2 Выведение
-                        </a> </li>
+                    {% endfor %}
                 </ul>
             </div>
             <!-- end of left bar -->
@@ -27,11 +60,18 @@
                 <h1>Курс: {{ course.name }}</h1>
 
                 <figure class="figure mt-3">
-                    <img src="/static/{{ course.img_url }}" class="figure-img img-fluid rounded"
-                        style="width: 200px; height: 200px;" alt="...">
+<!--                    <img src="/static/{{ course.img_url }}" class="figure-img img-fluid rounded"-->
+                        <img src="{% static 'img/course_img1.png' %}" class="img-fluid rounded-start" width="300" alt="...">
+
                 </figure>
                 <p>{{ course.description }}</p>
-                <input class="btn btn-primary" type="button" value="Записаться">
+                {% if not user.is_teacher %}
+                    {% csrf_token %}
+                    <input class="btn btn-primary" type="button" value="Добавить в корзину" onclick="add_to_cart({{ course.id }})">
+                {% endif %}
+                {% if user.is_teacher %}
+                        <a href="{% url 'mainapp:lesson_create' %}" class="mt-4 btn btn-primary">Создать лекцию</a>
+                {% endif %}
                 <!-- comments to course -->
                     <div class="d-flex">
                         <h3 style="margin: 20px 20px 0 0;">Oтзывы о курсе</h3>
