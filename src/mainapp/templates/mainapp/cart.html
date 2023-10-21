@@ -1,8 +1,9 @@
-{% extends 'authapp/base.html' %}
+{% extends 'mainapp/base.html' %}
 {% load static %}
 
 {# from https://www.pythontutorial.net/django-tutorial/django-loginview/ #}
 {% block js %}
+{{ block.super }}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script type="text/javascript">
     function update_cart(){
@@ -55,17 +56,22 @@
 
 {% block content %}
 <div class="container mb-5" style="margin-top: 100px; max-width: 500px;">
-    <h2>Корзина</h2>
-    {% csrf_token %}
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Курс</th>
-                <th scope="col">Удалить</th>
-            </tr>
-        </thead>
-	    <tbody id="cart_items"></tbody>
-    </table>
+    <div class="row">
+        <h2>Корзина</h2>
+        {% csrf_token %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Курс</th>
+                    <th scope="col">Удалить</th>
+                </tr>
+            </thead>
+            <tbody id="cart_items"></tbody>
+        </table>
+    </div>
+    <div class="row">
+        <a href="{% url 'mainapp:payment' %}" class="btn btn-primary">Оформить заказ</a>
+    </div>
 </div>
 
 {% endblock %}

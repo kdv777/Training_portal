@@ -2,6 +2,7 @@
 {% load static %}
 
 {% block js %}
+{{ block.super }}
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 <script type="text/javascript">
 function add_to_cart(course_id){
@@ -59,11 +60,12 @@ function add_to_cart(course_id){
                 <h1>Курс: {{ course.name }}</h1>
 
                 <figure class="figure mt-3">
-                    <img src="/static/{{ course.img_url }}" class="figure-img img-fluid rounded"
-                         alt="...">
+                    <img src="/static/{{ course.img_url }}" class="figure-img img-fluid rounded">
+<!--                        <img src="{% static 'img/course_img1.png' %}" class="img-fluid rounded-start" width="300" alt="...">-->
+
                 </figure>
                 <p>{{ course.description }}</p>
-                {% if user.is_teacher == None %}
+                {% if not user.is_teacher %}
                     {% csrf_token %}
                     <input class="btn btn-primary" type="button" value="Добавить в корзину" onclick="add_to_cart({{ course.id }})">
                 {% endif %}
