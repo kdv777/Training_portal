@@ -52,17 +52,17 @@ pdm run python src/manage.py runserver
 ```
 # Создание фикстуры
 ```bash
-Папку fixtures предварительно необходимо создать внутри приложения (mainapp, authapp) (/mainapp/fixtures)
-Далее выполняем команду для создания фикстуры для соответствующего приложения
-python manage.py dumpdata mainapp > mainapp/fixtures/001_mainapp.json
-python manage.py dumpdata authapp > authapp/fixtures/001_authapp.json
+Папку fixtures предварительно необходимо создать внутри src (/fixtures)
+Далее выполняем команду для создания фикстуры если находимся в src>
+python -Xutf8 manage.py dumpdata --exclude auth.permission --exclude contenttypes --exclude auth.group  --exclude admin.logentry --exclude sessions --indent 2 -o ./fi
+xtures/007_all.json
 ```
 # Загрузка фикстур
 ```bash
 Удаляем старую базу
 python manage.py makemigrations
 python manage.py migrate
-python manage.py loaddata ./mainapp/fixtures/006_all.json
+python manage.py loaddata 007_all.json
 ```
 
 
