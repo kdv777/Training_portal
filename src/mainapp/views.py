@@ -1,5 +1,11 @@
+# Logging
+import logging
+from django.conf import settings
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin, UserPassesTestMixin
+from django.http import FileResponse, JsonResponse
+from django.views.generic import CreateView, DeleteView, DetailView, ListView, TemplateView, UpdateView, View
 from django.shortcuts import get_object_or_404, render
-from django.views.generic import TemplateView
+
 
 # -------------- Class-Based- Views -----------
 # class MainPageView(TemplateView):
@@ -7,6 +13,7 @@ from django.views.generic import TemplateView
 from config.settings import BASE_DIR
 from mainapp.models import Category, Course, News, Order, Post
 
+logger = logging.getLogger(__name__)
 
 class MainPageView(TemplateView):
     template_name = "mainapp/index.html"
@@ -21,6 +28,7 @@ class MainPageView(TemplateView):
     #     return render(request, "mainapp/index.html", context)
 
     def get_context_data(self, **kwargs):
+        logger.info("Enter in main_page")
         # Get all previous data
         context = super().get_context_data(**kwargs)
 
@@ -82,6 +90,7 @@ class CourseDetailPageView(TemplateView):
     template_name = "mainapp/course_detail.html"
 
     def get_context_data(self, pk=None, **kwargs):
+        logger.debug("Yet another log message")
         # context = super(Courses_categoryPageView, self).get_context_data(**kwargs)
         context = super().get_context_data(**kwargs)
         context["course"] = get_object_or_404(Course, pk=pk)
@@ -164,3 +173,26 @@ class CategoriesPageView(TemplateView):
         context["categories"] = Category.objects.all()
 
         return context
+
+# Logging
+class LogView(TemplateView):
+    template_name = "mainapp/log_view.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(LogView, self).get_context_data(**kwargs)
+        log_slice = []
+        with open(settings.LOG_FILE, "r") as log_file:
+            for i, line in enumerate(log_file):
+                if i == 1000:  # first 1000 lines
+                    break
+                log_slice.insert(0, line)  # append at start
+            context["log"] = "".join(log_slice)
+        return context
+
+
+class LogDownloadView(UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def get(self, *args, **kwargs):
+        return FileResponse(open(settings.LOG_FILE, "rb"))

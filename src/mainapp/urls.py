@@ -29,4 +29,7 @@ urlpatterns = [
     path("ckeditor/", include("ckeditor_uploader.urls"), name="ckeditor_upload"),
     path("cabinet/", views.CabinetView.as_view(), name="cabinet"),
     path("news_details/<int:pk>/", views.NewsDetailsView.as_view(), name="news_details"),
+    # Logging
+    path("log_view/", views.LogView.as_view(), name="log_view"),
+    path("log_download/", views.LogDownloadView.as_view(), name="log_download"),
 ]
