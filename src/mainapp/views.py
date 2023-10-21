@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
+from django.db.models import Count
 
 # -------------- Class-Based- Views -----------
 # class MainPageView(TemplateView):
@@ -13,6 +14,8 @@ from config.settings import BASE_DIR
 from mainapp.models import Category, Course, Lesson, News, Order, Post
 from mainapp.serializers import OrderSerializer
 
+category_pk = 0
+course_pk = 0
 
 class MainPageView(TemplateView):
     template_name = "mainapp/index.html"
@@ -31,8 +34,13 @@ class MainPageView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         # Create your own data
-        context["category"] = Category.objects.all()
-        # print(context["category"].__dir__())
+        category = Category.objects.all()
+        count_cours = {}
+        context["category"] = category
+        for cat in category:
+            count_cours[cat.name] = Course.objects.filter(category=Category.objects.get(name=cat).id).count()
+
+        context["count_cours"] = count_cours
         context["list_of_news"] = News.objects.all().order_by("created_at")[:3]
         context["base_dir"] = str(BASE_DIR).replace("\\", "/")
         return context
@@ -86,10 +94,10 @@ class Course1PageView(TemplateView):
 
 class CourseDetailPageView(TemplateView):
     template_name = "mainapp/course_detail.html"
-
     def get_context_data(self, pk=None, **kwargs):
         # context = super(Courses_categoryPageView, self).get_context_data(**kwargs)
         context = super().get_context_data(**kwargs)
+        course_pk = pk
         context["course"] = get_object_or_404(Course, pk=pk)
         context["lesson"] = Lesson.objects.all().filter(course=pk)
         return context
@@ -98,8 +106,10 @@ class CourseDetailPageView(TemplateView):
 class CoursesCategoryPageView(TemplateView):
     template_name = "mainapp/courses_category.html"
 
+
     def get_context_data(self, pk=None, **kwargs):
         context = super().get_context_data(**kwargs)
+        category_pk = pk
         context["category"] = get_object_or_404(Category, pk=pk)
         context["courses_category"] = Course.objects.all().filter(category=pk)
         return context
@@ -109,9 +119,12 @@ class LessonDetailPageView(TemplateView):
     template_name = "mainapp/lesson_detail.html"
 
     def get_context_data(self, pk=None, **kwargs):
-        # context = super(Courses_categoryPageView, self).get_context_data(**kwargs)
+        # context = super(CoursesCategoryPageView, self).get_context_data(**kwargs)
         context = super().get_context_data(**kwargs)
         context["lesson"] = get_object_or_404(Lesson, pk=pk)
+        context["course"] = get_object_or_404(Course, pk=pk)
+        context["lessons_course"] = Lesson.objects.all().filter(course=pk)
+
         return context
 
 
@@ -189,8 +202,14 @@ class CategoriesPageView(TemplateView):
         context = super().get_context_data(**kwargs)
 
         # Create your own data
-        context["categories"] = Category.objects.all()
+        category = Category.objects.all()
+        count_cours = {}
+        context["category"] = category
+        for cat in category:
+            count_cours[cat.name] = Course.objects.filter(category=Category.objects.get(name=cat).id).count()
 
+        context["count_cours"] = count_cours
+        context["base_dir"] = str(BASE_DIR).replace("\\", "/")
         return context
 
 

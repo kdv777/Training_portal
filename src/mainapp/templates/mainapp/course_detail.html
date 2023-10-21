@@ -42,11 +42,11 @@ function add_to_cart(course_id){
             <div class='col-md-3' style="
             /* border: 3px solid blue;   */
             padding: 20px;">
-                <h2 style="margin-top: 40px;"> Список лекций</h2>
+                <h2 style="margin-top: 40px;"> Список уроков</h2>
                 <ul class="list-group">
                     {% for item in lesson %}
                     <li class="list-group-item"> <a href="{% url 'mainapp:lesson_detail' item.pk %}" style="text-decoration: none">
-                          Лекция {{ item.order }}. {{ item.post.title }}
+                          {{ item.post.title }}
                         </a> </li>
                     {% endfor %}
                 </ul>
@@ -60,7 +60,7 @@ function add_to_cart(course_id){
 
                 <figure class="figure mt-3">
                     <img src="/static/{{ course.img_url }}" class="figure-img img-fluid rounded"
-                        style="width: 200px; height: 200px;" alt="...">
+                         alt="...">
                 </figure>
                 <p>{{ course.description }}</p>
                 {% if user.is_teacher == None %}

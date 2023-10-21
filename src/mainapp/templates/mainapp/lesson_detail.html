@@ -8,11 +8,11 @@
     <div class='col-md-3' style="
     /* border: 3px solid blue;   */
     padding: 20px;">
-        <h2 style="margin-top: 40px;"> Список лекций</h2>
+        <h2 style="margin-top: 40px;"> Список уроков</h2>
             <ul class="list-group">
                 {% for item in lessons_course %}
-                    <li class="list-group-item"> <a href="{% url 'mainapp:lesson_detail' item.course.pk  %}" style="text-decoration: none">
-                          Лекция {{ item.order }}. {{ item.post.title }}
+                    <li class="list-group-item"> <a href="{% url 'mainapp:lesson_detail' item.pk  %}" style="text-decoration: none">
+                          {{ item.post.title }}
                         </a> </li>
                     {% endfor %}
                 </ul>
@@ -31,7 +31,7 @@
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowfullscreen></iframe>
         </figure>
-        <p>{{ lesson.post.text }}</p>
+        <p>{{ lesson.post.body|safe }}</p>
 
         <input class="btn btn-primary" type="button" value="Следующая лекция">
         <div class="mb-3 mt-4">
@@ -48,5 +48,5 @@
 
 
 </div>
-{# end of main content # }
+
 {% endblock %}
