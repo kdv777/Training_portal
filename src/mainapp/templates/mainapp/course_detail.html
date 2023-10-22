@@ -112,7 +112,12 @@
                             <p class="card-text">
                             <form action="{% url 'mainapp:course_feedback' %}" method="POST" id="feedbackForm">
                                 {% csrf_token %}
-                                {{ feedback_form }}
+                                {% for hidden in feedback_form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                                {% for field in feedback_form.visible_fields %}
+                                    {{ field }}
+                                {% endfor %}
                             </form>
                             <button id="feedbackSubmit" class="btn btn-primary btn-block">Отправить отзыв</button>
                             </p>
