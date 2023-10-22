@@ -64,5 +64,9 @@ python manage.py makemigrations
 python manage.py migrate
 python manage.py loaddata 007_all.json
 ```
-
+# Логирование
+Создать папку var/log в src
+'''bash
+mkdir -p ./var/log
+'''
 
