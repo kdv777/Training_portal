@@ -20,6 +20,7 @@ function add_to_cart(course_id){
         },
         success: function(data){
             alert("Курс добавлен в корзину");
+            document.location.reload();
         },
         error: function(jqXHR){
             if (jqXHR.status == 409){
@@ -67,8 +68,10 @@ function add_to_cart(course_id){
                 </figure>
                 <p>{{ course.description }}</p>
                 {% if not user.is_teacher %}
-                    {% csrf_token %}
-                    <input class="btn btn-primary" type="button" value="Добавить в корзину" onclick="add_to_cart({{ course.id }})">
+                    {% if not is_ordered %}
+                        {% csrf_token %}
+                        <input class="btn btn-primary" type="button" value="Добавить в корзину" onclick="add_to_cart({{ course.id }})">
+                    {% endif %}
                 {% endif %}
                 {% if user.is_teacher %}
                         <a href="{% url 'mainapp:lesson_create' %}" class="mt-4 btn btn-primary">Создать лекцию</a>
