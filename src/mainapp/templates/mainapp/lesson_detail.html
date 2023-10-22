@@ -10,7 +10,7 @@
     padding: 20px;">
         <h2 style="margin-top: 40px;"> Список уроков</h2>
             <ul class="list-group">
-                {% for item in lessons_course %}
+                {% for item in all_lessons %}
                     <li class="list-group-item"> <a href="{% url 'mainapp:lesson_detail' item.pk  %}" style="text-decoration: none">
                           {{ item.post.title }}
                         </a> </li>
@@ -24,13 +24,23 @@
     padding: 20px; ">
         <h1>Курс {{ lesson.course.name }}</h1>
         <h2>Лекция {{lesson.order}}. {{lesson.post.title}}</h2>
-
+        {% if lesson.video_url %}
         <figure class="figure mt-3">
-            <iframe width="560" height="315" src={{lesson.video_url}}
+            <iframe width="560" height="315" src=" {{lesson.video_url}} "
                 title="YouTube video player" frameborder="0"
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
                 allowfullscreen></iframe>
         </figure>
+        {% endif %}
+          {% if lesson.media_link %}
+        <figure class="figure mt-3">
+
+                    <img src="/static/{{ lesson.media_link }}" class="figure-img img-fluid rounded" alt="...">
+
+
+                </figure>
+        {% endif %}
+
         <p>{{ lesson.post.body|safe }}</p>
 
         <input class="btn btn-primary" type="button" value="Следующая лекция">

@@ -23,19 +23,51 @@
     {% endif %}
     <form class="mt-5" method="post" novalidate>
         {% csrf_token %}
-
-        {% for field in form %}
-        <label for="{{ field.name }}" class="col-sm-7 col-form-label">{{ field.label_tag }}</label>
-        <div class="col-sm-8" if="{{ field.name }}">
-            {{ field }}
+  <div class="row mb-3">
+            <label for="l_title" class="col-sm-10 col-form-label">Название лекции:</label>
+            <div class="col-sm-10">
+                <input type="text" name="l_title" class="form-control" id="l_title" required>
+            </div>
         </div>
-        {% endfor %}
+               <div class="row mb-3">
+            <label for="text" class="col-sm-10 col-form-label">Краткое описание</label>
+            <div class="col-sm-10">
+                <textarea name="text" class="form-control" id="text" rows="5" required></textarea>
+            </div>
+        </div>
+               <div class="row mb-3">
+            <label for="body" class="col-sm-10 col-form-label">Текст лекции</label>
+            <div class="col-sm-10">
+                <textarea name="body" class="form-control" id="body" rows="5" required></textarea>
+            </div>
+        </div>
 
+
+        <div class="row mb-3">
+            <label for="order" class="col-sm-10 col-form-label"># Лекции </label>
+            <div class="col-sm-10">
+                <input type="number" name="order" class="form-control" id="order" required>
+            </div>
+
+                    <div class="row mb-3">
+            <label for="video_url" class="col-sm-10 col-form-label">Video URL</label>
+            <div class="col-sm-10">
+                <input type="text" name="video_url" class="form-control" id="video_url" required>
+            </div>
+        </div>
+
+                    <div class="row mb-3">
+            <label for="media_url" class="col-sm-10 col-form-label">Media URL</label>
+            <div class="col-sm-10">
+                <input type="text" name="media_url" class="form-control" id="media_url" required>
+            </div>
+        </div>
 
         <hr>
-        <div class="d-flex gap-4 mt-5">
+        <div class="d-flex gap-4 mt-3 mb-3">
             <button type="submit" class="btn btn-primary" value="Update">Сохранить</button>
         </div>
+
         <hr>
 
     </form>
