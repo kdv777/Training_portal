@@ -102,11 +102,14 @@ class CourseDetailPageView(TemplateView):
         context = super().get_context_data(**kwargs)
         course = get_object_or_404(Course, pk=pk)
         context["course"] = course
+        # print(str(course.img_url)[:3])
         context["static_img"] = course.img_url
-        context["url_img"] = False
+        context["url_img"] = None
         if course.img_url[:4] == "http":
             context["url_img"] = course.img_url
-            context["static_img"] = False
+            context["static_img"] = None
+        # print(f'static_img: {context["static_img"]}')
+        # print(f'url_img: {context["url_img"]}')
 
 
 
@@ -138,6 +141,11 @@ class LessonDetailPageView(TemplateView):
         context["all_lessons"] = Lesson.objects.all()\
             .filter(course = lesson.course.id).\
             order_by("order")
+        context["static_img"] = lesson.media_link
+        context["url_img"] = None
+        if lesson.media_link[:4] == "http":
+            context["url_img"] = lesson.media_link
+            context["static_img"] = None
         # print(f'all lessons : {context["all_lessons"]}')
         return context
 
@@ -297,7 +305,7 @@ class LessonCreateView(CreateView):
         lesson_text = request.POST.get("text")
         lesson_body = request.POST.get("body")
         lesson_author = request.user
-        lesson_slug = str(lesson_title.lower().replace(" ", "-")[:20])+"_"+str(datetime.now)
+        lesson_slug = str(lesson_title.lower().replace(" ", "-")[:20]) + "_" + str(datetime.now)
         lesson_order = int(request.POST.get("order"))
         lesson_url_v = request.POST.get("video_url")
         lesson_url_m = request.POST.get("media_url")
@@ -345,10 +353,12 @@ class LessonCreateView(CreateView):
         lesson.post_id = post.id
         lesson.course = course
         lesson.order = lesson_order
-        lesson.video_url = lesson_url_v
-        lesson.media_link = lesson_url_m
+        if lesson_url_v:
+            lesson.video_url = lesson_url_v
+        if lesson_url_m:
+            lesson.media_link = lesson_url_m
         lesson.save()
-        return redirect("mainapp:lesson_detail", pk=pk )
+        return redirect("mainapp:lesson_detail", pk=lesson.id )
 
 
 
@@ -385,7 +395,7 @@ class CourseCreateView(TemplateView):
             [
                 course_name,
                 course_description,
-                course_img_url,
+                # course_img_url,
                 course_price,
                 course_cat_id,
             ]
@@ -400,7 +410,8 @@ class CourseCreateView(TemplateView):
         course = Course()
         course.name = course_name
         course.description = course_description
-        course.img_url = course_img_url
+        if course_img_url:
+            course.img_url = course_img_url
         course.price = course_price
         # course.category = course_category
         course.author = request.user

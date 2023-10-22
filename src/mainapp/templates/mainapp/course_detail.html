@@ -63,12 +63,12 @@ function add_to_cart(course_id){
         <h1>Курс: {{ course.name }}</h1>
         {% if static_img %}
         <figure class="figure mt-3">
-            <img src="/static/{{ static.img }}" class="figure-img img-fluid rounded" alt="...">
+            <img src="/static/{{ course.img_url }}" class="figure-img img-fluid rounded" alt="...">
         </figure>
         {% endif %}
         {% if url_img %}
         <figure class="figure mt-3">
-            <img src="{{ url_img }}" class="figure-img img-fluid rounded" alt="...">
+            <img src="{{ course.img_url }}" class="figure-img img-fluid rounded" alt="...">
         </figure>
         {% endif %}
 
