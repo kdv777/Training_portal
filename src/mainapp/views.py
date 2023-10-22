@@ -1,5 +1,8 @@
 from django.contrib import messages
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template.loader import render_to_string
 # from django.template import context
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, TemplateView
@@ -15,6 +18,8 @@ from django.db.models import Count
 from config.settings import BASE_DIR
 from mainapp.models import Category, Course, Lesson, News, Order, Post, CourseFeedback
 from mainapp.serializers import OrderSerializer
+from mainapp import forms as mainapp_forms
+from mainapp import models as mainapp_models
 
 
 class MainPageView(TemplateView):
@@ -101,8 +106,21 @@ class CourseDetailPageView(TemplateView):
         context["course"] = get_object_or_404(Course, pk=pk)
         context["lesson"] = Lesson.objects.all().filter(course=pk)
         context["feedback"] = CourseFeedback.objects.all().filter(course=pk)
-
+        if not self.request.user.is_anonymous:
+            context["feedback_form"] = mainapp_forms.CourseFeedbackForm(
+                course=context["course"], user=self.request.user
+            )
         return context
+
+
+class CourseFeedbackFormView(LoginRequiredMixin, CreateView):
+    model = mainapp_models.CourseFeedback
+    form_class = mainapp_forms.CourseFeedbackForm
+
+    def form_valid(self, form):
+        self.object = form.save()
+        rendered_card = render_to_string("mainapp/includes/feedback_card.html", context={"item": self.object})
+        return JsonResponse({"card": rendered_card})
 
 
 class CoursesCategoryPageView(TemplateView):

@@ -30,6 +30,23 @@
           }
         })
       }
+      $(document).ready(function () {
+        {% if feedback_form %}
+          $("#feedbackSubmit").click(function () {
+            $("#cardForm").hide();
+
+            var $form = $("#feedbackForm");
+            $.ajax({
+              type: "POST",
+              url: $form.attr("action"),
+              data: $form.serialize(),
+              success: function (data) {
+                $("#feedback_list").append(data.card);
+              }
+            });
+          });
+        {% endif %}
+      })
     </script>
 {% endblock %}
 
@@ -75,22 +92,34 @@
                 <a href="{% url 'mainapp:lesson_create' %}" class="mt-4 btn btn-primary">Создать лекцию</a>
             {% endif %}
             <!-- comments to course -->
-            <div class="d-flex">
+            <div id="feedback-list">
                 {% if feedback %}
                     {% for item in feedback %}
-                    {% include 'mainapp/includes/feedback_card.html' %}
+                        {% include 'mainapp/includes/feedback_card.html' %}
                     {% endfor %}
                 {% else %}
                     <p>
+
                         Пока о данном курсе нет отзывов. Будь первым!
                     </p>
                 {% endif %}
             </div>
-            <div class="mb-3 mt-4">
-                <h4>Ваш комментарий к курсу</h4>
-                <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-            </div>
-            <input class="btn btn-primary" type="button" value="Опубликовать">
+            {% if not user.is_teacher %}
+                {% if feedback_form %}
+                    <div class="card" id="cardForm">
+                        <div class="card-body">
+                            <h5 class="card-title">Добавить отзыв</h5>
+                            <p class="card-text">
+                            <form action="{% url 'mainapp:course_feedback' %}" method="POST" id="feedbackForm">
+                                {% csrf_token %}
+                                {{ feedback_form }}
+                            </form>
+                            <button id="feedbackSubmit" class="btn btn-primary btn-block">Отправить</button>
+                            </p>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
             <!-- end of comments to course -->
         </div>
         <!-- end of main content -->
