@@ -13,7 +13,7 @@ from django.db.models import Count
 # class MainPageView(TemplateView):
 #     template_name = "mainapp/index.html"
 from config.settings import BASE_DIR
-from mainapp.models import Category, Course, Lesson, News, Order, Post
+from mainapp.models import Category, Course, Lesson, News, Order, Post, CourseFeedback
 from mainapp.serializers import OrderSerializer
 
 
@@ -100,6 +100,8 @@ class CourseDetailPageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["course"] = get_object_or_404(Course, pk=pk)
         context["lesson"] = Lesson.objects.all().filter(course=pk)
+        context["feedback"] = CourseFeedback.objects.all().filter(course=pk)
+
         return context
 
 

@@ -184,3 +184,13 @@ class Order(TimestampMixin):
 
     def __str__(self):
         return f"" f"{self.buyer.username}  {self.course.name}"
+
+
+class CourseFeedback(TimestampMixin):
+    course = models.ForeignKey(Course, on_delete=models.CASCADE, related_name="coursefeedback")
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name="coursefeedback")
+    feedback = models.TextField(blank=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.course} ({self.user})"
