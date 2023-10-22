@@ -48,6 +48,10 @@
                             <li>
                                 <hr class="dropdown-divider"/>
                             </li>
+                            <!--Logging-->
+                            <li><a class="dropdown-item" style="color: #fff;" href="{% url 'mainapp:log_view' %}">Лог</a>
+                            </li>
+                            <!--Logging end-->
                             <li><a class="dropdown-item" style="color: #fff;"
                                    href="{% url 'authapp:logout' %}">Выйти</a></li>
                             {% elif user and user.is_authenticated %}
