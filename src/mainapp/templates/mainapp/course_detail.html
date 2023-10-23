@@ -2,38 +2,52 @@
 {% load static %}
 
 {% block js %}
-{{ block.super }}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script type="text/javascript">
-function add_to_cart(course_id){
-    csrftoken = $("[name=csrfmiddlewaretoken]").val();
-    $.ajax({
-        url: "{% url 'mainapp:orders-list'%}",
-        type: "POST",
-        data: {
+   {{ block.super }}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript">
+      function add_to_cart(course_id) {
+        csrftoken = $("[name=csrfmiddlewaretoken]").val();
+        $.ajax({
+          url: "{% url 'mainapp:orders-list'%}",
+          type: "POST",
+          data: {
             course: course_id,
             buyer: {{ user.id }},
             csrfmiddlewaretoken: csrftoken
-        },
-        beforeSend: function(xhr) {
+          },
+          beforeSend: function (xhr) {
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        },
-        success: function(data){
+          },
+          success: function (data) {
             alert("Курс добавлен в корзину");
-            document.location.reload();
-        },
-        error: function(jqXHR){
-            if (jqXHR.status == 409){
-                alert("Курс уже в корзине");
+          },
+          error: function (jqXHR) {
+            if (jqXHR.status == 409) {
+              alert("Курс уже в корзине");
+            } else {
+              alert("Не получилось добавить курс в корзину");
             }
-            else {
-                alert("Не получилось добавить курс в корзину");
-            }
-        }
-    })
-}
+          }
+        })
+      }
+      $(document).ready(function () {
+        {% if feedback_form %}
+          $("#feedbackSubmit").click(function () {
+            $("#cardForm").hide();
 
-</script>
+            var $form = $("#feedbackForm");
+            $.ajax({
+              type: "POST",
+              url: $form.attr("action"),
+              data: $form.serialize(),
+              success: function (data) {
+                $("#feedback_list").append(data.card);
+              }
+            });
+          });
+        {% endif %}
+      })
+    </script>
 {% endblock %}
 
 {% block content %}
