@@ -338,7 +338,7 @@ class LessonCreateView(CreateView):
         post.author = lesson_author
         post.slug = lesson_slug
         post.save()
-        print('post_created')
+        # print('post_created')
 
         lesson = Lesson()
         course = get_object_or_404(Course, pk=pk)
@@ -376,12 +376,12 @@ class CourseCreateView(TemplateView):
         course_price = request.POST.get("price")
         course_cat_id = request.POST.get("cat_id")
 
-        print(f"course_name: {course_name}")
-        print(f"course_description: {course_description}")
-        print(f"course_img_url: {course_img_url}")
-        print(f"course_price: {course_price}")
-        print(f"course_categ: {course_cat_id}")
-        print(f"course_author: {request.user.username}")
+        # print(f"course_name: {course_name}")
+        # print(f"course_description: {course_description}")
+        # print(f"course_img_url: {course_img_url}")
+        # print(f"course_price: {course_price}")
+        # print(f"course_categ: {course_cat_id}")
+        # print(f"course_author: {request.user.username}")
 
         if not all(
             [
