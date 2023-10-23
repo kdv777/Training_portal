@@ -105,7 +105,7 @@ class CourseDetailPageView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["course"] = get_object_or_404(Course, pk=pk)
         context["lesson"] = Lesson.objects.all().filter(course=pk)
-        context["feedback"] = CourseFeedback.objects.all().filter(course=pk)
+        context["feedback"] = CourseFeedback.objects.filter(course=pk)
         if not self.request.user.is_anonymous:
             context["feedback_form"] = mainapp_forms.CourseFeedbackForm(
                 course=context["course"], user=self.request.user
