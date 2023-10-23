@@ -394,8 +394,7 @@ class CourseCreateView(TemplateView):
         ):
             messages.error(self.request, "Не все поля заполнены")
             return redirect("mainapp:course_create")
-        course_names_all = [el.name for el in Course.objects.all()]
-        if course_name in course_names_all:
+        if Course.objects.filter(name=course_name).exists():
             messages.error(self.request, "Курс с таким именем уже есть")
             return redirect("authapp:register")
         course_category = get_object_or_404(Category, id=course_cat_id)
