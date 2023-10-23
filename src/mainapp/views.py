@@ -115,7 +115,9 @@ class CourseDetailPageView(TemplateView):
             context["is_ordered"] = True
         else:
             context["is_ordered"] = False
-        context["feedback"] = CourseFeedback.objects.all().filter(course=pk)
+
+        context["feedback"] = CourseFeedback.objects.filter(course=pk)
+
         if not self.request.user.is_anonymous:
             context["feedback_form"] = mainapp_forms.CourseFeedbackForm(
                 course=context["course"], user=self.request.user
@@ -338,7 +340,7 @@ class LessonCreateView(CreateView):
         post.author = lesson_author
         post.slug = lesson_slug
         post.save()
-        print('post_created')
+        # print('post_created')
 
         lesson = Lesson()
         course = get_object_or_404(Course, pk=pk)
@@ -376,12 +378,14 @@ class CourseCreateView(TemplateView):
         course_price = request.POST.get("price")
         course_cat_id = request.POST.get("cat_id")
 
-        print(f"course_name: {course_name}")
-        print(f"course_description: {course_description}")
-        print(f"course_img_url: {course_img_url}")
-        print(f"course_price: {course_price}")
-        print(f"course_categ: {course_cat_id}")
-        print(f"course_author: {request.user.username}")
+
+        # print(f"course_name: {course_name}")
+        # print(f"course_description: {course_description}")
+        # print(f"course_img_url: {course_img_url}")
+        # print(f"course_price: {course_price}")
+        # print(f"course_categ: {course_cat_id}")
+        # print(f"course_author: {request.user.username}")
+
 
         if not all(
             [
@@ -394,8 +398,9 @@ class CourseCreateView(TemplateView):
         ):
             messages.error(self.request, "Не все поля заполнены")
             return redirect("mainapp:course_create")
-        course_names_all = [el.name for el in Course.objects.all()]
-        if course_name in course_names_all:
+
+        if Course.objects.filter(name=course_name).exists():
+
             messages.error(self.request, "Курс с таким именем уже есть")
             return redirect("authapp:register")
         course_category = get_object_or_404(Category, id=course_cat_id)
