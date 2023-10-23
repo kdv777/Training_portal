@@ -115,7 +115,7 @@ class CourseDetailPageView(TemplateView):
             context["is_ordered"] = True
         else:
             context["is_ordered"] = False
-        context["feedback"] = CourseFeedback.objects.all().filter(course=pk)
+        context["feedback"] = CourseFeedback.objects.filter(course=pk)
         if not self.request.user.is_anonymous:
             context["feedback_form"] = mainapp_forms.CourseFeedbackForm(
                 course=context["course"], user=self.request.user
