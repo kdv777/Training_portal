@@ -3,10 +3,11 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.mixins import UserPassesTestMixin
-from django.http import FileResponse
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+from django.http import FileResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import context
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.datetime_safe import datetime
 from rest_framework import status
@@ -16,8 +17,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from config.settings import BASE_DIR
-from mainapp.models import Category, Course, Lesson, News, Order, Post
+from mainapp.models import Category, Course, Lesson, News, Order, Post, CourseFeedback
 from mainapp.serializers import OrderSerializer
+from mainapp import forms as mainapp_forms
+from mainapp import models as mainapp_models
 
 logger = logging.getLogger(__name__)
 
@@ -112,8 +115,22 @@ class CourseDetailPageView(TemplateView):
             context["is_ordered"] = True
         else:
             context["is_ordered"] = False
+        context["feedback"] = CourseFeedback.objects.all().filter(course=pk)
+        if not self.request.user.is_anonymous:
+            context["feedback_form"] = mainapp_forms.CourseFeedbackForm(
+                course=context["course"], user=self.request.user
+            )
 
         return context
+
+class CourseFeedbackFormView(LoginRequiredMixin, CreateView):
+    model = mainapp_models.CourseFeedback
+    form_class = mainapp_forms.CourseFeedbackForm
+
+    def form_valid(self, form):
+        self.object = form.save()
+        rendered_card = render_to_string("mainapp/includes/feedback_card.html", context={"item": self.object})
+        return JsonResponse({"card": rendered_card})
 
 
 class CoursesCategoryPageView(TemplateView):
