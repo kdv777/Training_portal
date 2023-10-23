@@ -6,8 +6,12 @@ from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin
 from django.http import FileResponse
 from django.shortcuts import get_object_or_404, redirect, render
+from django.template import context
 from django.urls import reverse_lazy
+from django.utils.datetime_safe import datetime
+from rest_framework import status
 from django.views.generic import CreateView, TemplateView, View
+
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
@@ -93,12 +97,22 @@ class CourseDetailPageView(TemplateView):
         logger.debug("Yet another log message")
         context = super().get_context_data(**kwargs)
         course = get_object_or_404(Course, pk=pk)
+
+        context["course"] = course
+        # print(str(course.img_url)[:3])
+        context["static_img"] = course.img_url
+        context["url_img"] = None
+        if course.img_url[:4] == "http":
+            context["url_img"] = course.img_url
+            context["static_img"] = None
+        context["all_lessons"] = Lesson.objects.all().filter(course=pk).order_by("order")
+        context["course_id"] = course.id
+
         if Order.objects.filter(course=course, buyer=self.request.user).exists():
             context["is_ordered"] = True
         else:
             context["is_ordered"] = False
-        context["course"] = course
-        context["lesson"] = Lesson.objects.filter(course=pk)
+
         return context
 
 
@@ -118,10 +132,19 @@ class LessonDetailPageView(TemplateView):
     def get_context_data(self, pk=None, **kwargs):
         # context = super(CoursesCategoryPageView, self).get_context_data(**kwargs)
         context = super().get_context_data(**kwargs)
-        context["lesson"] = get_object_or_404(Lesson, pk=pk)
-        context["course"] = get_object_or_404(Course, pk=pk)
-        context["lessons_course"] = Lesson.objects.all().filter(course=pk)
-
+        lesson =  get_object_or_404(Lesson, pk=pk)
+        context["lesson"] = lesson
+        course = get_object_or_404(Course, pk= lesson.course.id)
+        context["course"] = course
+        context["all_lessons"] = Lesson.objects.all()\
+            .filter(course = lesson.course.id).\
+            order_by("order")
+        context["static_img"] = lesson.media_link
+        context["url_img"] = None
+        if lesson.media_link[:4] == "http":
+            context["url_img"] = lesson.media_link
+            context["static_img"] = None
+        # print(f'all lessons : {context["all_lessons"]}')
         return context
 
 
@@ -131,7 +154,7 @@ class LessonsCoursePageView(TemplateView):
     def get_context_data(self, pk=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context["course"] = get_object_or_404(Course, pk=pk)
-        context["lessons_course"] = Lesson.objects.all().filter(course=pk)
+        context["lessons_course"] = Lesson.objects.all().filter(course = lesson.course.id)
         return context
 
 
@@ -237,10 +260,81 @@ class OrderViewSet(ModelViewSet):
 
 
 class LessonCreateView(CreateView):
+
     model = Lesson
     template_name = "mainapp/lesson_form.html"
     success_url = reverse_lazy("mainapp:index")
     fields = "__all__"
+
+    def get_context_data(self, pk=None, **kwargs):
+        # context = super(CoursesCategoryPageView, self).get_context_data(**kwargs)
+        context = super().get_context_data(**kwargs)
+        context["all_lessons"] = Lesson.objects.all().filter(course=pk).order_by('order')
+        context["course_id"] = pk
+        # context["course"] = get_object_or_404(Course, pk=pk)
+        # context["lessons_course"] = Lesson.objects.all().filter(course=pk)
+        return context
+
+    def post(self, request, pk=None, *args, **kwargs):
+        lesson_title = request.POST.get("l_title")
+        lesson_text = request.POST.get("text")
+        lesson_body = request.POST.get("body")
+        lesson_author = request.user
+        lesson_slug = str(lesson_title.lower().replace(" ", "-")[:20]) + "_" + str(datetime.now)
+        lesson_order = int(request.POST.get("order"))
+        lesson_url_v = request.POST.get("video_url")
+        lesson_url_m = request.POST.get("media_url")
+
+
+        # print(f"lesson_title: {lesson_title}")
+        # print(f"lesson_text: {lesson_text}")
+        # print(f"lesson_body: {lesson_body}")
+        # print(f"lesson_author: {lesson_author}")
+        # print(f"lesson_slug: {lesson_slug}")
+        # print(f"lesson_order: {lesson_order}")
+        # print(f"lesson_url_v: {lesson_url_v}")
+        # print(f"lesson_url_m: {lesson_url_m}")
+
+        if not all(
+            [
+                lesson_title,
+                lesson_text,
+                lesson_body,
+                lesson_author,
+                lesson_slug,
+                lesson_order
+            ]
+        ):
+            messages.error(self.request, "Не все поля заполнены")
+            return redirect("mainapp:lesson_create", pk=context.course_id )
+        all_lessons_in_course = Lesson.objects.all().filter(course=pk).order_by('order')
+        if all_lessons_in_course:
+            for item in all_lessons_in_course:
+                if item.order >= lesson_order:
+                    item.order += 1
+                    item.save()
+
+        post = Post()
+        post.title = lesson_title
+        post.text = lesson_text
+        post.body = lesson_body
+        post.author = lesson_author
+        post.slug = lesson_slug
+        post.save()
+        print('post_created')
+
+        lesson = Lesson()
+        course = get_object_or_404(Course, pk=pk)
+        lesson.post_id = post.id
+        lesson.course = course
+        lesson.order = lesson_order
+        if lesson_url_v:
+            lesson.video_url = lesson_url_v
+        if lesson_url_m:
+            lesson.media_link = lesson_url_m
+        lesson.save()
+        return redirect("mainapp:lesson_detail", pk=lesson.id )
+
 
 
 class CourseCreateView(TemplateView):
@@ -289,18 +383,18 @@ class LogDownloadView(UserPassesTestMixin, View):
         course_price = request.POST.get("price")
         course_cat_id = request.POST.get("cat_id")
 
-        print(f"course_name: {course_name}")
-        print(f"course_description: {course_description}")
-        print(f"course_img_url: {course_img_url}")
-        print(f"course_price: {course_price}")
-        print(f"course_categ: {course_cat_id}")
-        print(f"course_author: {request.user.username}")
+        # print(f"course_name: {course_name}")
+        # print(f"course_description: {course_description}")
+        # print(f"course_img_url: {course_img_url}")
+        # print(f"course_price: {course_price}")
+        # print(f"course_categ: {course_cat_id}")
+        # print(f"course_author: {request.user.username}")
 
         if not all(
             [
                 course_name,
                 course_description,
-                course_img_url,
+                # course_img_url,
                 course_price,
                 course_cat_id,
             ]
@@ -315,7 +409,8 @@ class LogDownloadView(UserPassesTestMixin, View):
         course = Course()
         course.name = course_name
         course.description = course_description
-        course.img_url = course_img_url
+        if course_img_url:
+            course.img_url = course_img_url
         course.price = course_price
         # course.category = course_category
         course.author = request.user

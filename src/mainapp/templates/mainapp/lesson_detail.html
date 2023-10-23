@@ -9,13 +9,14 @@
     /* border: 3px solid blue;   */
     padding: 20px;">
         <h2 style="margin-top: 40px;"> Список уроков</h2>
-            <ul class="list-group">
-                {% for item in lessons_course %}
-                    <li class="list-group-item"> <a href="{% url 'mainapp:lesson_detail' item.pk  %}" style="text-decoration: none">
-                          {{ item.post.title }}
-                        </a> </li>
-                    {% endfor %}
-                </ul>
+        <ul class="list-group">
+            {% for item in all_lessons %}
+            <li class="list-group-item"><a href="{% url 'mainapp:lesson_detail' item.pk  %}"
+                                           style="text-decoration: none">
+                {{ item.post.title }}
+            </a></li>
+            {% endfor %}
+        </ul>
     </div>
     {# end of left bar #}
     {# main content #}
@@ -24,16 +25,25 @@
     padding: 20px; ">
         <h1>Курс {{ lesson.course.name }}</h1>
         <h2>Лекция {{lesson.order}}. {{lesson.post.title}}</h2>
-
+        {% if lesson.video_url %}
         <figure class="figure mt-3">
-            <iframe width="560" height="315" src={{lesson.video_url}}
-                title="YouTube video player" frameborder="0"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                allowfullscreen></iframe>
+            {{lesson.video_url}}
         </figure>
+        {% endif %}
+        {% if lesson.media_link %}
+        <figure class="figure mt-3">
+            {% if static_img %}
+            <img src="/static/{{ lesson.media_link }}" class="figure-img img-fluid rounded" alt="...">
+            {% endif %}
+            {% if url_img %}
+            <img src="{{ lesson.media_link }}" class="figure-img img-fluid rounded" alt="...">
+            {% endif %}
+        </figure>
+        {% endif %}
+
         <p>{{ lesson.post.body|safe }}</p>
 
-        <input class="btn btn-primary" type="button" value="Следующая лекция">
+        <a href="{% url 'mainapp:course_detail' course.id %}" class="mt-4 btn btn-primary">Вернуться к курсу</a>
         <div class="mb-3 mt-4">
             <h4>Ваш комментарий к уроку</h4>
             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
@@ -43,8 +53,6 @@
 
     </div>
     {# end of main content #}
-
-
 
 
 </div>
