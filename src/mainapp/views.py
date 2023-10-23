@@ -110,11 +110,11 @@ class CourseDetailPageView(TemplateView):
             context["static_img"] = None
         context["all_lessons"] = Lesson.objects.all().filter(course=pk).order_by("order")
         context["course_id"] = course.id
-
-        if Order.objects.filter(course=course, buyer=self.request.user).exists():
-            context["is_ordered"] = True
-        else:
-            context["is_ordered"] = False
+        if self.request.user.is_authenticated:
+            if Order.objects.filter(course=course, buyer=self.request.user).exists():
+                context["is_ordered"] = True
+            else:
+                context["is_ordered"] = False
 
         context["feedback"] = CourseFeedback.objects.filter(course=pk)
 
