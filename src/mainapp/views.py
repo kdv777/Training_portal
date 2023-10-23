@@ -1,46 +1,42 @@
+# Logging
+import logging
+
+from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.mixins import UserPassesTestMixin
+from django.http import FileResponse
 from django.shortcuts import get_object_or_404, redirect, render
-# from django.template import context
 from django.template import context
 from django.urls import reverse_lazy
 from django.utils.datetime_safe import datetime
-from django.views.generic import CreateView, TemplateView
 from rest_framework import status
-from rest_framework.permissions import IsAuthenticated
-from rest_framework.response import Response
-from rest_framework.viewsets import ModelViewSet
-from django.db.models import Count
+from django.views.generic import CreateView, TemplateView, View
 
-# -------------- Class-Based- Views -----------
-# class MainPageView(TemplateView):
-#     template_name = "mainapp/index.html"
+from rest_framework.permissions import IsAuthenticated
+from rest_framework.viewsets import ModelViewSet
+
 from config.settings import BASE_DIR
 from mainapp.models import Category, Course, Lesson, News, Order, Post
 from mainapp.serializers import OrderSerializer
+
+logger = logging.getLogger(__name__)
 
 
 class MainPageView(TemplateView):
     template_name = "mainapp/index.html"
 
-    # def get(self, request):
-    #     context = {}
-    #     list_of_news = News.objects.all().order_by("created_at")[:3]
-    #     list_of_posts = Post.objects.all()
-    #     # print(f'news : {list_of_news[0].__dir__()}')
-    #     context["list_of_news"] = list_of_news
-    #     context["list_of_posts"] = list_of_posts
-    #     return render(request, "mainapp/index.html", context)
-
     def get_context_data(self, **kwargs):
+        logger.info("Enter in main_page")
         # Get all previous data
         context = super().get_context_data(**kwargs)
 
-        # Create your own data
         category = Category.objects.all()
         count_cours = {}
         context["category"] = category
         for cat in category:
-            count_cours[cat.name] = Course.objects.filter(category=Category.objects.get(name=cat).id).count()
+            count_cours[cat.name] = Course.objects.filter(
+                category=Category.objects.get(name=cat).id
+            ).count()
 
         context["count_cours"] = count_cours
         context["list_of_news"] = News.objects.all().order_by("created_at")[:3]
@@ -98,9 +94,10 @@ class CourseDetailPageView(TemplateView):
     template_name = "mainapp/course_detail.html"
 
     def get_context_data(self, pk=None, **kwargs):
-        # context = super(Courses_categoryPageView, self).get_context_data(**kwargs)
+        logger.debug("Yet another log message")
         context = super().get_context_data(**kwargs)
         course = get_object_or_404(Course, pk=pk)
+
         context["course"] = course
         # print(str(course.img_url)[:3])
         context["static_img"] = course.img_url
@@ -108,13 +105,14 @@ class CourseDetailPageView(TemplateView):
         if course.img_url[:4] == "http":
             context["url_img"] = course.img_url
             context["static_img"] = None
-        # print(f'static_img: {context["static_img"]}')
-        # print(f'url_img: {context["url_img"]}')
-
-
-
         context["all_lessons"] = Lesson.objects.all().filter(course=pk).order_by("order")
-        # context["course_id"] = course.id
+        context["course_id"] = course.id
+
+        if Order.objects.filter(course=course, buyer=self.request.user).exists():
+            context["is_ordered"] = True
+        else:
+            context["is_ordered"] = False
+
         return context
 
 
@@ -228,7 +226,9 @@ class CategoriesPageView(TemplateView):
         count_cours = {}
         context["category"] = category
         for cat in category:
-            count_cours[cat.name] = Course.objects.filter(category=Category.objects.get(name=cat).id).count()
+            count_cours[cat.name] = Course.objects.filter(
+                category=Category.objects.get(name=cat).id
+            ).count()
 
         context["count_cours"] = count_cours
         context["base_dir"] = str(BASE_DIR).replace("\\", "/")
@@ -257,31 +257,6 @@ class OrderViewSet(ModelViewSet):
         if is_paid is not None:
             queryset = queryset.filter(is_paid=is_paid)
         return queryset
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-
-        if Order.objects.filter(
-            course=serializer.validated_data["course"], buyer=self.request.user
-        ).exists():
-            return Response(
-                {"error": "You already have this course"},
-                status=status.HTTP_409_CONFLICT,
-            )
-
-        self.perform_create(serializer)
-        headers = self.get_success_headers(serializer.data)
-        return Response(
-            serializer.data, status=status.HTTP_201_CREATED, headers=headers
-        )
-
-
-# class CourseCreateView(CreateView):
-#     model = Course
-#     template_name = "mainapp/course_form.html"
-#     success_url = reverse_lazy("mainapp:courses")
-#     fields = "__all__"
 
 
 class LessonCreateView(CreateView):
@@ -376,6 +351,30 @@ class CourseCreateView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["allcategs"] = Category.objects.all()
         return context
+
+
+# Logging
+class LogView(TemplateView):
+    template_name = "mainapp/log_view.html"
+
+    def get_context_data(self, **kwargs):
+        context = super(LogView, self).get_context_data(**kwargs)
+        log_slice = []
+        with open(settings.LOG_FILE, "r") as log_file:
+            for i, line in enumerate(log_file):
+                if i == 1000:  # first 1000 lines
+                    break
+                log_slice.insert(0, line)  # append at start
+            context["log"] = "".join(log_slice)
+        return context
+
+
+class LogDownloadView(UserPassesTestMixin, View):
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def get(self, *args, **kwargs):
+        return FileResponse(open(settings.LOG_FILE, "rb"))
 
     def post(self, request, *args, **kwargs):
         course_name = request.POST.get("name")
