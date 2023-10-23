@@ -1,3 +1,24 @@
+from django import forms
+
+from mainapp import models
+
+
+class CourseFeedbackForm(forms.ModelForm):
+    def __init__(self, *args, course=None, user=None, **kwargs):
+        ret = super().__init__(*args, **kwargs)
+        if course and user:
+            self.fields["course"].initial = course.pk
+            self.fields["user"].initial = user.pk
+        return ret
+
+    class Meta:
+        model = models.CourseFeedback
+        fields = ("course", "user", "feedback")
+        widgets = {
+            "course": forms.HiddenInput(),
+            "user": forms.HiddenInput(),
+        }
+
 # ref: https://stackoverflow.com/questions/2374224/django-working-with-multiple-forms/2374240#2374240
 #
 # class CourseForm(forms.ModelForm):

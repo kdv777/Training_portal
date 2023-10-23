@@ -3,10 +3,11 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.mixins import UserPassesTestMixin
-from django.http import FileResponse
+from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
+from django.http import FileResponse, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import context
+from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.datetime_safe import datetime
 from rest_framework import status
@@ -16,8 +17,10 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
 from config.settings import BASE_DIR
-from mainapp.models import Category, Course, Lesson, News, Order, Post
+from mainapp.models import Category, Course, Lesson, News, Order, Post, CourseFeedback
 from mainapp.serializers import OrderSerializer
+from mainapp import forms as mainapp_forms
+from mainapp import models as mainapp_models
 
 logger = logging.getLogger(__name__)
 
@@ -112,8 +115,22 @@ class CourseDetailPageView(TemplateView):
             context["is_ordered"] = True
         else:
             context["is_ordered"] = False
+        context["feedback"] = CourseFeedback.objects.filter(course=pk)
+        if not self.request.user.is_anonymous:
+            context["feedback_form"] = mainapp_forms.CourseFeedbackForm(
+                course=context["course"], user=self.request.user
+            )
 
         return context
+
+class CourseFeedbackFormView(LoginRequiredMixin, CreateView):
+    model = mainapp_models.CourseFeedback
+    form_class = mainapp_forms.CourseFeedbackForm
+
+    def form_valid(self, form):
+        self.object = form.save()
+        rendered_card = render_to_string("mainapp/includes/feedback_card.html", context={"item": self.object})
+        return JsonResponse({"card": rendered_card})
 
 
 class CoursesCategoryPageView(TemplateView):
@@ -321,7 +338,7 @@ class LessonCreateView(CreateView):
         post.author = lesson_author
         post.slug = lesson_slug
         post.save()
-        print('post_created')
+        # print('post_created')
 
         lesson = Lesson()
         course = get_object_or_404(Course, pk=pk)
@@ -351,6 +368,47 @@ class CourseCreateView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["allcategs"] = Category.objects.all()
         return context
+
+    def post(self, request, *args, **kwargs):
+        course_name = request.POST.get("name")
+        course_description = request.POST.get("description")
+        course_img_url = request.POST.get("img_url")
+        course_price = request.POST.get("price")
+        course_cat_id = request.POST.get("cat_id")
+
+        # print(f"course_name: {course_name}")
+        # print(f"course_description: {course_description}")
+        # print(f"course_img_url: {course_img_url}")
+        # print(f"course_price: {course_price}")
+        # print(f"course_categ: {course_cat_id}")
+        # print(f"course_author: {request.user.username}")
+
+        if not all(
+            [
+                course_name,
+                course_description,
+                course_img_url,
+                course_price,
+                course_cat_id,
+            ]
+        ):
+            messages.error(self.request, "Не все поля заполнены")
+            return redirect("mainapp:course_create")
+        if Course.objects.filter(name=course_name).exists():
+            messages.error(self.request, "Курс с таким именем уже есть")
+            return redirect("authapp:register")
+        course_category = get_object_or_404(Category, id=course_cat_id)
+        course = Course()
+        course.name = course_name
+        course.description = course_description
+        course.img_url = course_img_url
+        course.price = course_price
+        # course.category = course_category
+        course.author = request.user
+        course.slug = str(course_name.lower().replace(" ", "-")[:20])
+        course.save()
+        course.category.add(course_category)
+        return redirect("mainapp:cabinet")
 
 
 # Logging

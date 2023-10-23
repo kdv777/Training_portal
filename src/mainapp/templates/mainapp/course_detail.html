@@ -2,38 +2,52 @@
 {% load static %}
 
 {% block js %}
-{{ block.super }}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<script type="text/javascript">
-function add_to_cart(course_id){
-    csrftoken = $("[name=csrfmiddlewaretoken]").val();
-    $.ajax({
-        url: "{% url 'mainapp:orders-list'%}",
-        type: "POST",
-        data: {
+   {{ block.super }}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript">
+      function add_to_cart(course_id) {
+        csrftoken = $("[name=csrfmiddlewaretoken]").val();
+        $.ajax({
+          url: "{% url 'mainapp:orders-list'%}",
+          type: "POST",
+          data: {
             course: course_id,
             buyer: {{ user.id }},
             csrfmiddlewaretoken: csrftoken
-        },
-        beforeSend: function(xhr) {
+          },
+          beforeSend: function (xhr) {
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
-        },
-        success: function(data){
+          },
+          success: function (data) {
             alert("Курс добавлен в корзину");
-            document.location.reload();
-        },
-        error: function(jqXHR){
-            if (jqXHR.status == 409){
-                alert("Курс уже в корзине");
+          },
+          error: function (jqXHR) {
+            if (jqXHR.status == 409) {
+              alert("Курс уже в корзине");
+            } else {
+              alert("Не получилось добавить курс в корзину");
             }
-            else {
-                alert("Не получилось добавить курс в корзину");
-            }
-        }
-    })
-}
+          }
+        })
+      }
+      $(document).ready(function () {
+        {% if feedback_form %}
+          $("#feedbackSubmit").click(function () {
+            $("#cardForm").hide();
 
-</script>
+            var $form = $("#feedbackForm");
+            $.ajax({
+              type: "POST",
+              url: $form.attr("action"),
+              data: $form.serialize(),
+              success: function (data) {
+                $("#feedback_list").append(data.card);
+              }
+            });
+          });
+        {% endif %}
+      })
+    </script>
 {% endblock %}
 
 {% block content %}
@@ -82,39 +96,47 @@ function add_to_cart(course_id){
                     {% endif %}
                 {% endif %}
                 {% if user.is_teacher %}
-                        <a href="{% url 'mainapp:lesson_create' %}" class="mt-4 btn btn-primary">Создать лекцию</a>
+                        <a href="{% url 'mainapp:lesson_create' course.id %}" class="mt-4 btn btn-primary">Создать лекцию</a>
                 {% endif %}
                 <!-- comments to course -->
-                    <div class="d-flex">
-                        <h3 style="margin: 20px 20px 0 0;">Oтзывы о курсе</h3>
-                        <ul class="list-group" style="margin: 20px; ">
-                            <li class="list-group-item mblank-2">
-                                User1:    Какая-то фигня
-                                </li>
-                            <li class="list-group-item mblank-2">
-                                    User2: А может не фигня
-                                </li>
-                        </ul>
 
 
         <!-- comments to course -->
-        <div class="d-flex">
-            <h3 style="margin: 20px 20px 0 0;">Oтзывы о курсе</h3>
-            <ul class="list-group" style="margin: 20px; ">
-                <li class="list-group-item mblank-2">
-                    User1: Какая-то фигня
-                </li>
-                <li class="list-group-item mblank-2">
-                    User2: А может не фигня
-                </li>
-            </ul>
+          <!-- comments to course -->
+            <div id="feedback-list">
+                {% if feedback %}
+                    {% for item in feedback %}
+                        {% include 'mainapp/includes/feedback_card.html' %}
+                    {% endfor %}
+                {% else %}
+                    <p>
 
-        </div>
-        <div class="mb-3 mt-4">
-            <h4>Ваш комментарий к курсу</h4>
-            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
-        </div>
-        <input class="btn btn-primary" type="button" value="Опубликовать">
+                        Пока о данном курсе нет отзывов. Будь первым!
+                    </p>
+                {% endif %}
+            </div>
+            {% if not user.is_teacher %}
+                {% if feedback_form %}
+                    <div class="card" id="cardForm">
+                        <div class="card-body">
+                            <h5 class="card-title">Добавить отзыв</h5>
+                            <p class="card-text">
+                            <form action="{% url 'mainapp:course_feedback' %}" method="POST" id="feedbackForm">
+                                {% csrf_token %}
+                                {% for hidden in feedback_form.hidden_fields %}
+                                    {{ hidden }}
+                                {% endfor %}
+                                {% for field in feedback_form.visible_fields %}
+                                    {{ field }}
+                                {% endfor %}
+                            </form>
+                            <button id="feedbackSubmit" class="btn btn-primary btn-block">Отправить отзыв</button>
+                            </p>
+                        </div>
+                    </div>
+                {% endif %}
+            {% endif %}
+            <!-- end of comments to course -->
         <!-- end of comments to course -->
     </div>
     <!-- end of main content -->
