@@ -82,7 +82,7 @@ function add_to_cart(course_id){
                     {% endif %}
                 {% endif %}
                 {% if user.is_teacher %}
-                        <a href="{% url 'mainapp:lesson_create' %}" class="mt-4 btn btn-primary">Создать лекцию</a>
+                        <a href="{% url 'mainapp:lesson_create', pk=course.id %}" class="mt-4 btn btn-primary">Создать лекцию</a>
                 {% endif %}
                 <!-- comments to course -->
                     <div class="d-flex">

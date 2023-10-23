@@ -352,6 +352,48 @@ class CourseCreateView(TemplateView):
         context["allcategs"] = Category.objects.all()
         return context
 
+    def post(self, request, *args, **kwargs):
+        course_name = request.POST.get("name")
+        course_description = request.POST.get("description")
+        course_img_url = request.POST.get("img_url")
+        course_price = request.POST.get("price")
+        course_cat_id = request.POST.get("cat_id")
+
+        print(f"course_name: {course_name}")
+        print(f"course_description: {course_description}")
+        print(f"course_img_url: {course_img_url}")
+        print(f"course_price: {course_price}")
+        print(f"course_categ: {course_cat_id}")
+        print(f"course_author: {request.user.username}")
+
+        if not all(
+            [
+                course_name,
+                course_description,
+                course_img_url,
+                course_price,
+                course_cat_id,
+            ]
+        ):
+            messages.error(self.request, "Не все поля заполнены")
+            return redirect("mainapp:course_create")
+        course_names_all = [el.name for el in Course.objects.all()]
+        if course_name in course_names_all:
+            messages.error(self.request, "Курс с таким именем уже есть")
+            return redirect("authapp:register")
+        course_category = get_object_or_404(Category, id=course_cat_id)
+        course = Course()
+        course.name = course_name
+        course.description = course_description
+        course.img_url = course_img_url
+        course.price = course_price
+        # course.category = course_category
+        course.author = request.user
+        course.slug = str(course_name.lower().replace(" ", "-")[:20])
+        course.save()
+        course.category.add(course_category)
+        return redirect("mainapp:cabinet")
+
 
 # Logging
 class LogView(TemplateView):
