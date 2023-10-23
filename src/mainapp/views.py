@@ -110,12 +110,14 @@ class CourseDetailPageView(TemplateView):
             context["static_img"] = None
         context["all_lessons"] = Lesson.objects.all().filter(course=pk).order_by("order")
         context["course_id"] = course.id
+        if self.request.user.is_authenticated:
+            if Order.objects.filter(course=course, buyer=self.request.user).exists():
+                context["is_ordered"] = True
+            else:
+                context["is_ordered"] = False
 
-        if Order.objects.filter(course=course, buyer=self.request.user).exists():
-            context["is_ordered"] = True
-        else:
-            context["is_ordered"] = False
         context["feedback"] = CourseFeedback.objects.filter(course=pk)
+
         if not self.request.user.is_anonymous:
             context["feedback_form"] = mainapp_forms.CourseFeedbackForm(
                 course=context["course"], user=self.request.user
@@ -376,12 +378,14 @@ class CourseCreateView(TemplateView):
         course_price = request.POST.get("price")
         course_cat_id = request.POST.get("cat_id")
 
+
         # print(f"course_name: {course_name}")
         # print(f"course_description: {course_description}")
         # print(f"course_img_url: {course_img_url}")
         # print(f"course_price: {course_price}")
         # print(f"course_categ: {course_cat_id}")
         # print(f"course_author: {request.user.username}")
+
 
         if not all(
             [
@@ -394,7 +398,9 @@ class CourseCreateView(TemplateView):
         ):
             messages.error(self.request, "Не все поля заполнены")
             return redirect("mainapp:course_create")
+
         if Course.objects.filter(name=course_name).exists():
+
             messages.error(self.request, "Курс с таким именем уже есть")
             return redirect("authapp:register")
         course_category = get_object_or_404(Category, id=course_cat_id)
