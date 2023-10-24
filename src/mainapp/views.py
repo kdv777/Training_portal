@@ -21,12 +21,14 @@ from mainapp.models import Category, Course, Lesson, News, Order, Post, CourseFe
 from mainapp.serializers import OrderSerializer
 from mainapp import forms as mainapp_forms
 from mainapp import models as mainapp_models
+from authapp.models import User
 
 logger = logging.getLogger(__name__)
 
 
 class MainPageView(TemplateView):
     template_name = "mainapp/index.html"
+    TEACHERS_COUNT = 3
 
     def get_context_data(self, **kwargs):
         logger.info("Enter in main_page")
@@ -42,6 +44,7 @@ class MainPageView(TemplateView):
             ).count()
 
         context["count_cours"] = count_cours
+        context["teachers"] = User.get_random_teachers(self.TEACHERS_COUNT)
         context["list_of_news"] = News.objects.all().order_by("created_at")[:3]
         context["base_dir"] = str(BASE_DIR).replace("\\", "/")
         return context
