@@ -46,7 +46,7 @@
                                     href="{% url 'mainapp:courses_category' item.pk %}">{{ item.name }}</a></h5>
 
                         </div>
-                        <div class="d-flex justify-content-between align-items-end" style="mardin-left:5px;">
+                        <div class="d-flex justify-content-between align-items-end" style="margin-left:5px;">
                             <div>
                                 <img src="/static/{{ item.img_url }}"
                                      class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
@@ -112,46 +112,20 @@
             <h2>Авторы Курсов</h2>
         </div>
         <div class="row row-cols-3">
+            {% for teacher in teachers %}
             <div class="col">
                 <div class="card author_card ">
                     <div class="card-body shadow d-flex flex-row ">
                         <img src="{% static 'img/avatar1.png' %}" alt="photo"
                              style="width:70px; height: 70px; margin: 8px;">
                         <div style="height: 86px;" class=" d-flex flex-column justify-content-between">
-                            <h5 class="card-title">Name Surname</h5>
-                            <p style="margin-top: 5px;">Автор 2 курсов</p>
+                            <h5 class="card-title">{{ teacher.get_full_name }}</h5>
+                            <p style="margin-top: 5px;">Автор {{ teacher.courses.count }} курсов</p>
                         </div>
                     </div>
                 </div>
             </div>
-
-            <div class="col">
-                <div class="card author_card ">
-                    <div class="card-body shadow d-flex flex-row ">
-                        <img src="{% static 'img/avatar2.png' %}" alt="photo"
-                             style="width:70px; height: 70px; margin: 8px;">
-                        <div style="height: 86px;" class=" d-flex flex-column justify-content-between">
-                            <h5 class="card-title">Name Surname</h5>
-                            <p style="margin-top: 5px;">Автор 3 курсов</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col">
-                <div class="card author_card">
-                    <div class="card-body shadow d-flex flex-row ">
-                        <img src="{% static 'img/avatar3.png' %}" alt="photo"
-                             style="width:70px; height: 70px; margin: 8px;">
-                        <div style="height: 86px;" class=" d-flex flex-column justify-content-between">
-                            <h5 class="card-title">Name Surname</h5>
-                            <p style="margin-top: 5px;">Автор 5 курсов</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
+            {% endfor %}
         </div>
 
     </div>
