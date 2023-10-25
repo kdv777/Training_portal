@@ -8,6 +8,8 @@ from django.views.generic import TemplateView, UpdateView, View
 
 from authapp.models import User
 
+from utils.utils import notification_to_admin
+
 
 class LoginPageView(LoginView):
     template_name = "authapp/login.html"
@@ -50,6 +52,7 @@ class RegisterPageView(TemplateView):
         user.save()
 
         login(request, user)
+        notification_to_admin(f" Please approve request for teacher_role from user {user.username}")
         return redirect("mainapp:cabinet")
 
 
@@ -66,3 +69,6 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy("mainapp:cabinet")
+
+
+

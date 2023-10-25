@@ -26,8 +26,17 @@
         <h1>Курс {{ lesson.course.name }}</h1>
         <h2>Лекция {{lesson.order}}. {{lesson.post.title}}</h2>
         {% if lesson.video_url %}
+<!--            Этот код работает для ссылок на видео с YouTube формата -->
+<!--            https://www.youtube.com/embed/....-->
+<!--            ссылку можно получить из youtube(на странице видео) > -->
+<!--            > "поделиться" > "встроить" > из предложенного взять нужную часть вида как выше. -->
+<!--            > вставить в поле "Video URL" при создании урока-->
         <figure class="figure mt-3">
-            {{lesson.video_url}}
+            <iframe width="560" height="315"
+                    src="{{lesson.video_url}}"
+                    title="YouTube video player" frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowfullscreen></iframe>
         </figure>
         {% endif %}
         {% if lesson.media_link %}

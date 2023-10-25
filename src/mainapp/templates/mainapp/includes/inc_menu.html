@@ -45,6 +45,8 @@
                             {% if user and user.is_superuser %}
                             <li><a class="dropdown-item" style="color: #fff;" href="{% url 'admin:index' %}">Админ.панель</a>
                             </li>
+                            <li><a class="dropdown-item" style="color: #fff;" href="{% url 'mainapp:request_teacher' %}">Заявки</a>
+                            </li>
                             <li>
                                 <hr class="dropdown-divider"/>
                             </li>

@@ -74,7 +74,7 @@ class Post(TimestampMixin):
     2. Возможность добавления комментариев и звёзд ко всем трём типам постов
     """
 
-    title = models.CharField(max_length=128, unique=True)
+    title = models.CharField(max_length=128, unique=False)
     text = models.TextField(blank=True)
     body = RichTextField(blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")

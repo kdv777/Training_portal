@@ -50,6 +50,9 @@ urlpatterns = [
     path("cart/", views.CartPageView.as_view(), name="cart"),
     path("payment/", views.PaymentPageView.as_view(), name="payment"),
     path("course_feedback/", views.CourseFeedbackFormView.as_view(), name="course_feedback", ),
+    path("request_teacher/", views.RequestTeacher.as_view(), name="request_teacher"),
+    path("approve_teacher/<int:pk>/", views.ApproveTeacherStatus.as_view(), name="approve_teacher"),
+    path("recall_teacher/<int:pk>/", views.RecallTeacherStatus.as_view(), name="recall_teacher"),
 ]
 
 router.register(r"orders", views.OrderViewSet, basename="orders")

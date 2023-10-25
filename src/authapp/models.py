@@ -6,6 +6,7 @@ from django.db import models
 
 class User(AbstractUser):
     is_teacher = models.BooleanField(default=False)
+    is_teacher_approved = models.BooleanField(null=True, default=False)
     course = models.ForeignKey(
         "mainapp.Course",
         on_delete=models.SET_NULL,
