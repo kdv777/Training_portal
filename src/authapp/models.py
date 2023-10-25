@@ -1,7 +1,15 @@
 import random
+from pathlib import Path
+from time import time
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+
+
+def users_avatars_path(instance, filename):
+    num = int(time() * 1000)
+    suffix = Path(filename).suffix
+    return f"{num}{suffix}"
 
 
 class User(AbstractUser):
@@ -14,6 +22,13 @@ class User(AbstractUser):
         null=True,
         blank=True,
         db_constraint=False,
+    )
+
+    avatar = models.ImageField(
+        verbose_name="Аватарка",
+        upload_to=users_avatars_path,
+        blank=True,
+        null=True
     )
 
     @classmethod

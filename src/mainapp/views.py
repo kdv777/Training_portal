@@ -4,7 +4,7 @@ import logging
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
-from django.http import FileResponse, JsonResponse
+from django.http import FileResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import context
 from django.template.loader import render_to_string
@@ -21,6 +21,7 @@ from mainapp.models import Category, Course, Lesson, News, Order, Post, CourseFe
 from mainapp.serializers import OrderSerializer
 from mainapp import forms as mainapp_forms
 from mainapp import models as mainapp_models
+from mainapp.tasks import send_feedback_mail
 from authapp.models import User
 
 logger = logging.getLogger(__name__)
@@ -500,6 +501,7 @@ class RecallTeacherStatus(TemplateView):
         return redirect("mainapp:request_teacher")
 
 
+
 class Search(ListView):
     model = Course
     template_name = "mainapp/search.html"
@@ -513,3 +515,23 @@ class Search(ListView):
         context = super().get_context_data(**kwargs)
         context['q'] = self.request.GET.get('q')
         return context
+
+      
+class HelpPageView(TemplateView):
+    template_name = "mainapp/help.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
+            context["form"] = mainapp_forms.MailFeedbackForm(user=self.request.user)
+        return context
+
+    def post(self, *args, **kwargs):
+        send_feedback_mail.delay(
+            {
+                "user_id": self.request.POST.get("user_id"),
+                "message": self.request.POST.get("message"),
+            }
+        )
+        return HttpResponseRedirect(reverse_lazy("mainapp:index"))
+
