@@ -70,7 +70,6 @@ class NewsListPageView(TemplateView):
         context = {}
         list_of_news = News.objects.all()
         list_of_posts = Post.objects.all()
-        # print(f'news : {list_of_news[0].__dir__()}')
         context["news_list"] = list_of_news
         context["post_list"] = list_of_posts
         return render(request, "mainapp/news_list.html", context)
@@ -289,12 +288,10 @@ class LessonCreateView(CreateView):
     fields = "__all__"
 
     def get_context_data(self, pk=None, **kwargs):
-        # context = super(CoursesCategoryPageView, self).get_context_data(**kwargs)
         context = super().get_context_data(**kwargs)
         context["all_lessons"] = Lesson.objects.all().filter(course=pk).order_by('order')
         context["course_id"] = pk
-        # context["course"] = get_object_or_404(Course, pk=pk)
-        # context["lessons_course"] = Lesson.objects.all().filter(course=pk)
+
         return context
 
     def post(self, request, pk=None, *args, **kwargs):
@@ -306,16 +303,6 @@ class LessonCreateView(CreateView):
         lesson_order = int(request.POST.get("order"))
         lesson_url_v = request.POST.get("video_url")
         lesson_url_m = request.POST.get("media_url")
-
-
-        # print(f"lesson_title: {lesson_title}")
-        # print(f"lesson_text: {lesson_text}")
-        # print(f"lesson_body: {lesson_body}")
-        # print(f"lesson_author: {lesson_author}")
-        # print(f"lesson_slug: {lesson_slug}")
-        # print(f"lesson_order: {lesson_order}")
-        # print(f"lesson_url_v: {lesson_url_v}")
-        # print(f"lesson_url_m: {lesson_url_m}")
 
         if not all(
             [
@@ -469,13 +456,23 @@ class RequestTeacher(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        # print(User.objects.filter(is_teacher=True).exclude(is_teacher_approved=True))
-        # print(User.objects.filter(is_teacher=True).filter(is_teacher_approved=True))
         context["request_teacher"] = User.objects.filter(is_teacher=True).exclude(is_teacher_approved=True)
         context["approved_teacher"] = User.objects.filter(is_teacher=True).filter(is_teacher_approved=True)
         return context
 
+
 class ApproveTeacherStatus(TemplateView):
+    """
+      The get function is used to approve a teacher.
+          It takes in the request and pk of the user as parameters.
+          It then gets the user object from User model using get_object_or_404 function, which returns a 404 error if no such object exists.
+          Then it sets is_teacher approved attribute of that user to True and saves it in database.
+
+      :param self: Represent the instance of the object itself
+      :param request: Pass the request object to the view
+      :param pk: Get the user object from the database
+      :return: The user and sets the is_teacher_approved to true
+    """
     template_name = "mainapp/teacher_status.html"
 
     def get(self, request, pk):
@@ -484,7 +481,18 @@ class ApproveTeacherStatus(TemplateView):
         user.save()
         return redirect("mainapp:request_teacher")
 
+
 class RecallTeacherStatus(TemplateView):
+    """
+       The get function is used to retrieve a single object from the database.
+           It takes in a request and an id, and returns the object with that id.
+           If no such object exists, it raises an Http404 exception.
+
+       :param self: Represent the instance of the object itself
+       :param request: Pass the request object to the view
+       :param pk: Identify the user that is being approved
+       :return: A redirect to the request_teacher view
+    """
     template_name = "mainapp/teacher_status.html"
 
     def get(self, request, pk):
