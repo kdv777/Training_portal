@@ -478,28 +478,14 @@ class RequestTeacher(TemplateView):
 class ApproveTeacherStatus(TemplateView):
     template_name = "mainapp/teacher_status.html"
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["request_teacher"] =User.objects.filter(is_teacher=False).exclude(is_teacher_approved=True)
-        context["approved_teacher"] = User.objects.filter(is_teacher=False).filter(is_teacher_approved=True)
-        return context
-
-
     def get(self, request, pk):
         user = get_object_or_404(User, pk=pk)
         user.is_teacher_approved = True
         user.save()
         return redirect("mainapp:request_teacher")
 
-
 class RecallTeacherStatus(TemplateView):
     template_name = "mainapp/teacher_status.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["request_teacher"] = User.objects.filter(is_teacher=False).exclude(is_teacher_approved=True)
-        context["approved_teacher"] = User.objects.filter(is_teacher=False).filter(is_teacher_approved=True)
-        return context
 
     def get(self, request, pk):
         user = get_object_or_404(User, pk=pk)

@@ -7,35 +7,45 @@
     {% if user.is_superuser %}
 
 
-        <h3>Запрос на статус преподавателя :</h3>
-            {% if request_teacher %}
+    <h3>Запрос на статус преподавателя :</h3>
+    {% if request_teacher %}
     <ul>
-                {% for el1 in request_teacher %}
-                <li class="row mb-1 d-flex">
-                    <h5 style="width:60%;"> {{ el1.username }} </h5>
-                    <a href="{% url 'mainapp:approve_teacher' el1.id %}" type="button" class="btn btn-outline-primary btn-sm" style="width:35%;">Одобрить</a>
-                </li>
-                {% endfor %}
-        </ul>
-            {% else %}
-               <h4> Таких нет </h4>
-            {% endif %}
-
-        <h3>Имеют статус преподавателя :</h3>
-            {% if approved_teacher %}
+        {% for el1 in request_teacher %}
+        <li class="row mb-1 d-flex">
+            <h5 style="width:60%;"> {{ el1.username }} </h5>
+            <a href="{% url 'mainapp:approve_teacher' el1.id %}" type="button" class="btn btn-outline-primary btn-sm"
+               style="width:35%;">Одобрить</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
     <ul>
-                {% for el2 in approved_teacher %}
-                 <li class="row mb-1 d-flex">
-                    <h5 style="width:60%;"> {{ el2.username }} </h5>
-                   <a href="{% url 'mainapp:recall_teacher' el2.id %}" type="button" class="btn btn-outline-primary btn-sm" style="width:35%;">Отозвать</a>
-                </li>
-                {% endfor %}
-        </ul>
-                {% else %}
-               <h4> Таких нет </h4>
-            {% endif %}
+        <li class="row mb-1">
+            <h5> Таких нет </h5>
+        </li>
+    </ul>
+    {% endif %}
 
-        {% endif %}
+    <h3>Имеют статус преподавателя :</h3>
+    {% if approved_teacher %}
+    <ul>
+        {% for el2 in approved_teacher %}
+        <li class="row mb-1 d-flex">
+            <h5 style="width:60%;"> {{ el2.username }} </h5>
+            <a href="{% url 'mainapp:recall_teacher' el2.id %}" type="button" class="btn btn-outline-primary btn-sm"
+               style="width:35%;">Отозвать</a>
+        </li>
+        {% endfor %}
+    </ul>
+    {% else %}
+    <ul>
+        <liclass="row mb-1">
+            <h5> Таких нет </h5>
+        </li>
+    </ul>
+    {% endif %}
+
+    {% endif %}
 </div>
 
 {% endblock %}
