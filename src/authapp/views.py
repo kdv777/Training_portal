@@ -7,7 +7,7 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, UpdateView, View
 
 from authapp.models import User
-
+from authapp.forms import UserUpdateForm
 from utils.utils import notification_to_admin
 
 
@@ -65,7 +65,7 @@ class LogoutView(View):
 class UserUpdateView(LoginRequiredMixin, UpdateView):
     template_name_suffix = "_update_form"
     model = User
-    fields = ["first_name", "last_name", "email"]
+    form_class = UserUpdateForm
 
     def get_success_url(self):
         return reverse_lazy("mainapp:cabinet")
