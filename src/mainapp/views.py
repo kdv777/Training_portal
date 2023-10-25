@@ -11,7 +11,7 @@ from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.datetime_safe import datetime
 from rest_framework import status
-from django.views.generic import CreateView, TemplateView, View
+from django.views.generic import CreateView, TemplateView, View, ListView
 
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
@@ -362,13 +362,6 @@ class LessonCreateView(CreateView):
 class CourseCreateView(TemplateView):
     template_name = "mainapp/course_create_form.html"
 
-    # def get(self, request):
-    #     if request.user.is_teacher==False:
-    #         return redirect("mainapp:index")
-    #         context = super().get_context_data(**kwargs)
-    #         context['allcategs'] = Category.objects.all()
-    #     return render(request, "mainapp/news_list.html", context)
-
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["allcategs"] = Category.objects.all()
@@ -380,15 +373,6 @@ class CourseCreateView(TemplateView):
         course_img_url = request.POST.get("img_url")
         course_price = request.POST.get("price")
         course_cat_id = request.POST.get("cat_id")
-
-
-        # print(f"course_name: {course_name}")
-        # print(f"course_description: {course_description}")
-        # print(f"course_img_url: {course_img_url}")
-        # print(f"course_price: {course_price}")
-        # print(f"course_categ: {course_cat_id}")
-        # print(f"course_author: {request.user.username}")
-
 
         if not all(
             [
@@ -450,13 +434,6 @@ class LogDownloadView(UserPassesTestMixin, View):
         course_price = request.POST.get("price")
         course_cat_id = request.POST.get("cat_id")
 
-        # print(f"course_name: {course_name}")
-        # print(f"course_description: {course_description}")
-        # print(f"course_img_url: {course_img_url}")
-        # print(f"course_price: {course_price}")
-        # print(f"course_categ: {course_cat_id}")
-        # print(f"course_author: {request.user.username}")
-
         if not all(
             [
                 course_name,
@@ -485,3 +462,56 @@ class LogDownloadView(UserPassesTestMixin, View):
         course.save()
         course.category.add(course_category)
         return redirect("mainapp:cabinet")
+
+
+class RequestTeacher(TemplateView):
+    template_name = "mainapp/teacher_status.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        # print(User.objects.filter(is_teacher=True).exclude(is_teacher_approved=True))
+        # print(User.objects.filter(is_teacher=True).filter(is_teacher_approved=True))
+        context["request_teacher"] = User.objects.filter(is_teacher=True).exclude(is_teacher_approved=True)
+        context["approved_teacher"] = User.objects.filter(is_teacher=True).filter(is_teacher_approved=True)
+        return context
+
+class ApproveTeacherStatus(TemplateView):
+    template_name = "mainapp/teacher_status.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["request_teacher"] =User.objects.filter(is_teacher=False).exclude(is_teacher_approved=True)
+        context["approved_teacher"] = User.objects.filter(is_teacher=False).filter(is_teacher_approved=True)
+        return context
+
+
+    def get(self, request, pk):
+        user = get_object_or_404(User, pk=pk)
+        user.is_teacher_approved = True
+        user.save()
+        return redirect("mainapp:request_teacher")
+
+
+class RecallTeacherStatus(TemplateView):
+    template_name = "mainapp/teacher_status.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["request_teacher"] = User.objects.filter(is_teacher=False).exclude(is_teacher_approved=True)
+        context["approved_teacher"] = User.objects.filter(is_teacher=False).filter(is_teacher_approved=True)
+        return context
+
+    def get(self, request, pk):
+        user = get_object_or_404(User, pk=pk)
+        user.is_teacher_approved = False
+        user.save()
+        return redirect("mainapp:request_teacher")
+
+
+
+
+
+
+
+
+
