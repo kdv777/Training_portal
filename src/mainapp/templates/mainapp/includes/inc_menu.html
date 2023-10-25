@@ -83,11 +83,12 @@
                         <a class="nav-link active" aria-current="page" href="{% url 'mainapp:contacts' %}">Контакты</a>
                     </li>
                 </ul>
-                <form class="d-flex my-auto me-3" role="search">
+                <form action="{% url 'mainapp:search' %}" method="get" class="d-flex my-auto me-3" role="search">
                     <input
                             class="form-control me-3"
-                            type="search"
-                            placeholder="Поиск"
+                            type="text"
+                            name="q"
+                            placeholder="Введите запрос"
                             aria-label="Поиск"
                     />
                     <button class="btn btn-outline-success" type="submit">Поиск</button>
