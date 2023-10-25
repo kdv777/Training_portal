@@ -6,7 +6,7 @@
 {% if user.is_authenticated %}
 <h1>Отправьте сообщение в поддержку</h1>
 {% else %}
-<h1>Прежде чем мы сможем начать помогать вам, необходимо зарегистрироваться</h1>
+<h1 style="margin-top:100px;margin-bottom:50px;">Прежде чем мы сможем начать помогать вам, необходимо зарегистрироваться</h1>
 {% endif %}
 
 {% if form %}
@@ -14,7 +14,7 @@
 <form method="post">
     {% csrf_token %}
     {{ form.as_p }}
-    <button type="submit">Отаправить</button>
+    <button type="submit">Отправить</button>
 </form>
 {% endif %}
 
