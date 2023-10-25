@@ -1,0 +1,32 @@
+# This is compose file using only local develop
+version: "3.5"
+
+services:
+  db:
+    image: "postgres:16"
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "pythons"
+      POSTGRES_PASSWORD: "pythons"
+      POSTGRES_DB: "pythons"
+    ports:
+      - "5432:5432"
+
+  amqp:
+    image: "rabbitmq:3-management"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  mailhog:
+    image: "mailhog/mailhog"
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+volumes:
+  db: {}
+  rabbitmq_data: {}
