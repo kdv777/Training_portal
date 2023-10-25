@@ -6,23 +6,23 @@
 {% comment %}
 <div style="margin-top: 100px;"></div>
 <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <input type="submit" value="Update">
+	{% csrf_token %}
+	{{ form.as_p }}
+	<input type="submit" value="Update">
 </form>
 {% endcomment %}
 
 <div class="container mb-5" style="margin-top: 100px; max-width: 500px;">
-    <h2>Ваши данные:</h2>
+	<h2>Ваши данные:</h2>
 	{% if messages %}
-		{% for message in messages %}
-			<div class="row mb-3">
-				<p style="color: red;">{{ message }}</p>
-			</div>
-		{% endfor %}
+	{% for message in messages %}
+	<div class="row mb-3">
+		<p style="color: red;">{{ message }}</p>
+	</div>
+	{% endfor %}
 	{% endif %}
-    <form class="mt-5" method="post" novalidate>
-        {% csrf_token %}
+	<form class="mt-5" method="post" novalidate enctype="multipart/form-data">
+		{% csrf_token %}
 
 
 		{% for field in form %}
@@ -33,15 +33,12 @@
 		{% endfor %}
 
 		<hr>
-        <div class="d-flex gap-4 mt-5">
-            <button type="submit" class="btn btn-primary" value="Update" >Сохранить</button>
-        </div>
-        		<hr>
+		<div class="d-flex gap-4 mt-5">
+			<button type="submit" class="btn btn-primary" value="Update">Сохранить</button>
+		</div>
+		<hr>
 
 	</form>
 </div>
 
 {% endblock %}
-
-
-

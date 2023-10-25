@@ -44,12 +44,32 @@ git push origin -d <branch_name>
 ```
 
 # Как запустить проект локально
+### Запускаем контейнеры rabbitMQ, postgreSQL, Mail Hog
+```bash
+docker compose -f local.docker-compose.yaml up -d
+```
+### Ставим зависимости
 ```bash
 pdm install 
+```
+### Запускаем worker celery из папки src/ в отдельном терминале
+```bash
+cd src
+pdm run celery -A config worker -l info
+```
+### Запускаем Джангу 
+```bash
 pdm run python src/manage.py collectstatic
 pdm run python src/manage.py migrate
 pdm run python src/manage.py runserver
 ```
+# Удаление базы данных 
+```bash
+docker compose -f src/local.docker-compose.yaml down --volumes
+
+```
+# Веб интерфейс Mail Hog находится тут -> localhost:8025
+
 # Создание фикстуры
 ```bash
 Папку fixtures предварительно необходимо создать внутри src (/fixtures)
@@ -66,7 +86,7 @@ python manage.py loaddata 007_all.json
 ```
 # Логирование
 Создать папку var/log в src
-'''bash
+```bash
 mkdir -p ./var/log
-'''
+```
 

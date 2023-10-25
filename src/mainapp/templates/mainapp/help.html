@@ -1,0 +1,21 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block content %}
+
+{% if user.is_authenticated %}
+<h1>Отправьте сообщение в поддержку</h1>
+{% else %}
+<h1>Прежде чем мы сможем начать помогать вам, необходимо зарегистрироваться</h1>
+{% endif %}
+
+{% if form %}
+<h3>Отправить сообщение в техподдержку</h3>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Отаправить</button>
+</form>
+{% endif %}
+
+{% endblock content %}

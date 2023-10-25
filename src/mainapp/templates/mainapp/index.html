@@ -48,8 +48,8 @@
                         </div>
                         <div class="d-flex justify-content-between align-items-end" style="margin-left:5px;">
                             <div>
-                                <img src="/static/{{ item.img_url }}"
-                                     class="img-fluid rounded-start mr-2" style="width:70px; height:70px;" alt="..."/>
+                                <img src="/static/{{ item.img_url }}" class="img-fluid rounded-start mr-2"
+                                    style="width:70px; height:70px;" alt="..." />
                             </div>
                             <div class="p-2">
                                 {% for k,v in count_cours.items %}
@@ -83,7 +83,7 @@
 
                         <div style=" width:100%; height: 45%;">
                             <img src="{% static news.img_url %}" class="card-img-top" alt="..."
-                                 style=" width: 100%;   height : 100%;">
+                                style=" width: 100%;   height : 100%;">
                         </div>
                         <div class="card-body mt-1">
 
@@ -91,9 +91,8 @@
                             <p class="card-text mt-2">{{ news.post.text|truncatechars:145 }}...
                         </div>
 
-                        <a href="{% url 'mainapp:news_details' news.pk %}"
-                           class="btn btn-primary"
-                           style="position: absolute; bottom: 15px; right:15px;">
+                        <a href="{% url 'mainapp:news_details' news.pk %}" class="btn btn-primary"
+                            style="position: absolute; bottom: 15px; right:15px;">
                             Подробнее</a>
                     </div>
                 </div>
@@ -116,8 +115,12 @@
             <div class="col">
                 <div class="card author_card ">
                     <div class="card-body shadow d-flex flex-row ">
+                        {% if teacher.avatar %}
+                        <img src="{{ teacher.avatar.url }}" alt="photo" style="width:70px; height: 70px; margin: 8px;">
+                        {% else %}
                         <img src="{% static 'img/avatar1.png' %}" alt="photo"
-                             style="width:70px; height: 70px; margin: 8px;">
+                            style="width:70px; height: 70px; margin: 8px;">
+                        {% endif %}
                         <div style="height: 86px;" class=" d-flex flex-column justify-content-between">
                             <h5 class="card-title">{{ teacher.get_full_name }}</h5>
                             <p style="margin-top: 5px;">Автор {{ teacher.courses.count }} курсов</p>
