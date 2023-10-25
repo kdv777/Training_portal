@@ -127,6 +127,7 @@ class CourseDetailPageView(TemplateView):
 
         return context
 
+
 class CourseFeedbackFormView(LoginRequiredMixin, CreateView):
     model = mainapp_models.CourseFeedback
     form_class = mainapp_forms.CourseFeedbackForm
@@ -153,12 +154,12 @@ class LessonDetailPageView(TemplateView):
     def get_context_data(self, pk=None, **kwargs):
         # context = super(CoursesCategoryPageView, self).get_context_data(**kwargs)
         context = super().get_context_data(**kwargs)
-        lesson =  get_object_or_404(Lesson, pk=pk)
+        lesson = get_object_or_404(Lesson, pk=pk)
         context["lesson"] = lesson
-        course = get_object_or_404(Course, pk= lesson.course.id)
+        course = get_object_or_404(Course, pk=lesson.course.id)
         context["course"] = course
-        context["all_lessons"] = Lesson.objects.all()\
-            .filter(course = lesson.course.id).\
+        context["all_lessons"] = Lesson.objects.all() \
+            .filter(course=lesson.course.id). \
             order_by("order")
         context["static_img"] = lesson.media_link
         context["url_img"] = None
@@ -175,7 +176,7 @@ class LessonsCoursePageView(TemplateView):
     def get_context_data(self, pk=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context["course"] = get_object_or_404(Course, pk=pk)
-        context["lessons_course"] = Lesson.objects.all().filter(course = lesson.course.id)
+        context["lessons_course"] = Lesson.objects.all().filter(course=lesson.course.id)
         return context
 
 
@@ -210,8 +211,8 @@ class CabinetView(TemplateView):
 
         courses_active = (
             Order.objects.all()
-            .filter(buyer=self.request.user.id)
-            .filter(finished=False)
+                .filter(buyer=self.request.user.id)
+                .filter(finished=False)
         )
         # print(f'courses_active:{courses_active}')
         courses_active_id = []
@@ -281,7 +282,6 @@ class OrderViewSet(ModelViewSet):
 
 
 class LessonCreateView(CreateView):
-
     model = Lesson
     template_name = "mainapp/lesson_form.html"
     success_url = reverse_lazy("mainapp:index")
@@ -305,17 +305,17 @@ class LessonCreateView(CreateView):
         lesson_url_m = request.POST.get("media_url")
 
         if not all(
-            [
-                lesson_title,
-                lesson_text,
-                lesson_body,
-                lesson_author,
-                lesson_slug,
-                lesson_order
-            ]
+                [
+                    lesson_title,
+                    lesson_text,
+                    lesson_body,
+                    lesson_author,
+                    lesson_slug,
+                    lesson_order
+                ]
         ):
             messages.error(self.request, "Не все поля заполнены")
-            return redirect("mainapp:lesson_create", pk=context.course_id )
+            return redirect("mainapp:lesson_create", pk=context.course_id)
         all_lessons_in_course = Lesson.objects.all().filter(course=pk).order_by('order')
         if all_lessons_in_course:
             for item in all_lessons_in_course:
@@ -342,8 +342,7 @@ class LessonCreateView(CreateView):
         if lesson_url_m:
             lesson.media_link = lesson_url_m
         lesson.save()
-        return redirect("mainapp:lesson_detail", pk=lesson.id )
-
+        return redirect("mainapp:lesson_detail", pk=lesson.id)
 
 
 class CourseCreateView(TemplateView):
@@ -362,19 +361,18 @@ class CourseCreateView(TemplateView):
         course_cat_id = request.POST.get("cat_id")
 
         if not all(
-            [
-                course_name,
-                course_description,
-                course_img_url,
-                course_price,
-                course_cat_id,
-            ]
+                [
+                    course_name,
+                    course_description,
+                    course_img_url,
+                    course_price,
+                    course_cat_id,
+                ]
         ):
             messages.error(self.request, "Не все поля заполнены")
             return redirect("mainapp:course_create")
 
         if Course.objects.filter(name=course_name).exists():
-
             messages.error(self.request, "Курс с таким именем уже есть")
             return redirect("authapp:register")
         course_category = get_object_or_404(Category, id=course_cat_id)
@@ -422,13 +420,13 @@ class LogDownloadView(UserPassesTestMixin, View):
         course_cat_id = request.POST.get("cat_id")
 
         if not all(
-            [
-                course_name,
-                course_description,
-                # course_img_url,
-                course_price,
-                course_cat_id,
-            ]
+                [
+                    course_name,
+                    course_description,
+                    # course_img_url,
+                    course_price,
+                    course_cat_id,
+                ]
         ):
             messages.error(self.request, "Не все поля заполнены")
             return redirect("mainapp:course_create")
@@ -502,10 +500,16 @@ class RecallTeacherStatus(TemplateView):
         return redirect("mainapp:request_teacher")
 
 
+class Search(ListView):
+    model = Course
+    template_name = "mainapp/search.html"
+    context_object_name = 'courses'
+    paginate_by = 5
 
+    def get_queryset(self):
+        return Course.objects.filter(name__iregex=self.request.GET.get('q'))
 
-
-
-
-
-
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['q'] = self.request.GET.get('q')
+        return context

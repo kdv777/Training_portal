@@ -1,0 +1,20 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block content %}
+<br><br><br><br>
+<h2>Результаты поиска: {{ q }}</h2>
+<ul>
+    {% if courses %}
+    {% for course in courses %}
+    <li>
+        <a href="{% url 'mainapp:course_detail' course.id %}">{{ course.name }}</a>
+    </li>
+    {% endfor %}
+    {% else %}
+    Ничего не найдено.
+    {% endif %}
+</ul>
+{% endblock %}
+
+
