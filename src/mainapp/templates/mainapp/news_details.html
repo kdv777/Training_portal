@@ -1,6 +1,89 @@
 {% extends 'mainapp/base.html' %}
 {% load static %}
 
+{% block js %}
+   {{ block.super }}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript">
+        function reply_to_comment(author_name, comment_id){
+            $("#new_comment_label").text("Ответить " + author_name);
+            $("#new_comment_submit").attr("parent_id", comment_id);
+        }
+        function reset_comment(){
+            $("#new_comment_label").text("Новый комментарий");
+            $("#new_comment_submit").removeAttr("parent_id");
+        }
+        function load_comments(){
+            $.ajax({
+                url: "{% url 'mainapp:comments-list' %}",
+                type: "GET",
+                data: {
+                    post_id: {{ news.post.id }}
+                },
+                success: function (data) {
+                    for (let i = 0; i < data.length; i++) {
+                        html = '<div class="d-flex flex-start mt-4">'
+                            + '<img class="rounded-circle shadow-1-strong me-3" src="/media/'
+                            + data[i].author_avatar
+                            + '" alt="avatar" width="65" height="65" /><div class="flex-grow-1 flex-shrink-1">'
+                            + '<div><div class="d-flex justify-content-between align-items-center"><p class="mb-1">'
+                            + data[i].author_name
+                            + '</p><a href="#!" onclick="reply_to_comment(\''
+                            + data[i].author_name + '\', '
+                            + data[i].id +')">'
+                            + '<i class="fas fa-reply fa-xs"></i>'
+                            + '<span class="small">ответить</span>'
+                            + '</a></div><p class="small mb-0">'
+                            + data[i].text
+                            + '</p></div>';
+                        for (let j = 0; j < data[i].children.length; j++) {
+                            html = html + '<div class="d-flex flex-start mt-4">'
+                                + '<img class="rounded-circle shadow-1-strong me-3" src="/media/'
+                                + data[i].children[j].author_avatar
+                                + '" alt="avatar" width="65" height="65" /><div class="flex-grow-1 flex-shrink-1">'
+                                + '<div><div class="d-flex justify-content-between align-items-center"><p class="mb-1">'
+                                + data[i].children[j].author_name
+                                + '</p></div><p class="small mb-0">'
+                                + data[i].children[j].text
+                                + '</p></div></div></div>';
+                        }
+                        html = html + '</div></div>';
+                        $("#comments_list").append(html);
+                    }
+                },
+
+            })
+        }
+        function add_comment(){
+            parent_id = $("#new_comment_submit").attr("parent_id");
+            csrftoken = $("[name=csrfmiddlewaretoken]").val();
+            $.ajax({
+                url: "{% url 'mainapp:comments-list' %}",
+                type: "POST",
+                data: {
+                    author: {{ user.id }},
+                    post: {{ news.post.id }},
+                    text: $("#new_comment_text").val(),
+                    parent: parent_id,
+                },
+                beforeSend: function(xhr) {
+                    xhr.setRequestHeader("X-CSRFToken", csrftoken);
+                },
+                success: function (data) {
+                    $("#comments_list").empty();
+                    $("#new_comment_text").val("");
+                    reset_comment();
+                    load_comments();
+                },
+
+            })
+        }
+        $(document).ready(function(){
+            load_comments();
+        })
+    </script>
+{% endblock %}
+
 {% block content %}
 
 <div class="row" style="margin-top: 100px;margin-bottom: 50px;">
@@ -21,6 +104,30 @@
         {% endfor %}
 
 
+    </div>
+    <div class="mb-3 mt-4">
+        {% csrf_token %}
+        <div class="card">
+            <div class="card-body p-4">
+                <h4 class="text-center mb-4 pb-2">Комментарии</h4>
+                <div class="row">
+                    <div class="col" id="comments_list">
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
+                <div class="d-flex flex-start w-100">
+                  <div class="form-outline w-100">
+                    <textarea class="form-control" id="new_comment_text" rows="4" style="background: #fff;"></textarea>
+                    <label class="form-label" for="new_comment_text" id="new_comment_label">Новый комментарий</label>
+                  </div>
+                </div>
+                <div class="float-end mt-2 pt-1">
+                    <button id="new_comment_submit" type="button" class="btn btn-primary btn-sm" onclick="add_comment()">Опубликовать</button>
+                    <button type="button" class="btn btn-outline-primary btn-sm" onclick="reset_comment()">Отмена</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     {# end block about #}
