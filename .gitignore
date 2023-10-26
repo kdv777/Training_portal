@@ -162,6 +162,7 @@ cython_debug/
 
 # Other
 src/static
+.DS_Store
 
 # Logging
 main_log.log

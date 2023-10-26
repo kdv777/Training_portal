@@ -3,26 +3,25 @@ import logging
 
 from django.conf import settings
 from django.contrib import messages
-from django.contrib.auth.mixins import UserPassesTestMixin, LoginRequiredMixin
-from django.http import FileResponse, JsonResponse, HttpResponseRedirect
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import FileResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.template import context
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
 from django.utils.datetime_safe import datetime
-from rest_framework import status
-from django.views.generic import CreateView, TemplateView, View, ListView
-
+from django.views.generic import CreateView, ListView, TemplateView, View
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
+from authapp.models import User
 from config.settings import BASE_DIR
-from mainapp.models import Category, Course, Lesson, News, Order, Post, CourseFeedback
-from mainapp.serializers import OrderSerializer
 from mainapp import forms as mainapp_forms
 from mainapp import models as mainapp_models
+from mainapp.models import (Category, Comment, Course, CourseFeedback, Lesson,
+                            News, Order, Post)
+from mainapp.serializers import CommentSerializer, OrderSerializer
 from mainapp.tasks import send_feedback_mail
-from authapp.models import User
 
 logger = logging.getLogger(__name__)
 
@@ -111,7 +110,9 @@ class CourseDetailPageView(TemplateView):
         if course.img_url[:4] == "http":
             context["url_img"] = course.img_url
             context["static_img"] = None
-        context["all_lessons"] = Lesson.objects.all().filter(course=pk).order_by("order")
+        context["all_lessons"] = (
+            Lesson.objects.all().filter(course=pk).order_by("order")
+        )
         context["course_id"] = course.id
         if self.request.user.is_authenticated:
             if Order.objects.filter(course=course, buyer=self.request.user).exists():
@@ -135,7 +136,9 @@ class CourseFeedbackFormView(LoginRequiredMixin, CreateView):
 
     def form_valid(self, form):
         self.object = form.save()
-        rendered_card = render_to_string("mainapp/includes/feedback_card.html", context={"item": self.object})
+        rendered_card = render_to_string(
+            "mainapp/includes/feedback_card.html", context={"item": self.object}
+        )
         return JsonResponse({"card": rendered_card})
 
 
@@ -159,9 +162,9 @@ class LessonDetailPageView(TemplateView):
         context["lesson"] = lesson
         course = get_object_or_404(Course, pk=lesson.course.id)
         context["course"] = course
-        context["all_lessons"] = Lesson.objects.all() \
-            .filter(course=lesson.course.id). \
-            order_by("order")
+        context["all_lessons"] = (
+            Lesson.objects.all().filter(course=lesson.course.id).order_by("order")
+        )
         context["static_img"] = lesson.media_link
         context["url_img"] = None
         if lesson.media_link[:4] == "http":
@@ -174,7 +177,7 @@ class LessonDetailPageView(TemplateView):
 class LessonsCoursePageView(TemplateView):
     template_name = "mainapp/lessons_course.html"
 
-    def get_context_data(self, pk=None, **kwargs):
+    def get_context_data(self, pk=None, lesson=None, **kwargs):
         context = super().get_context_data(**kwargs)
         context["course"] = get_object_or_404(Course, pk=pk)
         context["lessons_course"] = Lesson.objects.all().filter(course=lesson.course.id)
@@ -212,8 +215,8 @@ class CabinetView(TemplateView):
 
         courses_active = (
             Order.objects.all()
-                .filter(buyer=self.request.user.id)
-                .filter(finished=False)
+            .filter(buyer=self.request.user.id)
+            .filter(finished=False)
         )
         # print(f'courses_active:{courses_active}')
         courses_active_id = []
@@ -282,6 +285,16 @@ class OrderViewSet(ModelViewSet):
         return queryset
 
 
+class CommentViewSet(ModelViewSet):
+    serializer_class = CommentSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = Comment.objects.filter(parent__isnull=True)
+        post_id = self.request.query_params.get("post_id", None)
+        return queryset.filter(post_id=post_id) if post_id else queryset
+
+
 class LessonCreateView(CreateView):
     model = Lesson
     template_name = "mainapp/lesson_form.html"
@@ -290,7 +303,9 @@ class LessonCreateView(CreateView):
 
     def get_context_data(self, pk=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["all_lessons"] = Lesson.objects.all().filter(course=pk).order_by('order')
+        context["all_lessons"] = (
+            Lesson.objects.all().filter(course=pk).order_by("order")
+        )
         context["course_id"] = pk
 
         return context
@@ -300,24 +315,26 @@ class LessonCreateView(CreateView):
         lesson_text = request.POST.get("text")
         lesson_body = request.POST.get("body")
         lesson_author = request.user
-        lesson_slug = str(lesson_title.lower().replace(" ", "-")[:20]) + "_" + str(datetime.now)
+        lesson_slug = (
+            str(lesson_title.lower().replace(" ", "-")[:20]) + "_" + str(datetime.now)
+        )
         lesson_order = int(request.POST.get("order"))
         lesson_url_v = request.POST.get("video_url")
         lesson_url_m = request.POST.get("media_url")
 
         if not all(
-                [
-                    lesson_title,
-                    lesson_text,
-                    lesson_body,
-                    lesson_author,
-                    lesson_slug,
-                    lesson_order
-                ]
+            [
+                lesson_title,
+                lesson_text,
+                lesson_body,
+                lesson_author,
+                lesson_slug,
+                lesson_order,
+            ]
         ):
             messages.error(self.request, "Не все поля заполнены")
             return redirect("mainapp:lesson_create", pk=context.course_id)
-        all_lessons_in_course = Lesson.objects.all().filter(course=pk).order_by('order')
+        all_lessons_in_course = Lesson.objects.all().filter(course=pk).order_by("order")
         if all_lessons_in_course:
             for item in all_lessons_in_course:
                 if item.order >= lesson_order:
@@ -362,13 +379,13 @@ class CourseCreateView(TemplateView):
         course_cat_id = request.POST.get("cat_id")
 
         if not all(
-                [
-                    course_name,
-                    course_description,
-                    course_img_url,
-                    course_price,
-                    course_cat_id,
-                ]
+            [
+                course_name,
+                course_description,
+                course_img_url,
+                course_price,
+                course_cat_id,
+            ]
         ):
             messages.error(self.request, "Не все поля заполнены")
             return redirect("mainapp:course_create")
@@ -421,13 +438,13 @@ class LogDownloadView(UserPassesTestMixin, View):
         course_cat_id = request.POST.get("cat_id")
 
         if not all(
-                [
-                    course_name,
-                    course_description,
-                    # course_img_url,
-                    course_price,
-                    course_cat_id,
-                ]
+            [
+                course_name,
+                course_description,
+                # course_img_url,
+                course_price,
+                course_cat_id,
+            ]
         ):
             messages.error(self.request, "Не все поля заполнены")
             return redirect("mainapp:course_create")
@@ -455,23 +472,29 @@ class RequestTeacher(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["request_teacher"] = User.objects.filter(is_teacher=True).exclude(is_teacher_approved=True)
-        context["approved_teacher"] = User.objects.filter(is_teacher=True).filter(is_teacher_approved=True)
+        context["request_teacher"] = User.objects.filter(is_teacher=True).exclude(
+            is_teacher_approved=True
+        )
+        context["approved_teacher"] = User.objects.filter(is_teacher=True).filter(
+            is_teacher_approved=True
+        )
         return context
 
 
 class ApproveTeacherStatus(TemplateView):
     """
-      The get function is used to approve a teacher.
-          It takes in the request and pk of the user as parameters.
-          It then gets the user object from User model using get_object_or_404 function, which returns a 404 error if no such object exists.
-          Then it sets is_teacher approved attribute of that user to True and saves it in database.
+    The get function is used to approve a teacher.
+        It takes in the request and pk of the user as parameters.
+        It then gets the user object from User model using get_object_or_404 function,
+        which returns a 404 error if no such object exists.
+        Then it sets is_teacher approved attribute of that user to True and saves it in database.
 
-      :param self: Represent the instance of the object itself
-      :param request: Pass the request object to the view
-      :param pk: Get the user object from the database
-      :return: The user and sets the is_teacher_approved to true
+    :param self: Represent the instance of the object itself
+    :param request: Pass the request object to the view
+    :param pk: Get the user object from the database
+    :return: The user and sets the is_teacher_approved to true
     """
+
     template_name = "mainapp/teacher_status.html"
 
     def get(self, request, pk):
@@ -483,15 +506,16 @@ class ApproveTeacherStatus(TemplateView):
 
 class RecallTeacherStatus(TemplateView):
     """
-       The get function is used to retrieve a single object from the database.
-           It takes in a request and an id, and returns the object with that id.
-           If no such object exists, it raises an Http404 exception.
+    The get function is used to retrieve a single object from the database.
+        It takes in a request and an id, and returns the object with that id.
+        If no such object exists, it raises an Http404 exception.
 
-       :param self: Represent the instance of the object itself
-       :param request: Pass the request object to the view
-       :param pk: Identify the user that is being approved
-       :return: A redirect to the request_teacher view
+    :param self: Represent the instance of the object itself
+    :param request: Pass the request object to the view
+    :param pk: Identify the user that is being approved
+    :return: A redirect to the request_teacher view
     """
+
     template_name = "mainapp/teacher_status.html"
 
     def get(self, request, pk):
@@ -501,22 +525,21 @@ class RecallTeacherStatus(TemplateView):
         return redirect("mainapp:request_teacher")
 
 
-
 class Search(ListView):
     model = Course
     template_name = "mainapp/search.html"
-    context_object_name = 'courses'
+    context_object_name = "courses"
     paginate_by = 5
 
     def get_queryset(self):
-        return Course.objects.filter(name__iregex=self.request.GET.get('q'))
+        return Course.objects.filter(name__iregex=self.request.GET.get("q"))
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['q'] = self.request.GET.get('q')
+        context["q"] = self.request.GET.get("q")
         return context
 
-      
+
 class HelpPageView(TemplateView):
     template_name = "mainapp/help.html"
 
@@ -534,4 +557,3 @@ class HelpPageView(TemplateView):
             }
         )
         return HttpResponseRedirect(reverse_lazy("mainapp:index"))
-
