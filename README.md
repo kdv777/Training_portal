@@ -44,6 +44,7 @@ git push origin -d <branch_name>
 ```
 
 # Как запустить проект локально
+### Устанавливаем Docker (под Windows ставим Docker Desktop)
 ### Запускаем контейнеры rabbitMQ, postgreSQL, Mail Hog
 ```bash
 docker compose -f local.docker-compose.yaml up -d
@@ -57,11 +58,11 @@ pdm install
 cd src
 pdm run celery -A config worker -l info
 ```
-### Запускаем Джангу 
+### Запускаем Джангу из директории src
 ```bash
-pdm run python src/manage.py collectstatic
-pdm run python src/manage.py migrate
-pdm run python src/manage.py runserver
+pdm run python manage.py collectstatic
+pdm run python manage.py migrate
+pdm run python manage.py runserver
 ```
 # Удаление базы данных 
 ```bash
@@ -77,12 +78,12 @@ docker compose -f src/local.docker-compose.yaml down --volumes
 python -Xutf8 manage.py dumpdata --exclude auth.permission --exclude contenttypes --exclude auth.group  --exclude admin.logentry --exclude sessions --indent 2 -o ./fi
 xtures/007_all.json
 ```
-# Загрузка фикстур
+# Загрузка фикстур из директории src
 ```bash
 Удаляем старую базу
 python manage.py makemigrations
 python manage.py migrate
-python manage.py loaddata 007_all.json
+python manage.py loaddata ./fixtures/007_all.json
 ```
 # Логирование
 Создать папку var/log в src
