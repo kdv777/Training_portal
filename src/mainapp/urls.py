@@ -17,7 +17,11 @@ urlpatterns = [
     # path("course_detail/", views.Course1PageView.as_view(), name="course_detail"),
     # path("course1/", views.Course1PageView.as_view(), name="course1"),
     path("course_create/", views.CourseCreateView.as_view(), name="course_create"),
-    path("lesson_create/<int:pk>/", views.LessonCreateView.as_view(), name="lesson_create"),
+    path(
+        "lesson_create/<int:pk>/",
+        views.LessonCreateView.as_view(),
+        name="lesson_create",
+    ),
     # path("lesson1_1/", views.Lesson1_1PageView.as_view(), name="lesson1_1"),
     path("categories", views.CategoriesPageView.as_view(), name="categories"),
     path(
@@ -40,7 +44,9 @@ urlpatterns = [
     ),
     path("ckeditor/", include("ckeditor_uploader.urls"), name="ckeditor_upload"),
     path("cabinet/", views.CabinetView.as_view(), name="cabinet"),
-    path("news_details/<int:pk>/", views.NewsDetailsView.as_view(), name="news_details"),
+    path(
+        "news_details/<int:pk>/", views.NewsDetailsView.as_view(), name="news_details"
+    ),
     # Logging
     path("log_view/", views.LogView.as_view(), name="log_view"),
     path("log_download/", views.LogDownloadView.as_view(), name="log_download"),
@@ -49,13 +55,26 @@ urlpatterns = [
     ),
     path("cart/", views.CartPageView.as_view(), name="cart"),
     path("payment/", views.PaymentPageView.as_view(), name="payment"),
-    path("course_feedback/", views.CourseFeedbackFormView.as_view(), name="course_feedback"),
+    path(
+        "course_feedback/",
+        views.CourseFeedbackFormView.as_view(),
+        name="course_feedback",
+    ),
     path("help/", views.HelpPageView.as_view(), name="help"),
     path("request_teacher/", views.RequestTeacher.as_view(), name="request_teacher"),
-    path("approve_teacher/<int:pk>/", views.ApproveTeacherStatus.as_view(), name="approve_teacher"),
-    path("recall_teacher/<int:pk>/", views.RecallTeacherStatus.as_view(), name="recall_teacher"),
+    path(
+        "approve_teacher/<int:pk>/",
+        views.ApproveTeacherStatus.as_view(),
+        name="approve_teacher",
+    ),
+    path(
+        "recall_teacher/<int:pk>/",
+        views.RecallTeacherStatus.as_view(),
+        name="recall_teacher",
+    ),
     path("search/", views.Search.as_view(), name="search"),
 ]
 
 router.register(r"orders", views.OrderViewSet, basename="orders")
+router.register(r"comments", views.CommentViewSet, basename="comments")
 urlpatterns += router.urls
