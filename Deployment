@@ -1,0 +1,41 @@
+Данный файл содержит информацию о развёртывание проекта на виртуальном сетевом сервисе.
+
+Создание базы.
+
+CREATE DATABASE Training_Portal;
+
+CREATE USER romik1981 with NOSUPERUSER PASSWORD 'denis-1103';
+
+GRANT ALL PRIVILEGES ON DATABASE Training_Portal TO romik1981;
+
+ALTER ROLE romik1981 SET CLIENT_ENCODING TO 'UTF8';
+
+ALTER ROLE romik1981 SET default_transaction_isolation TO 'READ COMMITTED';
+
+Копирование файлов проекта.
+
+rsync --archive --compress --delete . romik1981@95.163.235.40:/home/romik1981/Training_Portal
+
+Данннные сайта Reg.ru:
+
+Доступ к серверу
+
+Логин: root
+Пароль: npeRF3Aysy$w
+
+Доступ к DNS
+
+Адрес: https://dnsadmin.hosting.reg.ru/manager/ispmgr
+Логин: ce86917249
+Пароль: rPcbjWIk!lOf1NK
+DNS: ns5.hosting.reg.ru • ns6.hosting.reg.ru
+
+sudo apt install -y python3-venv - установка виртуального окружения
+
+python3 -m venv venv - создание виртуального окружения
+
+. ./venv/bin/activate - активация виртуального окружения
+
+python manage.py runserver 95.163.235.40:8080 - запуск серверв проекта
+
+pdm run python src/manage.py runserver 95.163.235.40:8080 - запуск проекта через pdm

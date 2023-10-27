@@ -1,0 +1,45 @@
+                                Основные команды необходимые при разработки проекта.
+
+venv\Scripts\activate.bat - активация виртуального окружения в терминале Windows
+
+deactivate - деактивация виртуального окружения
+
+pip install -r requirements.txt - установка пакетов из файла
+
+django-admin startproject config . - создание проекта
+
+python manage.py startapp mainapp - создание приложение
+
+python manage.py runserver 0.0.0.0:8000 - запуск отладочного сервера
+
+django-admin - запуск админки django
+
+python manage.py migrate [приложение] - создание миграций
+
+python manage.py createsuperuser - создание суперпользователя
+
+python manage.py startapp mainapp - создание приложения
+
+django-admin startproject config . - создание проекта
+
+python manage.py createsuperuser - создание суперпользователя
+
+python manage.py makemigrations mainapp - создние таблиц в базе данных
+
+python manage.py loaddata db.json - заполнение базы данных
+
+python manage.py update_db - обновление базы данных
+
+python manage.py runserver --settings=config.settings 0.0.0.0:8000 - запуск отладочного сервера
+
+export DJANGO_SETTINGS_MODULE=config.settings - установка переменной окружения
+
+env | grep DJANGO - проверка переменной окружения
+
+pip freeze > requirements.txt - запись зависимостей в файл
+
+curl -sSL https://raw.githubusercontent.com/pdm-project/pdm/main/install-pdm.py | python3 - - установка PDM на Ubuntu
+
+export PATH=/root/.local/bin:$PATH  - установка переменной окружения PDM на Ubuntu
+
+
