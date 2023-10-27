@@ -11,8 +11,8 @@
         <ul class="list-group">
             {% for course in courses_top %}
             <li class="list-group-item">
-                <a href="{% url 'mainapp:course_detail' course.pk %}" style="text-decoration: none"> Курс: {{
-                    course.name }} </a>
+                <a href="{% url 'mainapp:course_detail' course.pk %}"
+                   style="text-decoration: none"> Курс: {{ course.name }} </a>
             </li>
             {% endfor %}
         </ul>

@@ -45,6 +45,10 @@ git push origin -d <branch_name>
 
 # Как запустить проект локально
 ### Устанавливаем Docker (под Windows ставим Docker Desktop)
+в docker.com > логинишься | регистрируешься ->
+-> продкуты ->  кнопка "download for Windows" -> устанавливаешь
+-> получаем Docker Desktop
+
 ### Запускаем контейнеры rabbitMQ, postgreSQL, Mail Hog
 ```bash
 docker compose -f local.docker-compose.yaml up -d
@@ -64,21 +68,22 @@ pdm run python manage.py collectstatic
 pdm run python manage.py migrate
 pdm run python manage.py runserver
 ```
-# Удаление базы данных 
+### Удаление базы данных 
 ```bash
 docker compose -f src/local.docker-compose.yaml down --volumes
 
 ```
-# Веб интерфейс Mail Hog находится тут -> localhost:8025
+### Веб интерфейс Mail Hog находится тут -> localhost:8025
 
-# Создание фикстуры
+# Фикстуры
+### Создание фикстуры
 ```bash
 Папку fixtures предварительно необходимо создать внутри src (/fixtures)
 Далее выполняем команду для создания фикстуры если находимся в src>
 python -Xutf8 manage.py dumpdata --exclude auth.permission --exclude contenttypes --exclude auth.group  --exclude admin.logentry --exclude sessions --indent 2 -o ./fi
 xtures/007_all.json
 ```
-# Загрузка фикстур из директории src
+### Загрузка фикстур из директории src
 ```bash
 Удаляем старую базу
 python manage.py makemigrations
@@ -90,4 +95,24 @@ python manage.py loaddata ./fixtures/007_all.json
 ```bash
 mkdir -p ./var/log
 ```
+
+# Загрузка картинок и видео
+При создании курсов и лекций можно подгружать 
+файлы картинок, картинки по ссылке и видео по ссылке
+### Файлы картинок 
+Файлы картинок загружаются в папку /static/, при создании курса в поле
+"файл картинки" указывается название файла формата img/diz_04.jpeg
+### Картинки по ссылке
+Для картинки по ссылке  в поле
+"URL картинки" указывается ссылка на картинку в формате 
+https://.....  .jpg
+### Видео по ссылке
+Для видео по ссылке  в поле "Video URL"
+указывается ссылка на видео в формате 
+https://www.youtube.com/embed/Xiy8xwhbmew?si=vb7hqtiDATouk30x
+
+Такую ссылку можно получить из youtube(на странице видео)
+-> "поделиться" > "встроить" > 
+из предложенного взять нужную часть вида как выше. 
+-> вставить в поле "Video URL" при создании урока
 

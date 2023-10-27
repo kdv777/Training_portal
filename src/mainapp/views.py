@@ -1,5 +1,6 @@
 # Logging
 import logging
+from time import time
 
 from django.conf import settings
 from django.contrib import messages
@@ -45,6 +46,8 @@ class MainPageView(TemplateView):
 
         context["count_cours"] = count_cours
         context["teachers"] = User.get_random_teachers(self.TEACHERS_COUNT)
+        context["num_students"] = User.objects.exclude(is_teacher=True)\
+            .exclude(is_staff=True).count()
         context["list_of_news"] = News.objects.all().order_by("created_at")[:3]
         context["base_dir"] = str(BASE_DIR).replace("\\", "/")
         return context
@@ -104,12 +107,7 @@ class CourseDetailPageView(TemplateView):
         course = get_object_or_404(Course, pk=pk)
 
         context["course"] = course
-        # print(str(course.img_url)[:3])
-        context["static_img"] = course.img_url
-        context["url_img"] = None
-        if course.img_url[:4] == "http":
-            context["url_img"] = course.img_url
-            context["static_img"] = None
+
         context["all_lessons"] = (
             Lesson.objects.all().filter(course=pk).order_by("order")
         )
@@ -165,11 +163,6 @@ class LessonDetailPageView(TemplateView):
         context["all_lessons"] = (
             Lesson.objects.all().filter(course=lesson.course.id).order_by("order")
         )
-        context["static_img"] = lesson.media_link
-        context["url_img"] = None
-        if lesson.media_link[:4] == "http":
-            context["url_img"] = lesson.media_link
-            context["static_img"] = None
         # print(f'all lessons : {context["all_lessons"]}')
         return context
 
@@ -195,11 +188,13 @@ class CabinetView(TemplateView):
         # Create your own data
 
         # print(User)
+        course_now_id=0
         course_now = self.request.user.course
         if course_now:
             context["course_now"] = get_object_or_404(
                 Course, pk=self.request.user.course.id
             )
+            course_now_id=course_now.id
 
         courses_done = (
             Order.objects.all().filter(buyer=self.request.user.id).filter(finished=True)
@@ -230,9 +225,15 @@ class CabinetView(TemplateView):
         context["courses_teacher"] = Course.objects.all().filter(
             author=self.request.user.id
         )
-        context["courses_top"] = Course.objects.all().order_by("created_at")[:3]
-        # context["base_dir"] = str(BASE_DIR).replace("\\", "/")
-        # print(context['base_dir'])
+
+        filter_list = courses_active_id + courses_done_id
+        filter_list.append(course_now_id)
+        print(filter_list)
+
+        context["courses_top"] = Course.objects.all().\
+                                     exclude(id__in=filter_list).order_by("created_at")[:3]
+
+
         return context
 
 
@@ -316,11 +317,12 @@ class LessonCreateView(CreateView):
         lesson_body = request.POST.get("body")
         lesson_author = request.user
         lesson_slug = (
-            str(lesson_title.lower().replace(" ", "-")[:20]) + "_" + str(datetime.now)
-        )
+            str(lesson_title.lower().replace(" ", "-")[:20]) + "_" + str(int(time())
+        ))
         lesson_order = int(request.POST.get("order"))
-        lesson_url_v = request.POST.get("video_url")
-        lesson_url_m = request.POST.get("media_url")
+        lesson_vid_url = request.POST.get("video_url")
+        lesson_img_url = request.POST.get("img_url")
+        lesson_img_file = request.POST.get("img_file")
 
         if not all(
             [
@@ -355,10 +357,12 @@ class LessonCreateView(CreateView):
         lesson.post_id = post.id
         lesson.course = course
         lesson.order = lesson_order
-        if lesson_url_v:
-            lesson.video_url = lesson_url_v
-        if lesson_url_m:
-            lesson.media_link = lesson_url_m
+        if lesson_vid_url:
+            lesson.video_url = lesson_vid_url
+        if lesson_img_url:
+            lesson.img_url = lesson_img_url
+        if lesson_img_file:
+            lesson.img_file_ = lesson_img_file
         lesson.save()
         return redirect("mainapp:lesson_detail", pk=lesson.id)
 
@@ -375,6 +379,7 @@ class CourseCreateView(TemplateView):
         course_name = request.POST.get("name")
         course_description = request.POST.get("description")
         course_img_url = request.POST.get("img_url")
+        course_img_file = request.POST.get("img_file")
         course_price = request.POST.get("price")
         course_cat_id = request.POST.get("cat_id")
 
@@ -397,7 +402,10 @@ class CourseCreateView(TemplateView):
         course = Course()
         course.name = course_name
         course.description = course_description
-        course.img_url = course_img_url
+        if course_img_url:
+            course.img_url = course_img_url
+        if course_img_file:
+            course.img_file = course_img_file
         course.price = course_price
         # course.category = course_category
         course.author = request.user
@@ -557,3 +565,16 @@ class HelpPageView(TemplateView):
             }
         )
         return HttpResponseRedirect(reverse_lazy("mainapp:index"))
+
+
+class TermsView(TemplateView):
+    template_name = "mainapp/terms.html"
+
+
+
+
+
+
+
+
+

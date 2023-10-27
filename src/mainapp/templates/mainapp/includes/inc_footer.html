@@ -7,7 +7,7 @@
                 <div style="margin-bottom: 8px; color:#222;">
                     © 2023 PYTHONS.team
                 </div>
-                Наши условия <a style="color: #777" href="https://welcome.stepik.org/ru/terms">использования<br>и
+                Наши условия <a style="color: #777" href="{% url 'mainapp:terms' %}">использования<br>и
                     конфиденциальности</a>
                 <div style="margin-top: 18px; width: 100%; text-align: center;">
                     <a style="color: #777" href="#">Switch to English</a>
@@ -53,7 +53,7 @@
 
                 <ul style="color: #222">
                     <li style="list-style-type: none" title="Общее количество отправленных решений на Stepik">
-                        123 студентов
+                        {{ num_students }} студентов
                     </li>
                 </ul>
             </div>

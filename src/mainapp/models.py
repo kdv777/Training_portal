@@ -56,6 +56,7 @@ class Course(TimestampMixin):
     description = models.TextField(blank=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="courses")
     img_url = models.TextField(blank=True)
+    img_file = models.TextField(blank=True)
     category = models.ManyToManyField(Category, related_name="courses")
     price = models.PositiveIntegerField(default=0)
     active = models.BooleanField(default=True)
@@ -93,7 +94,10 @@ class Lesson(TimestampMixin):
     post = models.OneToOneField(Post, on_delete=models.CASCADE, related_name="lesson")
     order = models.PositiveIntegerField(default=0)
     video_url = models.URLField(blank=True)
-    media_link = models.TextField(blank=True)
+    # media_link = models.URLField(blank=True)
+    img_url = models.TextField(blank=True)
+    img_file = models.TextField(blank=True)
+
 
     def __str__(self):
         return "{} - {}".format(self.course.name, self.post.title)
