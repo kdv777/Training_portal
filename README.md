@@ -44,27 +44,29 @@ git push origin -d <branch_name>
 ```
 
 # Как запустить проект локально
-```bash 
 через pdm
+```bash 
 pdm install 
 pdm run python src/manage.py collectstatic
 pdm run python src/manage.py migrate
 pdm run python src/manage.py runserver
+```
 через pip
+```bash 
 pip install -r requirements.txt
 pip freeze
 cd src
 python manage.py collectstatic
 python manage.py makemigrations
 python manage.py migrate
-создание суперпользователя
+"создание суперпользователя"
 python manage.py csu
 python manage.py runserver
 ```
 # Создание фикстуры
-```bash
 Папку fixtures предварительно необходимо создать внутри приложения (mainapp, authapp) (/mainapp/fixtures)
 Далее выполняем команду для создания фикстуры для соответствующего приложения
+```bash
 python manage.py dumpdata mainapp > mainapp/fixtures/004_mainapp.json
 python manage.py dumpdata authapp > authapp/fixtures/004_authapp.json
 ```
@@ -72,7 +74,7 @@ python manage.py dumpdata authapp > authapp/fixtures/004_authapp.json
 ```bash
 python manage.py loaddata ./mainapp/fixtures/004_mainapp.json
 python manage.py loaddata ./authapp/fixtures/004_authapp.json
-Удаляем старую базу
+"Удаляем старую базу"
 python manage.py makemigrations
 python manage.py migrate
 python manage.py loaddata ./mainapp/fixtures/006_all.json
