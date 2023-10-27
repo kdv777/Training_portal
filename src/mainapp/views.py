@@ -55,8 +55,7 @@ class MainPageView(CommonContextMixin, TemplateView):
 
         context["count_cours"] = count_cours
         context["teachers"] = User.get_random_teachers(self.TEACHERS_COUNT)
-        # context["num_students"] = User.objects.exclude(is_teacher=True)\
-        #     .exclude(is_staff=True).count()
+
         context["list_of_news"] = News.objects.all().order_by("created_at")[:3]
         context["base_dir"] = str(BASE_DIR).replace("\\", "/")
         # print(context)
