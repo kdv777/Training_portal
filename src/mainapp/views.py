@@ -32,7 +32,7 @@ class CommonContextMixin(object):
         context = super().get_context_data(*args, **kwargs)
         context["num_students"] = User.objects.all().exclude(is_teacher=True) \
             .exclude(is_staff=True).count()
-        print(context["num_students"])
+
         return context
 
 
