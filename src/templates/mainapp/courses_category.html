@@ -55,16 +55,11 @@
             {% for course in courses_category %}
             <div class="card mb-8" style="margin-top: 30px;margin-bottom:30px;">
                 <div class="row g-0">
-                    {% if course.img_file %}
-                    <div class="col" style="display:flex; align-items:center;justify-content: center;">
-                        <img src="/static/{{ course.img_file }}" class="img-fluid rounded-start" alt="...">
-                    </div>
-                    {% endif %}
-                    {% if course.img_url %}
+
                     <div class="col" style="display:flex; align-items:center;justify-content: center;">
                         <img src="{{ course.img_url }}" class="img-fluid rounded-start" alt="...">
                     </div>
-                    {% endif %}
+
                     <div class="col">
                         <div class="card-body">
                         <h5 class="card-title">{{ course.name }}</h5>

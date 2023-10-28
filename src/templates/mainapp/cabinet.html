@@ -58,20 +58,13 @@
                         align-items: center;
                         justify-content: center;
                       ">
-                    {% if course_now.img_url %}
+
                     <img
                             src="{{ course_now.img_url }}"
                             class="img-fluid rounded-start"
                             alt="..."
                     />
-                    {% endif %}
-                    {% if course_now.img_file %}
-                    <img
-                            src="/static/{{ course_now.img_file }}"
-                            class="img-fluid rounded-start"
-                            alt="..."
-                    />
-                    {% endif %}
+
                 </div>
                 <div class="col-md-8">
                     <div class="card-body">

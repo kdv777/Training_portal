@@ -332,7 +332,7 @@ class LessonCreateView(CommonContextMixin, CreateView):
         lesson_order = int(request.POST.get("order"))
         lesson_vid_url = request.POST.get("video_url")
         lesson_img_url = request.POST.get("img_url")
-        lesson_img_file = request.POST.get("img_file")
+        # lesson_img_file = request.POST.get("img_file")
 
         if not all(
             [
@@ -371,8 +371,8 @@ class LessonCreateView(CommonContextMixin, CreateView):
             lesson.video_url = lesson_vid_url
         if lesson_img_url:
             lesson.img_url = lesson_img_url
-        if lesson_img_file:
-            lesson.img_file_ = lesson_img_file
+        # if lesson_img_file:
+        #     lesson.img_file_ = lesson_img_file
         lesson.save()
         return redirect("mainapp:lesson_detail", pk=lesson.id)
 
