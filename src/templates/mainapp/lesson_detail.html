@@ -129,16 +129,11 @@
                     allowfullscreen></iframe>
         </figure>
         {% endif %}
-        {% if lesson.img_file %}
-        <figure class="figure mt-3">
-            <img src="/static/{{ lesson.img_file }}" class="figure-img img-fluid rounded" alt="...">
-        </figure>
-        {% endif %}
-        {% if lesson.img_url %}
+
         <figure class="figure mt-3">
             <img src="{{ lesson.img_url }}" class="figure-img img-fluid rounded" alt="...">
         </figure>
-        {% endif %}
+
 
 
         <p>{{ lesson.post.body|safe }}</p>
