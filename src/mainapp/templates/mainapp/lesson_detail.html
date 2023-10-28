@@ -2,9 +2,9 @@
 {% load static %}
 
 {% block js %}
-   {{ block.super }}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-    <script type="text/javascript">
+{{ block.super }}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<script type="text/javascript">
         function reply_to_comment(author_name, comment_id){
             $("#new_comment_label").text("Ответить " + author_name);
             $("#new_comment_submit").attr("parent_id", comment_id);
@@ -85,7 +85,8 @@
         $(document).ready(function(){
             load_comments();
         })
-    </script>
+
+</script>
 {% endblock %}
 {% block content %}
 {# Блок Lesson #}
@@ -94,6 +95,7 @@
     <div class='col-md-3' style="
     /* border: 3px solid blue;   */
     padding: 20px;">
+        {% if all_lessons %}
         <h2 style="margin-top: 40px;"> Список уроков</h2>
         <ul class="list-group">
             {% for item in all_lessons %}
@@ -103,6 +105,7 @@
             </a></li>
             {% endfor %}
         </ul>
+        {% endif %}
     </div>
     {# end of left bar #}
     {# main content #}
@@ -112,11 +115,11 @@
         <h1>Курс {{ lesson.course.name }}</h1>
         <h2>Лекция {{lesson.order}}. {{lesson.post.title}}</h2>
         {% if lesson.video_url %}
-<!--            Этот код работает для ссылок на видео с YouTube формата -->
-<!--            https://www.youtube.com/embed/....-->
-<!--            ссылку можно получить из youtube(на странице видео) > -->
-<!--            > "поделиться" > "встроить" > из предложенного взять нужную часть вида как выше. -->
-<!--            > вставить в поле "Video URL" при создании урока-->
+        <!--            Этот код работает для ссылок на видео с YouTube формата -->
+        <!--            https://www.youtube.com/embed/....-->
+        <!--            ссылку можно получить из youtube(на странице видео) > -->
+        <!--            > "поделиться" > "встроить" > из предложенного взять нужную часть вида как выше. -->
+        <!--            > вставить в поле "Video URL" при создании урока-->
         <figure class="figure mt-3">
             <iframe width="560" height="315"
                     src="{{lesson.video_url}}"
@@ -125,16 +128,17 @@
                     allowfullscreen></iframe>
         </figure>
         {% endif %}
-        {% if lesson.media_link %}
+        {% if lesson.img_file %}
         <figure class="figure mt-3">
-            {% if static_img %}
-            <img src="/static/{{ lesson.media_link }}" class="figure-img img-fluid rounded" alt="...">
-            {% endif %}
-            {% if url_img %}
-            <img src="{{ lesson.media_link }}" class="figure-img img-fluid rounded" alt="...">
-            {% endif %}
+            <img src="/static/{{ lesson.img_file }}" class="figure-img img-fluid rounded" alt="...">
         </figure>
         {% endif %}
+        {% if lesson.img_url %}
+        <figure class="figure mt-3">
+            <img src="{{ lesson.img_url }}" class="figure-img img-fluid rounded" alt="...">
+        </figure>
+        {% endif %}
+
 
         <p>{{ lesson.post.body|safe }}</p>
 
@@ -151,14 +155,19 @@
                 </div>
                 <div class="card-footer py-3 border-0" style="background-color: #f8f9fa;">
                     <div class="d-flex flex-start w-100">
-                      <div class="form-outline w-100">
-                        <textarea class="form-control" id="new_comment_text" rows="4" style="background: #fff;"></textarea>
-                        <label class="form-label" for="new_comment_text" id="new_comment_label">Новый комментарий</label>
-                      </div>
+                        <div class="form-outline w-100">
+                            <textarea class="form-control" id="new_comment_text" rows="4"
+                                      style="background: #fff;"></textarea>
+                            <label class="form-label" for="new_comment_text" id="new_comment_label">Новый
+                                комментарий</label>
+                        </div>
                     </div>
                     <div class="float-end mt-2 pt-1">
-                        <button id="new_comment_submit" type="button" class="btn btn-primary btn-sm" onclick="add_comment()">Опубликовать</button>
-                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="reset_comment()">Отмена</button>
+                        <button id="new_comment_submit" type="button" class="btn btn-primary btn-sm"
+                                onclick="add_comment()">Опубликовать
+                        </button>
+                        <button type="button" class="btn btn-outline-primary btn-sm" onclick="reset_comment()">Отмена
+                        </button>
                     </div>
                 </div>
             </div>

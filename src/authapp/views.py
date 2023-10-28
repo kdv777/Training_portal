@@ -49,8 +49,11 @@ class RegisterPageView(TemplateView):
         else:
             user.is_teacher = False
         # print(user.is_teacher)
-        user.save()
-
+        try:
+            user.save()
+        except Exception:
+            messages.error(self.request, "Пользователь с таким именем уже есть")
+            return redirect("authapp:register")
         login(request, user)
         notification_to_admin(f" Please approve request for teacher_role from user {user.username}")
         return redirect("mainapp:cabinet")

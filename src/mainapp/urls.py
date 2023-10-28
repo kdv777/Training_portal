@@ -73,6 +73,7 @@ urlpatterns = [
         name="recall_teacher",
     ),
     path("search/", views.Search.as_view(), name="search"),
+    path("terms/", views.TermsView.as_view(), name="terms"),
 ]
 
 router.register(r"orders", views.OrderViewSet, basename="orders")

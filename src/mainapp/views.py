@@ -1,5 +1,6 @@
 # Logging
 import logging
+from time import time
 
 from django.conf import settings
 from django.contrib import messages
@@ -26,7 +27,16 @@ from mainapp.tasks import send_feedback_mail
 logger = logging.getLogger(__name__)
 
 
-class MainPageView(TemplateView):
+class CommonContextMixin(object):
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(*args, **kwargs)
+        context["num_students"] = User.objects.all().exclude(is_teacher=True) \
+            .exclude(is_staff=True).count()
+
+        return context
+
+
+class MainPageView(CommonContextMixin, TemplateView):
     template_name = "mainapp/index.html"
     TEACHERS_COUNT = 3
 
@@ -45,35 +55,38 @@ class MainPageView(TemplateView):
 
         context["count_cours"] = count_cours
         context["teachers"] = User.get_random_teachers(self.TEACHERS_COUNT)
+
         context["list_of_news"] = News.objects.all().order_by("created_at")[:3]
         context["base_dir"] = str(BASE_DIR).replace("\\", "/")
+        # print(context)
         return context
 
 
-class NewsDetailsView(TemplateView):
+class NewsDetailsView(CommonContextMixin, TemplateView):
     template_name = "mainapp/news_details.html"
 
-    def get(self, request, pk):
-        context = {}
+    def get_context_data(self, pk=None, **kwargs):
+        context = super().get_context_data(**kwargs)
         news = get_object_or_404(News, pk=pk)
         list_of_posts = Post.objects.all()
         # print(f'news : {list_of_news[0].__dir__()}')
         context["news"] = news
         context["list_of_posts"] = list_of_posts
-        return render(request, "mainapp/news_details.html", context)
+        # return render(request, "mainapp/news_details.html", context)
+        return context
 
 
-class NewsListPageView(TemplateView):
+class NewsListPageView(CommonContextMixin, TemplateView):
     template_name = "mainapp/news_list.html"
 
-    def get(self, request):
-        context = {}
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
         list_of_news = News.objects.all()
         list_of_posts = Post.objects.all()
         context["news_list"] = list_of_news
         context["post_list"] = list_of_posts
-        return render(request, "mainapp/news_list.html", context)
-
+        # return render(request, "mainapp/news_list.html", context)
+        return context
 
 class ContactsPageView(TemplateView):
     template_name = "mainapp/about.html"
@@ -83,7 +96,7 @@ class CatalogPageView(TemplateView):
     template_name = "mainapp/categories.html"
 
 
-class LoginPageView(TemplateView):
+class LoginPageView(CommonContextMixin, TemplateView):
     template_name = "mainapp/login.html"
 
 
@@ -95,7 +108,7 @@ class Course1PageView(TemplateView):
     template_name = "mainapp/course1.html"
 
 
-class CourseDetailPageView(TemplateView):
+class CourseDetailPageView(CommonContextMixin, TemplateView):
     template_name = "mainapp/course_detail.html"
 
     def get_context_data(self, pk=None, **kwargs):
@@ -104,12 +117,7 @@ class CourseDetailPageView(TemplateView):
         course = get_object_or_404(Course, pk=pk)
 
         context["course"] = course
-        # print(str(course.img_url)[:3])
-        context["static_img"] = course.img_url
-        context["url_img"] = None
-        if course.img_url[:4] == "http":
-            context["url_img"] = course.img_url
-            context["static_img"] = None
+
         context["all_lessons"] = (
             Lesson.objects.all().filter(course=pk).order_by("order")
         )
@@ -142,7 +150,7 @@ class CourseFeedbackFormView(LoginRequiredMixin, CreateView):
         return JsonResponse({"card": rendered_card})
 
 
-class CoursesCategoryPageView(TemplateView):
+class CoursesCategoryPageView(CommonContextMixin, TemplateView):
     template_name = "mainapp/courses_category.html"
 
     def get_context_data(self, pk=None, **kwargs):
@@ -152,7 +160,7 @@ class CoursesCategoryPageView(TemplateView):
         return context
 
 
-class LessonDetailPageView(TemplateView):
+class LessonDetailPageView(CommonContextMixin, TemplateView):
     template_name = "mainapp/lesson_detail.html"
 
     def get_context_data(self, pk=None, **kwargs):
@@ -165,16 +173,11 @@ class LessonDetailPageView(TemplateView):
         context["all_lessons"] = (
             Lesson.objects.all().filter(course=lesson.course.id).order_by("order")
         )
-        context["static_img"] = lesson.media_link
-        context["url_img"] = None
-        if lesson.media_link[:4] == "http":
-            context["url_img"] = lesson.media_link
-            context["static_img"] = None
         # print(f'all lessons : {context["all_lessons"]}')
         return context
 
 
-class LessonsCoursePageView(TemplateView):
+class LessonsCoursePageView(CommonContextMixin, TemplateView):
     template_name = "mainapp/lessons_course.html"
 
     def get_context_data(self, pk=None, lesson=None, **kwargs):
@@ -184,7 +187,7 @@ class LessonsCoursePageView(TemplateView):
         return context
 
 
-class CabinetView(TemplateView):
+class CabinetView(CommonContextMixin, TemplateView):
     template_name = "mainapp/cabinet.html"
 
     def get_context_data(self, **kwargs):
@@ -195,11 +198,13 @@ class CabinetView(TemplateView):
         # Create your own data
 
         # print(User)
+        course_now_id=0
         course_now = self.request.user.course
         if course_now:
             context["course_now"] = get_object_or_404(
                 Course, pk=self.request.user.course.id
             )
+            course_now_id=course_now.id
 
         courses_done = (
             Order.objects.all().filter(buyer=self.request.user.id).filter(finished=True)
@@ -230,17 +235,23 @@ class CabinetView(TemplateView):
         context["courses_teacher"] = Course.objects.all().filter(
             author=self.request.user.id
         )
-        context["courses_top"] = Course.objects.all().order_by("created_at")[:3]
-        # context["base_dir"] = str(BASE_DIR).replace("\\", "/")
-        # print(context['base_dir'])
+
+        filter_list = courses_active_id + courses_done_id
+        filter_list.append(course_now_id)
+        print(filter_list)
+
+        context["courses_top"] = Course.objects.all().\
+                                     exclude(id__in=filter_list).order_by("created_at")[:3]
+
+
         return context
 
 
-class InProgressPageView(TemplateView):
+class InProgressPageView(CommonContextMixin, TemplateView):
     template_name = "mainapp/in_progress.html"
 
 
-class CategoriesPageView(TemplateView):
+class CategoriesPageView(CommonContextMixin, TemplateView):
     template_name = "mainapp/categories.html"
 
     def get_context_data(self, **kwargs):
@@ -285,7 +296,7 @@ class OrderViewSet(ModelViewSet):
         return queryset
 
 
-class CommentViewSet(ModelViewSet):
+class CommentViewSet(CommonContextMixin, ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
 
@@ -295,7 +306,7 @@ class CommentViewSet(ModelViewSet):
         return queryset.filter(post_id=post_id) if post_id else queryset
 
 
-class LessonCreateView(CreateView):
+class LessonCreateView(CommonContextMixin, CreateView):
     model = Lesson
     template_name = "mainapp/lesson_form.html"
     success_url = reverse_lazy("mainapp:index")
@@ -316,11 +327,12 @@ class LessonCreateView(CreateView):
         lesson_body = request.POST.get("body")
         lesson_author = request.user
         lesson_slug = (
-            str(lesson_title.lower().replace(" ", "-")[:20]) + "_" + str(datetime.now)
-        )
+            str(lesson_title.lower().replace(" ", "-")[:20]) + "_" + str(int(time())
+        ))
         lesson_order = int(request.POST.get("order"))
-        lesson_url_v = request.POST.get("video_url")
-        lesson_url_m = request.POST.get("media_url")
+        lesson_vid_url = request.POST.get("video_url")
+        lesson_img_url = request.POST.get("img_url")
+        lesson_img_file = request.POST.get("img_file")
 
         if not all(
             [
@@ -355,15 +367,17 @@ class LessonCreateView(CreateView):
         lesson.post_id = post.id
         lesson.course = course
         lesson.order = lesson_order
-        if lesson_url_v:
-            lesson.video_url = lesson_url_v
-        if lesson_url_m:
-            lesson.media_link = lesson_url_m
+        if lesson_vid_url:
+            lesson.video_url = lesson_vid_url
+        if lesson_img_url:
+            lesson.img_url = lesson_img_url
+        if lesson_img_file:
+            lesson.img_file_ = lesson_img_file
         lesson.save()
         return redirect("mainapp:lesson_detail", pk=lesson.id)
 
 
-class CourseCreateView(TemplateView):
+class CourseCreateView(CommonContextMixin, TemplateView):
     template_name = "mainapp/course_create_form.html"
 
     def get_context_data(self, **kwargs):
@@ -375,6 +389,7 @@ class CourseCreateView(TemplateView):
         course_name = request.POST.get("name")
         course_description = request.POST.get("description")
         course_img_url = request.POST.get("img_url")
+        course_img_file = request.POST.get("img_file")
         course_price = request.POST.get("price")
         course_cat_id = request.POST.get("cat_id")
 
@@ -397,7 +412,10 @@ class CourseCreateView(TemplateView):
         course = Course()
         course.name = course_name
         course.description = course_description
-        course.img_url = course_img_url
+        if course_img_url:
+            course.img_url = course_img_url
+        if course_img_file:
+            course.img_file = course_img_file
         course.price = course_price
         # course.category = course_category
         course.author = request.user
@@ -408,7 +426,7 @@ class CourseCreateView(TemplateView):
 
 
 # Logging
-class LogView(TemplateView):
+class LogView(CommonContextMixin, TemplateView):
     template_name = "mainapp/log_view.html"
 
     def get_context_data(self, **kwargs):
@@ -467,7 +485,7 @@ class LogDownloadView(UserPassesTestMixin, View):
         return redirect("mainapp:cabinet")
 
 
-class RequestTeacher(TemplateView):
+class RequestTeacher(CommonContextMixin, TemplateView):
     template_name = "mainapp/teacher_status.html"
 
     def get_context_data(self, **kwargs):
@@ -481,7 +499,7 @@ class RequestTeacher(TemplateView):
         return context
 
 
-class ApproveTeacherStatus(TemplateView):
+class ApproveTeacherStatus(CommonContextMixin, TemplateView):
     """
     The get function is used to approve a teacher.
         It takes in the request and pk of the user as parameters.
@@ -504,7 +522,7 @@ class ApproveTeacherStatus(TemplateView):
         return redirect("mainapp:request_teacher")
 
 
-class RecallTeacherStatus(TemplateView):
+class RecallTeacherStatus(CommonContextMixin, TemplateView):
     """
     The get function is used to retrieve a single object from the database.
         It takes in a request and an id, and returns the object with that id.
@@ -540,7 +558,7 @@ class Search(ListView):
         return context
 
 
-class HelpPageView(TemplateView):
+class HelpPageView(CommonContextMixin, TemplateView):
     template_name = "mainapp/help.html"
 
     def get_context_data(self, **kwargs):
@@ -557,3 +575,16 @@ class HelpPageView(TemplateView):
             }
         )
         return HttpResponseRedirect(reverse_lazy("mainapp:index"))
+
+
+class TermsView(CommonContextMixin, TemplateView):
+    template_name = "mainapp/terms.html"
+
+
+
+
+
+
+
+
+
