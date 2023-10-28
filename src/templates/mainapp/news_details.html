@@ -3,7 +3,8 @@
 
 {% block js %}
    {{ block.super }}
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
+    <script src="/static/js//jquery.min.js"></script>
     <script type="text/javascript">
         function reply_to_comment(author_name, comment_id){
             $("#new_comment_label").text("Ответить " + author_name);
@@ -93,13 +94,13 @@
 
 <div class="row" style="margin-top: 100px;margin-bottom: 50px;">
 
-    <div class="col-lg-8">
+    <div class="mb-3 mt-4">
         {% for post in list_of_posts.all %}
         {% if post.id == news.post_id %}
         {# card start #}
-        <div class="card my-2">
-            <div class="card-body shadow">
-                <h5 class="card-title">{{ post.title }}</h5>
+        <div class="card">
+            <div class="card-body p-4 shadow">
+                <h2 class="card-title">{{ post.title }}</h2>
                 <h6 class="card-subtitle mb-2 text-muted">2023-10-09 20-50-26</h6>
                 <p class="card-text">{{ post.body|safe }}</p>
             </div>
