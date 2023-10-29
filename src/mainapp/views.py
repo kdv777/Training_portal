@@ -6,11 +6,10 @@ from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import FileResponse, HttpResponseRedirect, JsonResponse
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import get_object_or_404, redirect
 from django.template import context
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-from django.utils.datetime_safe import datetime
 from django.views.generic import CreateView, ListView, TemplateView, View
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
@@ -20,8 +19,9 @@ from config.settings import BASE_DIR
 from mainapp import forms as mainapp_forms
 from mainapp import models as mainapp_models
 from mainapp.models import (Category, Comment, Course, CourseFeedback, Lesson,
-                            News, Order, Post)
-from mainapp.serializers import CommentSerializer, OrderSerializer
+                            News, Order, Post, RatingStar)
+from mainapp.serializers import (CommentSerializer, OrderSerializer,
+                                 RatingStarSerializer)
 from mainapp.tasks import send_feedback_mail
 
 logger = logging.getLogger(__name__)
@@ -30,8 +30,9 @@ logger = logging.getLogger(__name__)
 class CommonContextMixin(object):
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(*args, **kwargs)
-        context["num_students"] = User.objects.all().exclude(is_teacher=True) \
-            .exclude(is_staff=True).count()
+        context["num_students"] = (
+            User.objects.all().exclude(is_teacher=True).exclude(is_staff=True).count()
+        )
 
         return context
 
@@ -87,6 +88,7 @@ class NewsListPageView(CommonContextMixin, TemplateView):
         context["post_list"] = list_of_posts
         # return render(request, "mainapp/news_list.html", context)
         return context
+
 
 class ContactsPageView(TemplateView):
     template_name = "mainapp/about.html"
@@ -198,13 +200,13 @@ class CabinetView(CommonContextMixin, TemplateView):
         # Create your own data
 
         # print(User)
-        course_now_id=0
+        course_now_id = 0
         course_now = self.request.user.course
         if course_now:
             context["course_now"] = get_object_or_404(
                 Course, pk=self.request.user.course.id
             )
-            course_now_id=course_now.id
+            course_now_id = course_now.id
 
         courses_done = (
             Order.objects.all().filter(buyer=self.request.user.id).filter(finished=True)
@@ -240,9 +242,9 @@ class CabinetView(CommonContextMixin, TemplateView):
         filter_list.append(course_now_id)
         print(filter_list)
 
-        context["courses_top"] = Course.objects.all().\
-                                     exclude(id__in=filter_list).order_by("created_at")[:3]
-
+        context["courses_top"] = (
+            Course.objects.all().exclude(id__in=filter_list).order_by("created_at")[:3]
+        )
 
         return context
 
@@ -296,6 +298,20 @@ class OrderViewSet(ModelViewSet):
         return queryset
 
 
+class RatingStarViewSet(ModelViewSet):
+    serializer_class = RatingStarSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        queryset = RatingStar.objects.filter(author=self.request.user).order_by(
+            "-created_at"
+        )
+        post_id = self.request.query_params.get("post_id", None)
+        if post_id is not None:
+            queryset = queryset.filter(post_id=post_id)
+        return queryset
+
+
 class CommentViewSet(CommonContextMixin, ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [IsAuthenticated]
@@ -327,8 +343,8 @@ class LessonCreateView(CommonContextMixin, CreateView):
         lesson_body = request.POST.get("body")
         lesson_author = request.user
         lesson_slug = (
-            str(lesson_title.lower().replace(" ", "-")[:20]) + "_" + str(int(time())
-        ))
+            str(lesson_title.lower().replace(" ", "-")[:20]) + "_" + str(int(time()))
+        )
         lesson_order = int(request.POST.get("order"))
         lesson_vid_url = request.POST.get("video_url")
         lesson_img_url = request.POST.get("img_url")
@@ -579,12 +595,3 @@ class HelpPageView(CommonContextMixin, TemplateView):
 
 class TermsView(CommonContextMixin, TemplateView):
     template_name = "mainapp/terms.html"
-
-
-
-
-
-
-
-
-
