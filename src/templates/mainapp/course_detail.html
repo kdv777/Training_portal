@@ -72,6 +72,18 @@
         </ul>
         {% endif %}
         {% endif %}
+
+        {% if course_author %}
+        <h2 style="margin-top: 40px;"> Список уроков</h2>
+        <ul class="list-group">
+            {% for item in all_lessons %}
+            <li class="list-group-item"><a href="{% url 'mainapp:lesson_detail' item.pk %}"
+                                           style="text-decoration: none">
+                {{ item.post.title }}
+            </a></li>
+            {% endfor %}
+        </ul>
+        {% endif %}
     </div>
     <!-- end of left bar -->
     <!-- main content -->

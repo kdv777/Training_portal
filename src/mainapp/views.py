@@ -128,8 +128,10 @@ class CourseDetailPageView(CommonContextMixin, TemplateView):
             else:
                 context["is_ordered"] = False
 
-        context["feedback"] = CourseFeedback.objects.filter(course=pk)
+        if self.request.user.id == course.author.id:
+            context["course_author"] = True
 
+        context["feedback"] = CourseFeedback.objects.filter(course=pk)
         if not self.request.user.is_anonymous:
             context["feedback_form"] = mainapp_forms.CourseFeedbackForm(
                 course=context["course"], user=self.request.user
