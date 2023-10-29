@@ -1,0 +1,142 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block content %}
+
+    <div class="container" style="margin-top: 100px; margin-bottom: 50px;">
+        <div class="container text-center">
+            <div class="row gy-xl-5">
+                <div class="card" style="width: 35rem;">
+                    <span class="circle-image">
+                    <img src="/static/img/julia.jpeg" class="card-img-top rounded-circle w-50" alt="...">
+                    </span>
+                    <div class="card-body">
+                        <h5 class="card-title">Юлия Брюховских</h5>
+                        <p class="card-text">Страна проживания: Сербия</p>
+                        <p class="card-text">Город: Белград</p>
+                        <div class="myDIV1" style="display: none">
+                            <p>Возраст: 47 лет</p>
+                            <p>Интересы: Python Backend Developer
+                                Agil coach
+                                Chinese tea ceremony master</p>
+                        </div>
+                        <button id="button1" class="btn btn-primary" onclick="myFunction('.myDIV1')">Подробнее</button>
+                    </div>
+                </div>
+
+                <div class="card" style="width: 35rem;">
+                    <img src="/static/img/avatar1.png" class="card-img-top rounded-circle" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Владимир Мальчевский</h5>
+                        <p class="card-text">Страна проживания: Россия</p>
+                        <p class="card-text"> Город: Москва</p>
+                        <div class="myDIV2" style="display: none">
+                            <p>Возраст: 57 лет</p>
+                            <p>Интересы: Python Backend Developer
+                                Авто туризм
+                                Парусные катамараны
+                                Фотография</p>
+                        </div>
+                        <button id="button1" class="btn btn-primary" onclick="myFunction('.myDIV2')">Подробнее</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row gy-xl-5">
+                <div class="card" style="width: 35rem;">
+                    <img src="/static/img/avatar1.png" class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Дмитрий Посвянский</h5>
+                        <p class="card-text">Страна проживания: Россия</p>
+                        <p class="card-text"> Город: Санкт-Петербург</p>
+                        <div class="myDIV3" style="display: none">
+                            <p>Возраст: 26 лет</p>
+                            <p>Интересы: Python Backend Developer
+                                Горные лыжи
+                                Путешествия</p>
+                        </div>
+                        <button id="button1" class="btn btn-primary" onclick="myFunction('.myDIV3')">Подробнее</button>
+                    </div>
+                </div>
+                <div class="card" style="width: 35rem;">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Страна проживания: Россия</p>
+                        <p class="card-text"> Город: Санкт-Петербург</p>
+                        <div class="myDIV4" style="display: none">
+                            This is my DIV element.
+                        </div>
+                        <button id="button1" class="btn btn-primary" onclick="myFunction('.myDIV4')">Подробнее</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row gy-xl-5">
+                <div class="card" style="width: 35rem;">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Страна проживания: Россия</p>
+                        <p class="card-text"> Город: Санкт-Петербург</p>
+                        <div class="myDIV5" style="display: none">
+                            This is my DIV element.
+                        </div>
+                        <button id="button1" class="btn btn-primary" onclick="myFunction('.myDIV5')">Подробнее</button>
+                    </div>
+                </div>
+                <div class="card" style="width: 35rem;">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Страна проживания: Россия</p>
+                        <p class="card-text"> Город: Санкт-Петербург</p>
+                        <div class="myDIV6" style="display: none">
+                            This is my DIV element.
+                        </div>
+                        <button id="button1" class="btn btn-primary" onclick="myFunction('.myDIV6')">Подробнее</button>
+                    </div>
+                </div>
+            </div>
+            <div class="row gy-xl-5">
+                <div class="card" style="width: 35rem;">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Страна проживания: Россия</p>
+                        <p class="card-text"> Город: Санкт-Петербург</p>
+                        <div class="myDIV7" style="display: none">
+                            This is my DIV element.
+                        </div>
+                        <button id="button1" class="btn btn-primary" onclick="myFunction('.myDIV7')">Подробнее</button>
+                    </div>
+                </div>
+                <div class="card" style="width: 35rem;">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <h5 class="card-title">Card title</h5>
+                        <p class="card-text">Страна проживания: Россия</p>
+                        <p class="card-text"> Город: Санкт-Петербург</p>
+                        <div class="myDIV8" style="display: none">
+                            This is my DIV element.
+                        </div>
+                        <button id="button1" class="btn btn-primary" onclick="myFunction('.myDIV8')">Подробнее</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+{% endblock %}
+
+{% block js %}
+
+    <script>
+      function myFunction(y) {
+        var x = document.querySelector(y);
+        if (x.style.display === "none") {
+          x.style.display = "block";
+        } else {
+          x.style.display = "none";
+        }
+      }
+    </script>
+{% endblock %}

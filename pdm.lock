@@ -6,7 +6,7 @@ groups = ["default"]
 cross_platform = true
 static_urls = false
 lock_version = "4.3"
-content_hash = "sha256:704a8d1a5f04d356872af5482482f9052940af6a36ed0cbe08a6c58dfb173302"
+content_hash = "sha256:e54627c9d1378383fa13901338047bb3798252047d6e802de9b53678d2ce3d3b"
 
 [[package]]
 name = "amqp"
@@ -306,7 +306,6 @@ files = [
     {file = "prompt_toolkit-3.0.39-py3-none-any.whl", hash = "sha256:9dffbe1d8acf91e3de75f3b544e4842382fc06c6babe903ac9acb74dc6e08d88"},
     {file = "prompt_toolkit-3.0.39.tar.gz", hash = "sha256:04505ade687dc26dc4284b1ad19a83be2f2afe83e7a828ace0c72f3a1df72aac"},
 ]
-
 
 [[package]]
 name = "psycopg2-binary"

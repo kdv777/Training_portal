@@ -581,7 +581,8 @@ class TermsView(CommonContextMixin, TemplateView):
     template_name = "mainapp/terms.html"
 
 
-
+class CommandPageView(CommonContextMixin, TemplateView):
+    template_name = "mainapp/command.html"
 
 
 
