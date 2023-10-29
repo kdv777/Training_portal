@@ -3,8 +3,8 @@
 
 {% block js %}
    {{ block.super }}
-<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>-->
-    <script src="/static/js/jquery.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+<!--    <script src="{% static 'js/jquery.min.js' %}"></script>-->
     <script type="text/javascript">
       function add_to_cart(course_id) {
         csrftoken = $("[name=csrfmiddlewaretoken]").val();
@@ -104,7 +104,7 @@
             <div id="feedback-list" class="mt-5">
                 {% if feedback %}
                     {% for item in feedback %}
-                        {% include 'mainapp/includes/feedback_card.html' %}
+                        {% include 'includes/feedback_card.html' %}
                     {% endfor %}
                 {% else %}
                     <p>
