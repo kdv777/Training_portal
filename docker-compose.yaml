@@ -1,0 +1,83 @@
+version: "3.5"
+
+services:
+  db:
+    image: "postgres:16"
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -d pythons -U pythons" ]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 10s
+    volumes:
+      - db:/var/lib/postgresql/data
+    environment:
+      POSTGRES_USER: "pythons"
+      POSTGRES_PASSWORD: "pythons"
+      POSTGRES_DB: "pythons"
+    ports:
+      - "5432:5432"
+
+  amqp:
+    image: "rabbitmq:3-management"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    healthcheck:
+      test: [ "CMD", "rabbitmqctl", "ping" ]
+      interval: 5s
+      timeout: 3s
+      retries: 0
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq
+
+  mailhog:
+    image: "mailhog/mailhog"
+    ports:
+      - "1025:1025"
+      - "8025:8025"
+
+  web:
+    build:
+      context: .
+      dockerfile: ./src/Dockerfile
+    environment:
+      DJANGO_SETTINGS_MODULE: "config.settings_prod"
+    command: bash -c "python manage.py migrate 
+      && python manage.py collectstatic --noinput
+      && python manage.py loaddata fixtures/009_all.json
+      && gunicorn -b 0.0.0.0:8000 config.wsgi:application"
+    volumes:
+      - ./src:/app
+    ports:
+      - "8000:8000"
+    depends_on:
+      db:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf
+      - ./src:/app
+    depends_on:
+      - web
+
+  celery:
+    build:
+      context: .
+      dockerfile: ./src/Dockerfile
+    environment:
+      DJANGO_SETTINGS_MODULE: "config.settings_prod"
+    command: bash -c "celery -A config worker -l info"
+    volumes:
+      - ./src:/app
+    depends_on:
+      amqp:
+        condition: service_healthy
+
+volumes:
+  db: {}
+  rabbitmq_data: {}
