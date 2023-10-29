@@ -1,3 +1,6 @@
+# Logging
+import logging
+
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -10,12 +13,14 @@ from authapp.models import User
 from authapp.forms import UserUpdateForm
 from utils.utils import notification_to_admin
 
+logger = logging.getLogger(__name__)
 
 class LoginPageView(LoginView):
     template_name = "authapp/login.html"
     redirect_authentacated_user = True
 
     def get_success_url(self):
+        logger.info("Enter user:")
         return reverse_lazy("mainapp:cabinet")
 
     def form_invalid(self, form):
