@@ -9,11 +9,12 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, UpdateView, View
 
-from authapp.models import User
 from authapp.forms import UserUpdateForm
+from authapp.models import User
 from utils.utils import notification_to_admin
 
 logger = logging.getLogger(__name__)
+
 
 class LoginPageView(LoginView):
     template_name = "authapp/login.html"
@@ -60,7 +61,9 @@ class RegisterPageView(TemplateView):
             messages.error(self.request, "Пользователь с таким именем уже есть")
             return redirect("authapp:register")
         login(request, user)
-        notification_to_admin(f" Please approve request for teacher_role from user {user.username}")
+        notification_to_admin(
+            f" Please approve request for teacher_role from user {user.username}"
+        )
         return redirect("mainapp:cabinet")
 
 
@@ -77,6 +80,3 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy("mainapp:cabinet")
-
-
-

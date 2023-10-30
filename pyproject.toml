@@ -4,6 +4,10 @@ per-file-ignores = [
     '__init__.py:F401',
 ]
 
+[tool.pdm.dev-dependencies]
+dev = [
+    "ipython>=8.17.0",
+]
 [project]
 name = ""
 version = ""

@@ -1,6 +1,9 @@
+from statistics import mean
+
 from ckeditor.fields import RichTextField
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
+from django.db.models import Subquery
 
 from authapp.models import User
 
@@ -62,6 +65,20 @@ class Course(TimestampMixin):
     active = models.BooleanField(default=True)
     slug = models.SlugField(max_length=128, unique=True)
 
+    @property
+    def rating(self):
+        rating = (
+            RatingStar.objects.filter(
+                post_id__in=Subquery(self.lessons.values_list("post_id", flat=True))
+            )
+            .order_by("author__username", "-created_at")
+            .distinct("author__username")
+            .values_list("value", flat=True)
+        )
+        if rating:
+            return round(mean(rating))
+        return 0
+
     def __str__(self):
         return self.name
 
@@ -97,7 +114,6 @@ class Lesson(TimestampMixin):
     # media_link = models.URLField(blank=True)
     img_url = models.TextField(blank=True)
     img_file = models.TextField(blank=True)
-
 
     def __str__(self):
         return "{} - {}".format(self.course.name, self.post.title)
@@ -167,7 +183,7 @@ class RatingStar(TimestampMixin):
     )
 
     def __str__(self):
-        return self.value
+        return f"Rating of {self.author.username} for {self.post.title} is {self.value}"
 
 
 class Order(TimestampMixin):

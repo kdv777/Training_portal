@@ -1,6 +1,4 @@
-from .settings import *
-
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ["*"]
 
 DEBUG = False
 
@@ -15,6 +13,6 @@ DATABASES = {
     }
 }
 
-EMAIL_HOST = 'mailhog'
+EMAIL_HOST = "mailhog"
 
-CELERY_BROKER_URL = 'pyamqp://guest:guest@amqp//'
+CELERY_BROKER_URL = "pyamqp://guest:guest@amqp//"

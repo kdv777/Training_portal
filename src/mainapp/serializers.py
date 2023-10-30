@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from mainapp.models import Comment, Order
+from mainapp.models import Comment, Order, RatingStar
 
 
 class OrderSerializer(serializers.ModelSerializer):
@@ -22,4 +22,10 @@ class CommentSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Comment
+        fields = "__all__"
+
+
+class RatingStarSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RatingStar
         fields = "__all__"

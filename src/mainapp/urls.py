@@ -78,4 +78,5 @@ urlpatterns = [
 
 router.register(r"orders", views.OrderViewSet, basename="orders")
 router.register(r"comments", views.CommentViewSet, basename="comments")
+router.register(r"rating", views.RatingStarViewSet, basename="rating")
 urlpatterns += router.urls
