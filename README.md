@@ -15,6 +15,31 @@ Django 4.2.5
 
 
 # FAQ
+
+## Как развернуть проект на удаленном сервере
+
+Берем чистый сервер с Ubuntu
+
+Устанавливаем на него Git 
+
+```bash
+sudo apt install git
+```
+Устанавливаем на него Docker
+
+[Инструкция по установке докер на Ubuntu](https://docs.docker.com/engine/install/ubuntu/)
+
+Клонируем репозиторий
+```bash
+git clone https://github.com/kdv777/Training_portal.git
+```
+
+Разворачиваем проект
+```bash
+cd Training_portal
+sudo docker compose up --build -d
+```
+
 ## Как подмержить мейн с свою ветку
 Для того, чтобы всегда работать с актуальными изменениями и не резолвить потом конфликты, если ветка живёт долго, лучше переодически подмерживать в неё мейн. Для этого, **находять в своей ветке**, сделать следующее:
 
@@ -51,6 +76,7 @@ git push origin -d <branch_name>
 
 ### Запускаем контейнеры rabbitMQ, postgreSQL, Mail Hog
 ```bash
+cd src
 docker compose -f local.docker-compose.yaml up -d
 ```
 ### Ставим зависимости
@@ -60,6 +86,7 @@ pdm install
 ### Запускаем worker celery из папки src/ в отдельном терминале
 ```bash
 cd src
+export DJANGO_SETTINGS_MODULE=config.settings
 pdm run celery -A config worker -l info
 ```
 ### Запускаем Джангу из директории src
@@ -115,4 +142,3 @@ https://www.youtube.com/embed/Xiy8xwhbmew?si=vb7hqtiDATouk30x
 -> "поделиться" > "встроить" > 
 из предложенного взять нужную часть вида как выше. 
 -> вставить в поле "Video URL" при создании урока
-
