@@ -67,16 +67,17 @@ class Course(TimestampMixin):
 
     @property
     def rating(self):
-        return round(
-            mean(
-                RatingStar.objects.filter(
-                    post_id__in=Subquery(self.lessons.values_list("post_id", flat=True))
-                )
-                .order_by("author__username", "-created_at")
-                .distinct("author__username")
-                .values_list("value", flat=True)
+        rating = (
+            RatingStar.objects.filter(
+                post_id__in=Subquery(self.lessons.values_list("post_id", flat=True))
             )
+            .order_by("author__username", "-created_at")
+            .distinct("author__username")
+            .values_list("value", flat=True)
         )
+        if rating:
+            return round(mean(rating))
+        return 0
 
     def __str__(self):
         return self.name
