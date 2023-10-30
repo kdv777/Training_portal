@@ -4,6 +4,7 @@ from time import time
 
 from django.conf import settings
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import FileResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect, render
@@ -128,8 +129,10 @@ class CourseDetailPageView(CommonContextMixin, TemplateView):
             else:
                 context["is_ordered"] = False
 
-        context["feedback"] = CourseFeedback.objects.filter(course=pk)
+        if self.request.user.id == course.author.id:
+            context["course_author"] = True
 
+        context["feedback"] = CourseFeedback.objects.filter(course=pk)
         if not self.request.user.is_anonymous:
             context["feedback_form"] = mainapp_forms.CourseFeedbackForm(
                 course=context["course"], user=self.request.user
@@ -194,57 +197,58 @@ class CabinetView(CommonContextMixin, TemplateView):
         # Get all previous data
 
         context = super().get_context_data(**kwargs)
+        if self.request.user.is_authenticated:
 
-        # Create your own data
+            # Create your own data
 
-        # print(User)
-        course_now_id=0
-        course_now = self.request.user.course
-        if course_now:
-            context["course_now"] = get_object_or_404(
-                Course, pk=self.request.user.course.id
+            # print(User)
+            course_now_id=0
+            course_now = self.request.user.course
+            if course_now:
+                context["course_now"] = get_object_or_404(
+                    Course, pk=self.request.user.course.id
+                )
+                course_now_id=course_now.id
+
+            courses_done = (
+                Order.objects.all().filter(buyer=self.request.user.id).filter(finished=True)
             )
-            course_now_id=course_now.id
+            # print(f'course_done:{courses_done_id[0].id}')
+            courses_done_id = []
+            # print(courses_done)
+            for item in courses_done:
+                courses_done_id.append(item.course.id)
+            # print(f'course_done:{courses_done_id}')
 
-        courses_done = (
-            Order.objects.all().filter(buyer=self.request.user.id).filter(finished=True)
-        )
-        # print(f'course_done:{courses_done_id[0].id}')
-        courses_done_id = []
-        # print(courses_done)
-        for item in courses_done:
-            courses_done_id.append(item.course.id)
-        # print(f'course_done:{courses_done_id}')
+            context["courses_done"] = Course.objects.all().filter(id__in=courses_done_id)
 
-        context["courses_done"] = Course.objects.all().filter(id__in=courses_done_id)
+            courses_active = (
+                Order.objects.all()
+                .filter(buyer=self.request.user.id)
+                .filter(finished=False)
+            )
+            # print(f'courses_active:{courses_active}')
+            courses_active_id = []
+            for item in courses_active:
+                courses_active_id.append(item.course.id)
+            # print(f'course_active:{courses_active_id}')
+            context["courses_active"] = Course.objects.all().filter(
+                id__in=courses_active_id
+            )
 
-        courses_active = (
-            Order.objects.all()
-            .filter(buyer=self.request.user.id)
-            .filter(finished=False)
-        )
-        # print(f'courses_active:{courses_active}')
-        courses_active_id = []
-        for item in courses_active:
-            courses_active_id.append(item.course.id)
-        # print(f'course_active:{courses_active_id}')
-        context["courses_active"] = Course.objects.all().filter(
-            id__in=courses_active_id
-        )
+            context["courses_teacher"] = Course.objects.all().filter(
+                author=self.request.user.id
+            )
 
-        context["courses_teacher"] = Course.objects.all().filter(
-            author=self.request.user.id
-        )
+            filter_list = courses_active_id + courses_done_id
+            filter_list.append(course_now_id)
+            print(filter_list)
 
-        filter_list = courses_active_id + courses_done_id
-        filter_list.append(course_now_id)
-        print(filter_list)
-
-        context["courses_top"] = Course.objects.all().\
-                                     exclude(id__in=filter_list).order_by("created_at")[:3]
-
+            context["courses_top"] = Course.objects.all().\
+                                         exclude(id__in=filter_list).order_by("created_at")[:3]
 
         return context
+
 
 
 class InProgressPageView(CommonContextMixin, TemplateView):
