@@ -3,8 +3,9 @@
 
 {% block content %}
 <!-- Блок Course-->
-{% if user.is_authenticated %}
+
 <div class="container d-flex" style="margin-top: 100px;">
+    {% if user.is_anonymous == False %}
     <!-- left bar -->
     <div class="col-md-3" style=" padding: 20px 40px 20px 20px;">
         <h3 style="margin-top: 70px">Рекомендуем вам</h3>
@@ -118,6 +119,7 @@
         {# End of Student section #}
     </div>
     <!-- end of main content -->
-</div>
+
 {% endif %}
+    </div>
 {% endblock %}
