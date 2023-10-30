@@ -3,9 +3,10 @@
 
 {% block js %}
 {{ block.super }}
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-<!--<script src="/static/js/jquery.min.js"></script>-->
-<script type="text/javascript">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!--<script src="/static/js/jquery.min.js"></script>-->
+    <script src="/static/js/stars.js"></script>
+    <script type="text/javascript">
         function reply_to_comment(author_name, comment_id){
             $("#new_comment_label").text("Ответить " + author_name);
             $("#new_comment_submit").attr("parent_id", comment_id);
@@ -85,8 +86,49 @@
         }
         $(document).ready(function(){
             load_comments();
+            get_rating({{ user.id }}, {{ lesson.post.id }});
         })
 
+</script>
+<script>
+    function update_rating(user_id, post_id){
+        csrftoken = $("[name=csrfmiddlewaretoken]").val();
+        rate_sum = 0;
+        $("#rating").children("label").each(function(){
+            rate_sum += Number(getComputedStyle(this, ':before').getPropertyValue("opacity"));
+        });
+        $.ajax({
+            url: "{% url 'mainapp:rating-list' %}",
+            type: "POST",
+            data: {
+                author: user_id,
+                post: post_id,
+                value: rate_sum,
+            },
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            },
+        })
+    }
+    function get_rating(user_id, post_id){
+        rate_value = 0;
+        $.ajax({
+            url: "{% url 'mainapp:rating-list' %}",
+            type: "GET",
+            data: {
+                post_id: {{ lesson.post.id }}
+            },
+            success: function (data) {
+                $("#rating").children("input").each(function(){
+                    if (data[0].value == this.id){
+                        $(this).attr("checked", true);
+                    }
+                });
+            },
+        });
+
+
+    }
 </script>
 {% endblock %}
 {% block content %}
@@ -139,6 +181,15 @@
         <p>{{ lesson.post.body|safe }}</p>
 
         <a href="{% url 'mainapp:course_detail' course.id %}" class="mt-4 btn btn-primary">Вернуться к курсу</a>
+        {% if user.is_authenticated %}
+        <div class="rating" id="rating" onchange="update_rating({{ user.id }}, {{ lesson.post.id }})">
+            <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
+            <input type="radio" name="rating" value="4" id="4"><label for="4">☆</label>
+            <input type="radio" name="rating" value="3" id="3"><label for="3">☆</label>
+            <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
+            <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
+        </div>
+        {% endif %}
         <div class="mb-3 mt-4">
             {% csrf_token %}
             <div class="card">

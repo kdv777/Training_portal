@@ -124,6 +124,7 @@ class CourseDetailPageView(CommonContextMixin, TemplateView):
             Lesson.objects.all().filter(course=pk).order_by("order")
         )
         context["course_id"] = course.id
+        context["rating"] = course.rating
         if self.request.user.is_authenticated:
             if Order.objects.filter(course=course, buyer=self.request.user).exists():
                 context["is_ordered"] = True
