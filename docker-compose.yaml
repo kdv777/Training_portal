@@ -27,7 +27,7 @@ services:
       test: [ "CMD", "rabbitmqctl", "ping" ]
       interval: 5s
       timeout: 3s
-      retries: 0
+      retries: 10
     volumes:
       - rabbitmq_data:/var/lib/rabbitmq
 
