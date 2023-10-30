@@ -64,8 +64,11 @@
                         <div class="card-body">
                         <h5 class="card-title">{{ course.name }}</h5>
                         <p class="card-text">{{ course.description|truncatechars:500 }}...</p>
+                        <h5 class="card-title">Стоимость курса: {{ course.price }} руб.</h5>
                         <p class="card-text"><small class="text-body-secondary">Последнее обновление 3 мин. назад</small></p>
-                        <a href="{% url 'mainapp:course_detail' course.pk %}" class="btn btn-primary">Перейти</a>
+                            {% if user.is_authenticated %}
+                                <a href="{% url 'mainapp:course_detail' course.pk %}" class="btn btn-primary">Перейти</a>
+                            {% endif %}
                         </div>
                     </div>
                 </div>
