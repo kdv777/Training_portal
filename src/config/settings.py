@@ -179,14 +179,18 @@ LOGGING = {
             "level": "DEBUG",
             "handlers": ["file"],
         },
+        "authapp": {
+            "level": "DEBUG",
+            "handlers": ["file"],
+        },
     },
 }
 
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'localhost'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "localhost"
 EMAIL_PORT = 1025
-DEFAULT_FROM_EMAIL = 'pythons@mailhog.com'
+DEFAULT_FROM_EMAIL = "pythons@mailhog.com"
 
-CELERY_BROKER_URL = 'pyamqp://guest:guest@localhost//'
-CELERY_RESULT_BACKEND = 'rpc://'
+CELERY_BROKER_URL = "pyamqp://guest:guest@localhost//"
+CELERY_RESULT_BACKEND = "rpc://"

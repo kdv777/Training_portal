@@ -1,3 +1,6 @@
+# Logging
+import logging
+
 from django.contrib import messages
 from django.contrib.auth import login, logout
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -6,9 +9,11 @@ from django.shortcuts import redirect
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, UpdateView, View
 
-from authapp.models import User
 from authapp.forms import UserUpdateForm
+from authapp.models import User
 from utils.utils import notification_to_admin
+
+logger = logging.getLogger(__name__)
 
 
 class LoginPageView(LoginView):
@@ -16,6 +21,7 @@ class LoginPageView(LoginView):
     redirect_authentacated_user = True
 
     def get_success_url(self):
+        logger.info("Enter user:")
         return reverse_lazy("mainapp:cabinet")
 
     def form_invalid(self, form):
@@ -55,7 +61,9 @@ class RegisterPageView(TemplateView):
             messages.error(self.request, "Пользователь с таким именем уже есть")
             return redirect("authapp:register")
         login(request, user)
-        notification_to_admin(f" Please approve request for teacher_role from user {user.username}")
+        notification_to_admin(
+            f" Please approve request for teacher_role from user {user.username}"
+        )
         return redirect("mainapp:cabinet")
 
 
@@ -72,6 +80,3 @@ class UserUpdateView(LoginRequiredMixin, UpdateView):
 
     def get_success_url(self):
         return reverse_lazy("mainapp:cabinet")
-
-
-
