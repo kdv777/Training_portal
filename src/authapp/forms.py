@@ -31,7 +31,7 @@ class UserLoginForm(AuthenticationForm):  # Authentication
 
 
 class UserUpdateForm(forms.ModelForm):
-    avatar = ImageField(widget=FileInput)
+    avatar = ImageField(widget=FileInput, required=False)
 
     class Meta:
         model = User
