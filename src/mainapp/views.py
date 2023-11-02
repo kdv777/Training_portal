@@ -13,6 +13,7 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, TemplateView, View
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
+from django.core.paginator import Paginator, EmptyPage
 
 from authapp.models import User
 from config.settings import BASE_DIR
@@ -25,6 +26,21 @@ from mainapp.serializers import (CommentSerializer, OrderSerializer,
 from mainapp.tasks import send_feedback_mail
 
 logger = logging.getLogger(__name__)
+
+
+class MyPaginator(Paginator):
+    def validate_number(self, number):
+        try:
+            return super().validate_number(number)
+        except EmptyPage:
+            if int(number) > 1:
+                # return the last page
+                return self.num_pages
+            elif int(number) < 1:
+                # return the first page
+                return 1
+            else:
+                raise
 
 
 class CommonContextMixin(object):
@@ -59,7 +75,6 @@ class MainPageView(CommonContextMixin, TemplateView):
 
         context["list_of_news"] = News.objects.all().order_by("created_at")[:3]
         context["base_dir"] = str(BASE_DIR).replace("\\", "/")
-        # print(context)
         return context
 
 
@@ -70,23 +85,27 @@ class NewsDetailsView(CommonContextMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         news = get_object_or_404(News, pk=pk)
         list_of_posts = Post.objects.all()
-        # print(f'news : {list_of_news[0].__dir__()}')
         context["news"] = news
         context["list_of_posts"] = list_of_posts
-        # return render(request, "mainapp/news_details.html", context)
         return context
 
 
 class NewsListPageView(CommonContextMixin, TemplateView):
     template_name = "mainapp/news_list.html"
+    model = News
+    context_object_name = "news_list"
+    paginate_by = 3
+    paginator_class = MyPaginator
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
+        page = self.request.GET.get('page', 1)
         list_of_news = News.objects.all()
-        list_of_posts = Post.objects.all()
+        paginator = self.paginator_class(list_of_news, self.paginate_by)
+        page_obj = paginator.get_page(page)
+        context["page_obj"] = page_obj
+        list_of_news = paginator.page(page)
         context["news_list"] = list_of_news
-        context["post_list"] = list_of_posts
-        # return render(request, "mainapp/news_list.html", context)
         return context
 
 
