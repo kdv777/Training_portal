@@ -65,7 +65,7 @@
     <div class='col-md-3' style="padding: 20px;">
         {% if is_ordered %}
         {% if all_lessons %}
-        <h2 style="margin-top: 40px;"> Список уроков</h2>
+        <h2 style="margin-top: 40px;"> Список лекций</h2>
         <ul class="list-group">
             {% for item in all_lessons %}
             <li class="list-group-item"><a href="{% url 'mainapp:lesson_detail' item.pk %}"
@@ -79,15 +79,19 @@
         {% endif %}
 
         {% if course_author %}
-        <h2 style="margin-top: 40px;"> Список уроков</h2>
-        <ul class="list-group">
+        {% if all_lessons %}
+        <h2 style="margin-top: 40px;"> Список лекций</h2>
+        <ul class="list-group" >
             {% for item in all_lessons %}
-            <li class="list-group-item"><a href="{% url 'mainapp:lesson_detail' item.pk %}"
-                                           style="text-decoration: none">
-                {{ item.post.title }}
-            </a></li>
+            <li class="list-group-item">
+                <a href="{% url 'mainapp:lesson_detail' item.pk %}"
+                                           style="text-decoration: none"> {{ item.post.title }} </a>
+            </li>
             {% endfor %}
         </ul>
+        {% else %}
+                <h2 style="margin-top: 40px;"> Лекций пока нет </h2>
+        {% endif%}
         {% endif %}
     </div>
     <!-- end of left bar -->
@@ -110,9 +114,33 @@
                     {% endif %}
                 {% endif %}
                 {% endif %}
-                {% if user.is_teacher %}
+                {% if course_author %}
+                <div class="d-flex justify-content-between" style="width: 70%;">
+                    <a href="{% url 'mainapp:cabinet' %}"
+                       class="mt-4 btn btn-primary" style="width:150px;">Обратно <br> в кабинет </a>
+                    <a href="{% url 'mainapp:course_update' course.id %}"
+                       class="mt-4 btn btn-primary" style="width:150px;">Редактировать <br> курс </a>
+                    <a href="{% url 'mainapp:course_delete' course.id %}"
+                       class="mt-4 btn btn-outline-warning" style="width:150px;">Удалить <br> курс </a>
+                </div>
+
+        <h2 style="margin-top: 40px;"> Список лекций</h2>
+        <ul class="list-group">
+            {% for item in all_lessons %}
+            <li class="list-group-item d-flex justify-content-between">
+                <a href="{% url 'mainapp:lesson_detail' item.pk %}" class="d-inline-flex"
+                                           style="text-decoration: none; width: 80%;"> {{ item.post.title }} </a>
+                <a href="{% url 'mainapp:lesson_delete' item.pk %}" type="button" class="btn btn-outline-primary btn-sm"
+               style="width:15%;"> удалить </a>
+
+            </li>
+            {% endfor %}
+        </ul>
+                            <div>
                         <a href="{% url 'mainapp:lesson_create' course.id %}" class="mt-4 btn btn-primary">Создать лекцию</a>
-                {% endif %}
+                    </div>
+        {% endif %}
+
                 <!-- comments to course -->
 
         <div class="rating" id="rating">

@@ -7,7 +7,7 @@
 <div class="container d-flex" style="margin-top: 100px;">
     {% if user.is_anonymous == False %}
     <!-- left bar -->
-    <div class="col-md-3" style=" padding: 20px 40px 20px 20px;">
+    <div class="col-md-3" style=" padding: 20px;">
         <h3 style="margin-top: 70px">Рекомендуем вам</h3>
         <ul class="list-group">
             {% for course in courses_top %}
@@ -21,30 +21,34 @@
     <!-- end of left bar -->
     <!-- main content -->
     <div
-            class="col-md-9"
-            style="max-width: 540px; padding: 20px">
+            class="col-md-7"
+            style="max-width: 540px; padding: 10px">
 
         <h1>Здравствуйте, {{ user.username }}</h1>
 
         {# Teacher section #}
-        {% if user.is_teacher %}
-        {% if user.is_teacher_approved %}
-        <h3 class="mt-4">Ваши созданные курсы:</h3>
-        <!-- list start -->
-        <ul class="mt-3 list-group">
-            {% for item3 in courses_teacher %}
-            <li class="list-group-item">
-                <a href="{% url 'mainapp:course_detail' item3.id  %}"
-                   style="text-decoration: none"> {{ item3.name }}</a>
-            </li>
-            {% endfor %}
-        </ul>
-        <a href="{% url 'mainapp:course_create' %}" class="mt-4 btn btn-primary">Создать курс</a>
-        {% else %}
-        <h3> Ваша заявка на регистрацию в должности преподавателя </h3>
-        <h3> отправлена администратору </h3>
-        {% endif %}
-        {% endif %}
+            {% if user.is_teacher %}
+            {% if user.is_teacher_approved %}
+            <h3 class="mt-4">Ваши созданные курсы:</h3>
+            <!-- list start -->
+            <ul class="mt-3 list-group ">
+                {% for item3 in courses_teacher %}
+                <li class="list-group-item d-flex justify-content-between " ">
+                    <a href="{% url 'mainapp:course_detail' item3.id  %}"
+                       class="mt-1" style="text-decoration: none"> {{ item3.name }}</a>
+                    <a href="{% url 'mainapp:course_delete' item3.id %}"
+                       class="btn btn-outline-warning" style="width:150px;">Удалить  курс </a>
+                </li>
+                {% endfor %}
+            </ul>
+
+            <a href="{% url 'mainapp:course_create' %}"
+               class="mt-4 btn btn-primary">Создать курс</a>
+            {% else %}
+            <h3> Ваша заявка на регистрацию в должности преподавателя </h3>
+            <h3> отправлена администратору </h3>
+            {% endif %}
+            {% endif %}
         {# End Teacher section #}
 
         {# Student section #}
@@ -75,7 +79,8 @@
                             >something here (optional)</small
                             >
                         </p>
-                        <a href="{% url 'mainapp:course_detail' course_now.id  %}" class="btn btn-primary">Перейти</a>
+                        <a href="{% url 'mainapp:course_detail' course_now.id  %}"
+                           class="btn btn-primary">Перейти</a>
                     </div>
                 </div>
             </div>
@@ -118,8 +123,16 @@
         {% endif %}
         {# End of Student section #}
     </div>
+        {% endif %}
     <!-- end of main content -->
+    <!--    Right bar-->
+    {% if user.avatar %}
+    <div style="width: 15%; height: auto; padding: 5px;">
+         <img style="max-width: 100%; max-height: 100%; object-fit: contain;"
+              src="{{ user.avatar.url }}" alt="photo" >
 
-{% endif %}
     </div>
+    {% endif %}
+    <!--    end of right bar-->
+</div>
 {% endblock %}

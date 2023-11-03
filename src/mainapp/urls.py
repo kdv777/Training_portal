@@ -17,10 +17,16 @@ urlpatterns = [
     # path("course_detail/", views.Course1PageView.as_view(), name="course_detail"),
     # path("course1/", views.Course1PageView.as_view(), name="course1"),
     path("course_create/", views.CourseCreateView.as_view(), name="course_create"),
+    path("course_update/<int:pk>/", views.CourseUpdateView.as_view(), name="course_update"),
+    path("course_delete/<int:pk>/", views.CourseDeleteView.as_view(), name="course_delete"),
     path(
-        "lesson_create/<int:pk>/",
-        views.LessonCreateView.as_view(),
-        name="lesson_create",
+        "lesson_create/<int:pk>/", views.LessonCreateView.as_view(), name="lesson_create",
+    ),
+    path(
+        "lesson_update/<int:pk>/", views.LessonUpdateView.as_view(), name="lesson_update",
+    ),
+    path(
+        "lesson_delete/<int:pk>/", views.LessonDeleteView.as_view(), name="lesson_delete",
     ),
     # path("lesson1_1/", views.Lesson1_1PageView.as_view(), name="lesson1_1"),
     path("categories", views.CategoriesPageView.as_view(), name="categories"),
@@ -74,6 +80,8 @@ urlpatterns = [
     ),
     path("search/", views.Search.as_view(), name="search"),
     path("terms/", views.TermsView.as_view(), name="terms"),
+
+
 ]
 
 router.register(r"orders", views.OrderViewSet, basename="orders")

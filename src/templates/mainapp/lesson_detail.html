@@ -179,8 +179,19 @@
 
 
         <p>{{ lesson.post.body|safe }}</p>
-
+        {% if course_author %}
+        <div class="d-flex justify-content-between" style="width: 70%;">
+            <a href="{% url 'mainapp:course_detail' course.id %}"
+               class="mt-4 btn btn-primary" style="width:150px;">Обратно <br> к курсу </a>
+            <a href="{% url 'mainapp:lesson_update' lesson.id %}"
+               class="mt-4 btn btn-primary" style="width:150px;">Редактировать <br> лекцию </a>
+            <a href="{% url 'mainapp:lesson_delete' lesson.id %}"
+               class="mt-4 btn btn-outline-warning" style="width:150px;">Удалить <br> лекцию </a>
+        </div>
+        {% endif %}
+        {% if not course_author %}
         <a href="{% url 'mainapp:course_detail' course.id %}" class="mt-4 btn btn-primary">Вернуться к курсу</a>
+        {% endif %}
         {% if user.is_authenticated %}
         <div class="rating" id="rating" onchange="update_rating({{ user.id }}, {{ lesson.post.id }})">
             <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>

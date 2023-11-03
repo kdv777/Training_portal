@@ -125,8 +125,11 @@ class NewsPageView(TemplateView):
     template_name = "mainapp/news.html"
 
 
-class Course1PageView(TemplateView):
-    template_name = "mainapp/course1.html"
+class CourseUpdateView(CommonContextMixin, TemplateView):
+    template_name = "mainapp/in_progress.html"
+
+class CourseDeleteView(CommonContextMixin, TemplateView):
+    template_name = "mainapp/in_progress.html"
 
 
 class CourseDetailPageView(CommonContextMixin, TemplateView):
@@ -158,7 +161,6 @@ class CourseDetailPageView(CommonContextMixin, TemplateView):
             context["feedback_form"] = mainapp_forms.CourseFeedbackForm(
                 course=context["course"], user=self.request.user
             )
-
         return context
 
 
@@ -194,9 +196,12 @@ class LessonDetailPageView(CommonContextMixin, TemplateView):
         context["lesson"] = lesson
         course = get_object_or_404(Course, pk=lesson.course.id)
         context["course"] = course
-        context["all_lessons"] = (
-            Lesson.objects.all().filter(course=lesson.course.id).order_by("order")
-        )
+        context["all_lessons"] = Lesson.objects.all().\
+            filter(course=lesson.course.id).order_by("order")
+        context["course_author"] = False
+        if self.request.user.id == course.author.id:
+            context["course_author"] = True
+
         # print(f'all lessons : {context["all_lessons"]}')
         return context
 
@@ -209,6 +214,12 @@ class LessonsCoursePageView(CommonContextMixin, TemplateView):
         context["course"] = get_object_or_404(Course, pk=pk)
         context["lessons_course"] = Lesson.objects.all().filter(course=lesson.course.id)
         return context
+
+class LessonUpdateView(CommonContextMixin, TemplateView):
+    template_name = "mainapp/in_progress.html"
+
+class LessonDeleteView(CommonContextMixin, TemplateView):
+    template_name = "mainapp/in_progress.html"
 
 
 class CabinetView(CommonContextMixin, TemplateView):
@@ -467,6 +478,12 @@ class CourseCreateView(CommonContextMixin, TemplateView):
         course.save()
         course.category.add(course_category)
         return redirect("mainapp:cabinet")
+
+class CourseCreateView(CommonContextMixin, TemplateView):
+    template_name = "mainapp/course_create_form.html"
+
+class CourseCreateView(CommonContextMixin, TemplateView):
+    template_name = "mainapp/course_create_form.html"
 
 
 # Logging
