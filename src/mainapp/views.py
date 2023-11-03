@@ -5,6 +5,7 @@ from time import time
 from django.conf import settings
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.paginator import EmptyPage, Paginator
 from django.http import FileResponse, HttpResponseRedirect, JsonResponse
 from django.shortcuts import get_object_or_404, redirect
 from django.template import context
@@ -13,7 +14,6 @@ from django.urls import reverse_lazy
 from django.views.generic import CreateView, ListView, TemplateView, View
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
-from django.core.paginator import Paginator, EmptyPage
 
 from authapp.models import User
 from config.settings import BASE_DIR
@@ -99,7 +99,7 @@ class NewsListPageView(CommonContextMixin, TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        page = self.request.GET.get('page', 1)
+        page = self.request.GET.get("page", 1)
         list_of_news = News.objects.all()
         paginator = self.paginator_class(list_of_news, self.paginate_by)
         page_obj = paginator.get_page(page)
@@ -234,6 +234,7 @@ class CabinetView(CommonContextMixin, TemplateView):
                 Order.objects.all()
                 .filter(buyer=self.request.user.id)
                 .filter(finished=True)
+                .filter(is_paid=True)
             )
             # print(f'course_done:{courses_done_id[0].id}')
             courses_done_id = []
@@ -250,6 +251,7 @@ class CabinetView(CommonContextMixin, TemplateView):
                 Order.objects.all()
                 .filter(buyer=self.request.user.id)
                 .filter(finished=False)
+                .filter(is_paid=True)
             )
             # print(f'courses_active:{courses_active}')
             courses_active_id = []
