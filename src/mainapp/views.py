@@ -211,10 +211,10 @@ class LessonDetailPageView(CommonContextMixin, TemplateView):
 class LessonsCoursePageView(CommonContextMixin, TemplateView):
     template_name = "mainapp/lessons_course.html"
 
-    def get_context_data(self, pk=None, lesson=None, **kwargs):
+    def get_context_data(self, pk, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["course"] = get_object_or_404(Course, pk=pk)
-        context["lessons_course"] = Lesson.objects.all().filter(course=lesson.course.id)
+        # context["course"] = get_object_or_404(Course, pk=pk)
+        context["lessons_course"] = Lesson.objects.all().filter(course=pk)
         return context
 
 

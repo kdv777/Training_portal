@@ -136,3 +136,9 @@ https://www.youtube.com/embed/Xiy8xwhbmew?si=vb7hqtiDATouk30x
 -> "поделиться" > "встроить" > 
 из предложенного взять нужную часть вида как выше. 
 -> вставить в поле "Video URL" при создании урока
+
+# Как запустить тесты
+Тесты запускаем из директории src
+```bash
+pdm run python manage.py test
+```
