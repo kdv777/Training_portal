@@ -34,6 +34,19 @@ class MailFeedbackForm(forms.Form):
             self.fields["user_id"].initial = user.pk
 
 
+class CourseUpdateForm(forms.ModelForm):
+
+    class Meta:
+        model = models.Course
+        fields = (
+            "name",
+            "description",
+            "img_url",
+            "price",
+            "category",
+        )
+
+
 # ref: https://stackoverflow.com/questions/2374224/django-working-with-multiple-forms/2374240#2374240
 #
 # class CourseForm(forms.ModelForm):

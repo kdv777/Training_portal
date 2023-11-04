@@ -10,7 +10,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template import context
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, TemplateView, View
+from django.views.generic import CreateView, ListView, TemplateView, View, UpdateView, DeleteView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 from django.core.paginator import Paginator, EmptyPage
@@ -24,6 +24,8 @@ from mainapp.models import (Category, Comment, Course, CourseFeedback, Lesson,
 from mainapp.serializers import (CommentSerializer, OrderSerializer,
                                  RatingStarSerializer)
 from mainapp.tasks import send_feedback_mail
+
+from mainapp.forms import CourseUpdateForm
 
 logger = logging.getLogger(__name__)
 
@@ -479,11 +481,70 @@ class CourseCreateView(CommonContextMixin, TemplateView):
         course.category.add(course_category)
         return redirect("mainapp:cabinet")
 
-class CourseCreateView(CommonContextMixin, TemplateView):
-    template_name = "mainapp/course_create_form.html"
+class CourseUpdateView(LoginRequiredMixin, UpdateView):
+    # template_name_suffix = "_update_form"
+    template_name = "mainapp/course_update_form.html"
+    model = Course
+    form_class = CourseUpdateForm
 
-class CourseCreateView(CommonContextMixin, TemplateView):
-    template_name = "mainapp/course_create_form.html"
+    # # def get_success_url(self):
+    # def get_success_url(self, pk=None, ** kwargs):
+    #     # return reverse_lazy("mainapp:course ")
+    #     return redirect("mainapp:cabinet")
+
+    def post(self,  request, pk=None, *args, **kwargs):
+        course = get_object_or_404(Course, pk=pk)
+        # old_course_category = get_object_or_404(Category, pk=course.category)
+        # print (f'old_course_category: {old_course_category}')
+        course_name = request.POST.get("name")
+        course_description = request.POST.get("description")
+        course_img_url = request.POST.get("img_url")
+        course_img_file = request.POST.get("img_file")
+        course_price = request.POST.get("price")
+        course_category_id = request.POST.get("category")
+        print(request.POST)
+        print(course_name)
+        print(course_description)
+        print(course_img_url)
+        print(course_price)
+        print(course_category_id)
+
+        if not all(
+            [
+                course_name,
+                course_description,
+                course_img_url,
+                course_price,
+                course_category_id,
+            ]
+        ):
+            messages.error(self.request, "Не все поля заполнены")
+            return redirect("mainapp:course_update", pk=pk)
+
+        course_category = get_object_or_404(Category, id=course_category_id)
+        course.name = course_name
+        course.description = course_description
+        if course_img_url:
+            course.img_url = course_img_url
+        if course_img_file:
+            course.img_file = course_img_file
+        course.price = course_price
+        # course.category = course_category
+        course.author = request.user
+        course.slug = str(course_name.lower().replace(" ", "-")[:20])
+        course.save()
+        # course.category.remove(old_course_category)
+        course.category.add(course_category)
+        return redirect("mainapp:cabinet")
+
+class CourseDeleteView(CommonContextMixin, DeleteView):
+    model = Course
+    success_url = reverse_lazy("mainapp:cabinet")
+
+
+class LessonDeleteView(CommonContextMixin, DeleteView):
+    model = Lesson
+    success_url = reverse_lazy("mainapp:cabinet")
 
 
 # Logging

@@ -120,7 +120,7 @@
                        class="mt-4 btn btn-primary" style="width:150px;">Обратно <br> в кабинет </a>
                     <a href="{% url 'mainapp:course_update' course.id %}"
                        class="mt-4 btn btn-primary" style="width:150px;">Редактировать <br> курс </a>
-                    <a href="{% url 'mainapp:course_delete' course.id %}"
+                    <a href="{% url 'mainapp:course_delete' %}"
                        class="mt-4 btn btn-outline-warning" style="width:150px;">Удалить <br> курс </a>
                 </div>
 
@@ -130,8 +130,10 @@
             <li class="list-group-item d-flex justify-content-between">
                 <a href="{% url 'mainapp:lesson_detail' item.pk %}" class="d-inline-flex"
                                            style="text-decoration: none; width: 80%;"> {{ item.post.title }} </a>
-                <a href="{% url 'mainapp:lesson_delete' item.pk %}" type="button" class="btn btn-outline-primary btn-sm"
+                {% comment %}
+                <a href="{% url 'mainapp:lesson_delete' %}" type="button" class="btn btn-outline-primary btn-sm"
                style="width:15%;"> удалить </a>
+                           {% endcomment %}
 
             </li>
             {% endfor %}

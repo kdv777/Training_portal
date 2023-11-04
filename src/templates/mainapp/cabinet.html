@@ -36,8 +36,13 @@
                 <li class="list-group-item d-flex justify-content-between " ">
                     <a href="{% url 'mainapp:course_detail' item3.id  %}"
                        class="mt-1" style="text-decoration: none"> {{ item3.name }}</a>
-                    <a href="{% url 'mainapp:course_delete' item3.id %}"
+     {% comment %}
+                    <a href="{% url 'mainapp:course_delete' %}"
                        class="btn btn-outline-warning" style="width:150px;">Удалить  курс </a>
+
+                                    <a href="{% url 'mainapp:course_delete' item3.id %}"
+                       class="btn btn-outline-warning" style="width:150px;">Удалить  курс </a>
+                         {% endcomment %}
                 </li>
                 {% endfor %}
             </ul>
