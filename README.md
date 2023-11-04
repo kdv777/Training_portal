@@ -93,6 +93,7 @@ pdm run celery -A config worker -l info
 ```bash
 pdm run python manage.py collectstatic
 pdm run python manage.py migrate
+pdm run python manage.py loaddata ./fixtures/009_all.json
 pdm run python manage.py runserver
 ```
 ### Удаление базы данных 
@@ -107,16 +108,9 @@ docker compose -f src/local.docker-compose.yaml down --volumes
 ```bash
 Папку fixtures предварительно необходимо создать внутри src (/fixtures)
 Далее выполняем команду для создания фикстуры если находимся в src>
-python -Xutf8 manage.py dumpdata --exclude auth.permission --exclude contenttypes --exclude auth.group  --exclude admin.logentry --exclude sessions --indent 2 -o ./fi
-xtures/007_all.json
+pdm run python -Xutf8 manage.py dumpdata --exclude auth.permission --exclude contenttypes --exclude auth.group  --exclude admin.logentry --exclude sessions --indent 2 -o ./fixtures/009_all.json
 ```
-### Загрузка фикстур из директории src
-```bash
-Удаляем старую базу
-python manage.py makemigrations
-python manage.py migrate
-python manage.py loaddata ./fixtures/007_all.json
-```
+
 # Логирование
 Создать папку var/log в src
 ```bash

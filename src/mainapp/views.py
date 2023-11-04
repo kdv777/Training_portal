@@ -1,6 +1,7 @@
 # Logging
 import logging
 from time import time
+from datetime import datetime
 
 from django.conf import settings
 from django.contrib import messages
@@ -100,7 +101,13 @@ class NewsListPageView(CommonContextMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         page = self.request.GET.get("page", 1)
-        list_of_news = News.objects.all()
+        dateFrom = self.request.GET.get("dateFrom", "1970-01-01")
+        if dateFrom == "":
+            dateFrom = "1970-01-01"
+        dateTo = self.request.GET.get("dateTo", datetime.now())
+        if dateTo == "":
+            dateTo = datetime.now()
+        list_of_news = News.objects.filter(created_at__range=[dateFrom, dateTo])
         paginator = self.paginator_class(list_of_news, self.paginate_by)
         page_obj = paginator.get_page(page)
         context["page_obj"] = page_obj
