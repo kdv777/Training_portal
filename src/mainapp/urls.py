@@ -18,8 +18,7 @@ urlpatterns = [
     # path("course1/", views.Course1PageView.as_view(), name="course1"),
     path("course_create/", views.CourseCreateView.as_view(), name="course_create"),
     path("course_update/<int:pk>/", views.CourseUpdateView.as_view(), name="course_update"),
-    # path("course_delete/<int:pk>/", views.CourseDeleteView.as_view(), name="course_delete"),
-    path("course_delete/", views.CourseDeleteView.as_view(), name="course_delete"),
+    path("course_delete/<int:pk>/", views.CourseDeleteView.as_view(), name="course_delete"),
     path(
         "lesson_create/<int:pk>/", views.LessonCreateView.as_view(), name="lesson_create",
     ),

@@ -120,7 +120,7 @@
                        class="mt-4 btn btn-primary" style="width:150px;">Обратно <br> в кабинет </a>
                     <a href="{% url 'mainapp:course_update' course.id %}"
                        class="mt-4 btn btn-primary" style="width:150px;">Редактировать <br> курс </a>
-                    <a href="{% url 'mainapp:course_delete' %}"
+                    <a href="{% url 'mainapp:course_delete' course.id %}"
                        class="mt-4 btn btn-outline-warning" style="width:150px;">Удалить <br> курс </a>
                 </div>
 
