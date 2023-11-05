@@ -27,6 +27,11 @@ from mainapp.tasks import send_feedback_mail
 
 from mainapp.forms import CourseUpdateForm
 
+from mainapp.forms import LessonUpdateForm
+
+from mainapp.forms import PostUpdateForm
+
+
 logger = logging.getLogger(__name__)
 
 
@@ -163,6 +168,10 @@ class CourseDetailPageView(CommonContextMixin, TemplateView):
             context["feedback_form"] = mainapp_forms.CourseFeedbackForm(
                 course=context["course"], user=self.request.user
             )
+        if self.request.user.is_authenticated:
+            the_student = get_object_or_404(User, pk=self.request.user.id)
+            the_student.course_id = course.id
+            the_student.save()
         return context
 
 
@@ -217,11 +226,98 @@ class LessonsCoursePageView(CommonContextMixin, TemplateView):
         context["lessons_course"] = Lesson.objects.all().filter(course=lesson.course.id)
         return context
 
-class LessonUpdateView(CommonContextMixin, TemplateView):
-    template_name = "mainapp/in_progress.html"
 
-class LessonDeleteView(CommonContextMixin, TemplateView):
-    template_name = "mainapp/in_progress.html"
+class LessonUpdateView(CommonContextMixin, LoginRequiredMixin, TemplateView):
+    template_name = "mainapp/lesson_update_form.html"
+    model = Lesson
+    form_class = LessonUpdateForm
+
+
+    # def get_context_data(self, pk=None, **kwargs):
+    #     context = super().get_context_data(**kwargs)
+    #     context["all_lessons"] = (
+    #         Lesson.objects.all().filter(course=pk).order_by("order")
+    #     )
+    #     context["course_id"] = pk
+    #
+    #     return context
+
+    def get_context_data(self, pk=None, *args, **kwargs):
+        the_lesson = get_object_or_404(Lesson, pk=pk)
+        the_post_id = the_lesson.post_id
+        the_post = get_object_or_404(Post, pk=the_post_id)
+        context = super().get_context_data(**kwargs)
+        context['now_title'] = the_post.title
+        context['now_text'] = the_post.text
+        context['now_body'] = the_post.body
+        context['now_author'] = the_post.author
+        context['now_slug'] = the_post.slug
+        context['now_course'] = the_lesson.course_id
+        context['now_order'] = the_lesson.order
+        context['now_video_url'] = the_lesson.video_url
+        context['now_img_url'] = the_lesson.img_url
+
+        print (f'the_lesson course_id: {the_lesson.course_id}')
+        return context
+
+    def post(self, request, pk=None, *args, **kwargs):
+        lesson = get_object_or_404(Lesson, pk=id)
+        post_id = the_lesson.post_id
+        post = get_object_or_404(Post, pk=the_post_id)
+
+        lesson_title = request.POST.get("l_title")
+        lesson_text = request.POST.get("text")
+        lesson_body = request.POST.get("body")
+        lesson_author = request.user
+        lesson_slug = (
+            str(lesson_title.lower().replace(" ", "-")[:20]) + "_" + str(int(time()))
+        )
+        lesson_order = int(request.POST.get("order"))
+        lesson_vid_url = request.POST.get("video_url")
+        lesson_img_url = request.POST.get("img_url")
+        # lesson_img_file = request.POST.get("img_file")
+
+        if not all(
+            [
+                lesson_title,
+                lesson_text,
+                lesson_body,
+                lesson_author,
+                lesson_slug,
+                lesson_order,
+            ]
+        ):
+            messages.error(self.request, "Не все поля заполнены")
+            return redirect("mainapp:lesson_create", pk=context.course_id)
+        all_lessons_in_course = Lesson.objects.all().filter(course=pk).order_by("order")
+        if all_lessons_in_course:
+            for item in all_lessons_in_course:
+                if item.order >= lesson_order:
+                    item.order += 1
+                    item.save()
+
+        post.title = lesson_title
+        post.text = lesson_text
+        post.body = lesson_body
+        post.author = lesson_author
+        post.slug = lesson_slug
+        post.save()
+        # print('post_created')
+
+        lesson = Lesson()
+        course = get_object_or_404(Course, pk=pk)
+        lesson.post_id = post.id
+        lesson.course = course
+        lesson.order = lesson_order
+        if lesson_vid_url:
+            lesson.video_url = lesson_vid_url
+        if lesson_img_url:
+            lesson.img_url = lesson_img_url
+        # if lesson_img_file:
+        #     lesson.img_file_ = lesson_img_file
+        lesson.save()
+        return redirect("mainapp:lesson_detail", pk=lesson.id)
+
 
 
 class CabinetView(CommonContextMixin, TemplateView):

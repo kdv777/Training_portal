@@ -4,7 +4,7 @@
 
 {% block content %}
 {% comment %}
-<div style="margin-top: 100px;"></div>
+<div style="margin-top: 100px; width: 50%;"></div>
 <form method="post">
 	{% csrf_token %}
 	{{ form.as_p }}
@@ -13,7 +13,7 @@
 {% endcomment %}
 
 <div class="container mb-5" style="margin-top: 100px; max-width: 500px;">
-	<h2>Редактирование курса:</h2>
+	<h2>Редактирование лекции:</h2>
 	<br>
 	{% if messages %}
 	{% for message in messages %}
@@ -26,9 +26,10 @@
 		{% csrf_token %}
 
 
+
 		{% for field in form %}
 		<label for="{{ field.name }}" class="col-sm-7 col-form-label">{{ field.label_tag }}</label>
-		<div class="col-sm-8" if="{{ field.name }}">
+		<div class="col-sm-8" style="width: 70%;" if="{{ field.name }}">
 			{{ field }}
 		</div>
 		{% endfor %}
