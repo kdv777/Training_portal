@@ -7,7 +7,32 @@
 
     <div style="margin-top: 100px;">
         <h1>Команда:</h1>
-
+        {% for founder in founders %}
+            <div class="card">
+                <div class="card-body p-4 shadow">
+                    <div class="container">
+                        <div class="row align-items-center">
+                            <div class="col">
+                                <img class="rounded-circle shadow-1-strong me-3" src="/media/1699096857251.jpeg" alt="avatar" width="200" height="200">
+                            </div>
+                            <div class="col">
+                                <h3 class="card-title">{{ founder.name }} {{ founder.surname }}</h3>
+                                <h4>{{ founder.country }}, {{ founder.city }}</h4>
+                                <h5>Возраст: {{ founder.age }}</h5>
+                            </div>
+                            <div class="col">
+                                <h4>Интересы:</h4>
+                                <p>{{ founder.interests }}</p>
+                            </div>
+                            <div class="col">
+                                <h4>О себе:</h4>
+                                <p>{{ founder.about }}</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
     </div>
 
     {# end block about #}

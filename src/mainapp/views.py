@@ -766,5 +766,5 @@ class FoundersTemplateView(CommonContextMixin, TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['founders'] = Founders.objects.all()
+        context['founders'] = Founders.objects.all().order_by('id')
         return context
