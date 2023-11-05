@@ -41,6 +41,7 @@ urlpatterns = [
     path("recall_teacher/<int:pk>/", views.RecallTeacherStatus.as_view(), name="recall_teacher"),
     path("search/", views.Search.as_view(), name="search"),
     path("terms/", views.TermsView.as_view(), name="terms"),
+    path("founders/", views.FoundersTemplateView.as_view(), name="founders"),
 ]
 
 router.register(r"orders", views.OrderViewSet, basename="orders")

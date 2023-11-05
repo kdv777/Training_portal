@@ -221,3 +221,17 @@ class CourseFeedback(TimestampMixin):
 
     def __str__(self):
         return f"{self.course} ({self.user})"
+
+
+class Founders(TimestampMixin):
+    name = models.CharField(max_length=128)
+    surname = models.CharField(max_length=128)
+    age = models.PositiveIntegerField(default=0)
+    country = models.CharField(max_length=128)
+    city = models.CharField(max_length=128)
+    about = models.TextField(blank=True)
+    interests = models.TextField(blank=True)
+    img_url = models.TextField(blank=True)
+
+    def __str__(self):
+        return f"{self.name} {self.surname}"

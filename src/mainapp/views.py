@@ -759,3 +759,7 @@ class HelpPageView(CommonContextMixin, TemplateView):
 
 class TermsView(CommonContextMixin, TemplateView):
     template_name = "mainapp/terms.html"
+
+
+class FoundersTemplateView(CommonContextMixin, TemplateView):
+    template_name = "mainapp/founders.html"
