@@ -1,0 +1,18 @@
+{% extends 'mainapp/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="container mb-5" style="margin-top: 100px; max-width: 500px;">
+    <form method="post">{% csrf_token %}
+
+    <h3>Вы действительно хотите удалить лекцию "{{ object }}"?</h3>
+        <div class="d-flex justify-content-between" style="width: 70%;">
+    {{ form }}
+                <a href="{% url 'mainapp:cabinet' %}"
+                       class="btn btn-outline-primary" style="width:150px;">Не удалять </a>
+    <input type="submit" class="btn btn-outline-warning" style="width:150px;"  value="Удалить">
+ </div>
+</form>
+</div>
+{% endblock %}

@@ -12,7 +12,7 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template import context
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, TemplateView, View
+from django.views.generic import CreateView, ListView, TemplateView, View, UpdateView, DeleteView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
@@ -25,6 +25,13 @@ from mainapp.models import (Category, Comment, Course, CourseFeedback, Lesson,
 from mainapp.serializers import (CommentSerializer, OrderSerializer,
                                  RatingStarSerializer)
 from mainapp.tasks import send_feedback_mail
+
+from mainapp.forms import CourseUpdateForm
+
+from mainapp.forms import LessonUpdateForm
+
+from mainapp.forms import PostUpdateForm
+
 
 logger = logging.getLogger(__name__)
 
@@ -132,9 +139,6 @@ class NewsPageView(TemplateView):
     template_name = "mainapp/news.html"
 
 
-class Course1PageView(TemplateView):
-    template_name = "mainapp/course1.html"
-
 
 class CourseDetailPageView(CommonContextMixin, TemplateView):
     template_name = "mainapp/course_detail.html"
@@ -165,7 +169,10 @@ class CourseDetailPageView(CommonContextMixin, TemplateView):
             context["feedback_form"] = mainapp_forms.CourseFeedbackForm(
                 course=context["course"], user=self.request.user
             )
-
+        if self.request.user.is_authenticated:
+            the_student = get_object_or_404(User, pk=self.request.user.id)
+            the_student.course_id = course.id
+            the_student.save()
         return context
 
 
@@ -201,9 +208,12 @@ class LessonDetailPageView(CommonContextMixin, TemplateView):
         context["lesson"] = lesson
         course = get_object_or_404(Course, pk=lesson.course.id)
         context["course"] = course
-        context["all_lessons"] = (
-            Lesson.objects.all().filter(course=lesson.course.id).order_by("order")
-        )
+        context["all_lessons"] = Lesson.objects.all().\
+            filter(course=lesson.course.id).order_by("order")
+        context["course_author"] = False
+        if self.request.user.id == course.author.id:
+            context["course_author"] = True
+
         # print(f'all lessons : {context["all_lessons"]}')
         return context
 
@@ -216,6 +226,69 @@ class LessonsCoursePageView(CommonContextMixin, TemplateView):
         context["course"] = get_object_or_404(Course, pk=pk)
         context["lessons_course"] = Lesson.objects.all().filter(course=lesson.course.id)
         return context
+
+
+class LessonUpdateView(CommonContextMixin, LoginRequiredMixin, TemplateView):
+    template_name = "mainapp/lesson_update_form.html"
+
+    def get_context_data(self, pk=None, *args, **kwargs):
+        the_lesson = get_object_or_404(Lesson, pk=pk)
+        the_post_id = the_lesson.post_id
+        the_post = get_object_or_404(Post, pk=the_post_id)
+        context = super().get_context_data(**kwargs)
+        context['now_title'] = the_post.title
+        context['now_text'] = the_post.text
+        context['now_body'] = the_post.body
+        context['now_author'] = the_post.author
+        context['now_slug'] = the_post.slug
+        context['now_course'] = the_lesson.course_id
+        context['now_order'] = the_lesson.order
+        context['now_video_url'] = the_lesson.video_url
+        context['now_img_url'] = the_lesson.img_url
+        return context
+
+    def post(self, request, pk=None, *args, **kwargs):
+        lesson = get_object_or_404(Lesson, pk=pk)
+        post = get_object_or_404(Post, pk=lesson.post_id)
+
+        post_title = request.POST.get("l_title")
+        post_text = request.POST.get("text")
+        post_body = request.POST.get("body")
+        lesson_order = int(request.POST.get("order"))
+        lesson_vid_url = request.POST.get("video_url")
+        lesson_img_url = request.POST.get("img_url")
+
+        if not all(
+            [
+                post_title,
+                post_text,
+                post_body,
+                lesson_order,
+            ]
+        ):
+            messages.error(self.request, "Не все поля заполнены")
+            return redirect("mainapp:lesson_update", pk=pk)
+        all_lessons_in_course = Lesson.objects.all().filter(course=pk).order_by("order")
+        if all_lessons_in_course:
+            for item in all_lessons_in_course:
+                if item.order >= lesson_order:
+                    item.order += 1
+                    item.save()
+
+        post.title = post_title
+        post.text = post_text
+        post.body = post_body
+        post.save(update_fields=['title', 'text', 'body'])
+
+        lesson.order = lesson_order
+        if lesson_vid_url:
+            lesson.video_url = lesson_vid_url
+        if lesson_img_url:
+            lesson.img_url = lesson_img_url
+        lesson.save(update_fields=['order', 'video_url', 'img_url'])
+
+        return redirect("mainapp:lesson_detail", pk=lesson.id)
+
 
 
 class CabinetView(CommonContextMixin, TemplateView):
@@ -476,6 +549,60 @@ class CourseCreateView(CommonContextMixin, TemplateView):
         course.save()
         course.category.add(course_category)
         return redirect("mainapp:cabinet")
+
+class CourseUpdateView(LoginRequiredMixin, UpdateView):
+    template_name = "mainapp/course_update_form.html"
+    model = Course
+    form_class = CourseUpdateForm
+
+
+    def post(self,  request, pk=None, *args, **kwargs):
+        course = get_object_or_404(Course, pk=pk)
+        course_name = request.POST.get("name")
+        course_description = request.POST.get("description")
+        course_img_url = request.POST.get("img_url")
+        course_img_file = request.POST.get("img_file")
+        course_price = request.POST.get("price")
+        course_category_id = request.POST.get("category")
+        print(request.POST)
+        print(course_name)
+        print(course_description)
+        print(course_img_url)
+        print(course_price)
+        print(course_category_id)
+
+        if not all(
+            [
+                course_name,
+                course_description,
+                course_img_url,
+                course_price,
+                course_category_id,
+            ]
+        ):
+            messages.error(self.request, "Не все поля заполнены")
+            return redirect("mainapp:course_update", pk=pk)
+
+        course_category = get_object_or_404(Category, id=course_category_id)
+        course.name = course_name
+        course.description = course_description
+        if course_img_url:
+            course.img_url = course_img_url
+        if course_img_file:
+            course.img_file = course_img_file
+        course.price = course_price
+        course.save(update_fields=['name', 'description', 'img_url', 'img_file', 'price'])
+        course.category.add(course_category)
+        return redirect("mainapp:cabinet")
+
+class CourseDeleteView(CommonContextMixin, DeleteView):
+    model = Course
+    success_url = reverse_lazy("mainapp:cabinet")
+
+
+class LessonDeleteView(CommonContextMixin, DeleteView):
+    model = Lesson
+    success_url = reverse_lazy("mainapp:cabinet")
 
 
 # Logging
