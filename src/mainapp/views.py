@@ -213,8 +213,8 @@ class LessonsCoursePageView(CommonContextMixin, TemplateView):
 
     def get_context_data(self, pk, **kwargs):
         context = super().get_context_data(**kwargs)
-        # context["course"] = get_object_or_404(Course, pk=pk)
-        context["lessons_course"] = Lesson.objects.all().filter(course=pk)
+        context["course"] = get_object_or_404(Course, pk=pk)
+        context["lessons_course"] = Lesson.objects.filter(course=pk)
         return context
 
 
