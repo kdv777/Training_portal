@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 from mainapp.models import (Article, Category, Comment, Course, Lesson, News,
-                            Post, Order)
+                            Post, Order, Founders)
 
 
 @admin.register(Category)
@@ -38,6 +38,12 @@ class ArticleAdmin(admin.ModelAdmin):
 class CommentAdmin(admin.ModelAdmin):
     pass
 
+
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
+    pass
+
+
+@admin.register(Founders)
+class FoundersAdmin(admin.ModelAdmin):
     pass
