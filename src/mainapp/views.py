@@ -229,8 +229,8 @@ class LessonsCoursePageView(CommonContextMixin, TemplateView):
 
 class LessonUpdateView(CommonContextMixin, LoginRequiredMixin, TemplateView):
     template_name = "mainapp/lesson_update_form.html"
-    model = Lesson
-    form_class = LessonUpdateForm
+    # model = Lesson
+    # form_class = LessonUpdateForm
 
 
     # def get_context_data(self, pk=None, **kwargs):
@@ -256,22 +256,15 @@ class LessonUpdateView(CommonContextMixin, LoginRequiredMixin, TemplateView):
         context['now_order'] = the_lesson.order
         context['now_video_url'] = the_lesson.video_url
         context['now_img_url'] = the_lesson.img_url
-
-        print (f'the_lesson course_id: {the_lesson.course_id}')
         return context
 
     def post(self, request, pk=None, *args, **kwargs):
-        lesson = get_object_or_404(Lesson, pk=id)
-        post_id = the_lesson.post_id
-        post = get_object_or_404(Post, pk=the_post_id)
+        lesson = get_object_or_404(Lesson, pk=pk)
+        post = get_object_or_404(Post, pk=lesson.post_id)
 
-        lesson_title = request.POST.get("l_title")
-        lesson_text = request.POST.get("text")
-        lesson_body = request.POST.get("body")
-        lesson_author = request.user
-        lesson_slug = (
-            str(lesson_title.lower().replace(" ", "-")[:20]) + "_" + str(int(time()))
-        )
+        post_title = request.POST.get("l_title")
+        post_text = request.POST.get("text")
+        post_body = request.POST.get("body")
         lesson_order = int(request.POST.get("order"))
         lesson_vid_url = request.POST.get("video_url")
         lesson_img_url = request.POST.get("img_url")
@@ -279,16 +272,14 @@ class LessonUpdateView(CommonContextMixin, LoginRequiredMixin, TemplateView):
 
         if not all(
             [
-                lesson_title,
-                lesson_text,
-                lesson_body,
-                lesson_author,
-                lesson_slug,
+                post_title,
+                post_text,
+                post_body,
                 lesson_order,
             ]
         ):
             messages.error(self.request, "Не все поля заполнены")
-            return redirect("mainapp:lesson_create", pk=context.course_id)
+            return redirect("mainapp:lesson_update", pk=pk)
         all_lessons_in_course = Lesson.objects.all().filter(course=pk).order_by("order")
         if all_lessons_in_course:
             for item in all_lessons_in_course:
@@ -296,26 +287,18 @@ class LessonUpdateView(CommonContextMixin, LoginRequiredMixin, TemplateView):
                     item.order += 1
                     item.save()
 
-        post.title = lesson_title
-        post.text = lesson_text
-        post.body = lesson_body
-        post.author = lesson_author
-        post.slug = lesson_slug
-        post.save()
-        # print('post_created')
+        post.title = post_title
+        post.text = post_text
+        post.body = post_body
+        post.save(update_fields=['title', 'text', 'body'])
 
-        lesson = Lesson()
-        course = get_object_or_404(Course, pk=pk)
-        lesson.post_id = post.id
-        lesson.course = course
         lesson.order = lesson_order
         if lesson_vid_url:
             lesson.video_url = lesson_vid_url
         if lesson_img_url:
             lesson.img_url = lesson_img_url
-        # if lesson_img_file:
-        #     lesson.img_file_ = lesson_img_file
-        lesson.save()
+        lesson.save(update_fields=['order', 'video_url', 'img_url'])
+
         return redirect("mainapp:lesson_detail", pk=lesson.id)
 
 
