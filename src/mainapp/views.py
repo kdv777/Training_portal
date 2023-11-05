@@ -132,12 +132,6 @@ class NewsPageView(TemplateView):
     template_name = "mainapp/news.html"
 
 
-class CourseUpdateView(CommonContextMixin, TemplateView):
-    template_name = "mainapp/in_progress.html"
-
-class CourseDeleteView(CommonContextMixin, TemplateView):
-    template_name = "mainapp/in_progress.html"
-
 
 class CourseDetailPageView(CommonContextMixin, TemplateView):
     template_name = "mainapp/course_detail.html"
@@ -229,18 +223,6 @@ class LessonsCoursePageView(CommonContextMixin, TemplateView):
 
 class LessonUpdateView(CommonContextMixin, LoginRequiredMixin, TemplateView):
     template_name = "mainapp/lesson_update_form.html"
-    # model = Lesson
-    # form_class = LessonUpdateForm
-
-
-    # def get_context_data(self, pk=None, **kwargs):
-    #     context = super().get_context_data(**kwargs)
-    #     context["all_lessons"] = (
-    #         Lesson.objects.all().filter(course=pk).order_by("order")
-    #     )
-    #     context["course_id"] = pk
-    #
-    #     return context
 
     def get_context_data(self, pk=None, *args, **kwargs):
         the_lesson = get_object_or_404(Lesson, pk=pk)
@@ -268,7 +250,6 @@ class LessonUpdateView(CommonContextMixin, LoginRequiredMixin, TemplateView):
         lesson_order = int(request.POST.get("order"))
         lesson_vid_url = request.POST.get("video_url")
         lesson_img_url = request.POST.get("img_url")
-        # lesson_img_file = request.POST.get("img_file")
 
         if not all(
             [
@@ -561,20 +542,13 @@ class CourseCreateView(CommonContextMixin, TemplateView):
         return redirect("mainapp:cabinet")
 
 class CourseUpdateView(LoginRequiredMixin, UpdateView):
-    # template_name_suffix = "_update_form"
     template_name = "mainapp/course_update_form.html"
     model = Course
     form_class = CourseUpdateForm
 
-    # # def get_success_url(self):
-    # def get_success_url(self, pk=None, ** kwargs):
-    #     # return reverse_lazy("mainapp:course ")
-    #     return redirect("mainapp:cabinet")
 
     def post(self,  request, pk=None, *args, **kwargs):
         course = get_object_or_404(Course, pk=pk)
-        # old_course_category = get_object_or_404(Category, pk=course.category)
-        # print (f'old_course_category: {old_course_category}')
         course_name = request.POST.get("name")
         course_description = request.POST.get("description")
         course_img_url = request.POST.get("img_url")
@@ -608,11 +582,7 @@ class CourseUpdateView(LoginRequiredMixin, UpdateView):
         if course_img_file:
             course.img_file = course_img_file
         course.price = course_price
-        # course.category = course_category
-        course.author = request.user
-        course.slug = str(course_name.lower().replace(" ", "-")[:20])
-        course.save()
-        # course.category.remove(old_course_category)
+        course.save(update_fields=['name', 'description', 'img_url', 'img_file', 'price'])
         course.category.add(course_category)
         return redirect("mainapp:cabinet")
 
