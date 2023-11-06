@@ -1,3 +1,5 @@
+from .settings import *  # Noqa
+
 ALLOWED_HOSTS = ["*"]
 
 DEBUG = False
