@@ -21,7 +21,7 @@ from config.settings import BASE_DIR
 from mainapp import forms as mainapp_forms
 from mainapp import models as mainapp_models
 from mainapp.models import (Category, Comment, Course, CourseFeedback, Lesson,
-                            News, Order, Post, RatingStar)
+                            News, Order, Post, RatingStar, Founders)
 from mainapp.serializers import (CommentSerializer, OrderSerializer,
                                  RatingStarSerializer)
 from mainapp.tasks import send_feedback_mail
@@ -759,3 +759,12 @@ class HelpPageView(CommonContextMixin, TemplateView):
 
 class TermsView(CommonContextMixin, TemplateView):
     template_name = "mainapp/terms.html"
+
+
+class FoundersTemplateView(CommonContextMixin, TemplateView):
+    template_name = "mainapp/founders.html"
+
+    def get_context_data(self, *args, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['founders'] = Founders.objects.all().order_by('id')
+        return context
