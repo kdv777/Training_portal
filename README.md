@@ -81,6 +81,7 @@ docker compose -f local.docker-compose.yaml up -d
 ```
 ### Ставим зависимости
 ```bash
+pip install pdm
 pdm install 
 ```
 ### Запускаем worker celery из папки src/ в отдельном терминале
