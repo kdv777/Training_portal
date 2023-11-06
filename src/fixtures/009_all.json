@@ -617,32 +617,6 @@
   }
 },
 {
-  "model": "mainapp.post",
-  "pk": 17,
-  "fields": {
-    "created_at": "2023-11-04T15:46:36.688Z",
-    "updated_at": "2023-11-04T15:46:36.688Z",
-    "title": "Ускоряем запуск Spring Boot-приложений в контейнере",
-    "text": "Знаете ли вы, что Spring Boot-приложение в контейнере может запускаться за миллисекунды? При этом без ущерба для производительности, памяти, паритета окружений разработки-продакшена, без ограничений возможностей языка Java, и почти без изменения кода приложения. Но как? С помощью Liberty 23.0.0.10-beta…",
-    "body": "<p>Знаете ли вы, что Spring Boot-приложение в контейнере может запускаться за миллисекунды? При этом без ущерба для производительности, памяти, паритета окружений разработки-продакшена, без ограничений возможностей языка Java, и почти без изменения кода приложения. Но как? С помощью Liberty 23.0.0.10-beta&hellip;</p>\r\n\r\n<h3>Liberty InstantOn</h3>\r\n\r\n<p>Функциональность InstantOn в Open Liberty использует IBM Semeru JDK и технологию Linux&nbsp;<a href=\"https://criu.org/Main_Page\"><u>Checkpoint/Restore in Userspace</u></a>&nbsp;(CRIU), позволяющую во время выполнения делать снимки состояния процесса (снапшоты, контрольные точки). Впоследствии состояние очень быстро восстанавливается и работа возобновляется. Восстановить приложение можно несколько раз, поскольку Open Liberty и Semeru JDK сохраняют уникальность каждого восстановленного процесса в контейнере. После восстановления состояния процессу нет необходимости выполнять инициализацию при запуске, что экономит до 90% времени старта (зависит от вашего приложения). Использование InstantOn требует незначительных изменений вашего Java-приложения.</p>\r\n\r\n<p>Подробнее о Liberty InstantOn см. в статье&nbsp;<a href=\"https://openliberty.io/blog/2023/06/29/rapid-startup-instanton.html\"><u>How to package your cloud-native Java application for rapid startup</u></a>&nbsp;и в разделе&nbsp;<a href=\"https://openliberty.io/docs/latest/instanton.html\"><u>Faster startup for containerized applications with Open Liberty InstantOn</u></a>&nbsp;документации Open Liberty.</p>\r\n\r\n<h3>Поддержка checkpoint/restore в Spring Boot</h3>\r\n\r\n<p>В Spring Framework 6.1 будет реализована интеграция с&nbsp;<a href=\"https://docs.spring.io/spring-framework/reference/6.1/integration/checkpoint-restore.html\"><u>JVM checkpoint/restore</u></a>&nbsp;с помощью проекта&nbsp;<a href=\"https://github.com/CRaC/org.crac\"><u>org.crac</u></a>, что позволит ускорить запуск приложений. В Liberty InstantOn версии 23.0.0.10-beta для получения реализации&nbsp;<a href=\"https://javadoc.io/doc/org.crac/crac/latest/index.html\"><u>org.crac API</u></a>&nbsp;нужно добавить функциональный модуль (feature) crac-1.3. Это позволит развертывать Spring-приложения, включая Spring Boot, с помощью Liberty InstantOn.</p>\r\n\r\n<h3>Production-ready образы контейнеров Liberty</h3>\r\n\r\n<p>Образы контейнеров для всех новых релизов Liberty создаются на основе&nbsp;<a href=\"https://www.redhat.com/en/blog/introducing-red-hat-universal-base-image\"><u>Universal Base Image</u></a>&nbsp;и загружаются в репозиторий&nbsp;<a href=\"https://github.com/OpenLiberty/ci.docker/blob/main/docs/icr-images.md\"><u>IBM Container Registry</u></a>. Образ Liberty UBI с версии Liberty 23.0.0.6 включает необходимые компоненты для создания контрольных точек приложения с помощью Liberty InstantOn. А с версии 23.0.0.10-beta &mdash; также и для Spring Boot 3.2.</p>\r\n\r\n<p>Образы Liberty упрощают разработку InstantOn-приложений, готовых к развертыванию в продакшене. Важное преимущество Liberty InstantOn &mdash; возможность создавать контрольные точки процесса приложения внутри контейнера без необходимости запуска приложения в контейнере под root, что важно с точки зрения безопасности. Это также позволяет&nbsp;<a href=\"https://openliberty.io/docs/latest/instanton.html#_deploying_an_instanton_application_to_kubernetes_services\"><u>развертывать ваши InstantOn-образы</u></a>&nbsp;в облачных сервисах Kubernetes, таких как AWS EKS и Azure EKS.</p>\r\n\r\n<h3>Пример приложения на Spring Boot 3.2.0 с использованием Liberty InstantOn</h3>\r\n\r\n<p>В этом примере используются материалы туториала&nbsp;<a href=\"https://openliberty.io/guides/spring-boot.html\"><u>Containerizing, packaging, and running a Spring Boot application</u></a>. Самый простой способ начать работу &mdash; клонировать ветку cracSpringBoot из github-репозитория с примером:</p>\r\n\r\n<pre>\r\n<code>git clone --branch cracSpringBoot https://github.com/openliberty/guide-spring-boot.git\r\ncd guide-spring-boot/finish</code></pre>\r\n\r\n<p>В ветке&nbsp;<code>cracSpringBoot</code>&nbsp;используются более новые версии Open Liberty и Spring Boot, поддерживающие&nbsp;<code>org.crac</code>&nbsp;для Spring Boot-приложений. Понадобится Java 17 или более поздняя версия.&nbsp;</p>\r\n\r\n<p>Для сборки приложения запустим&nbsp;<code>mvnw</code>&nbsp;в папке&nbsp;<code>finish</code>.</p>\r\n\r\n<pre>\r\n<code>./mvnw package</code></pre>\r\n\r\n<p>Далее будем контейнеризовать наше приложение. Мы обратим внимание только на изменения в контейнеризации, связанные с Liberty InstantOn. Подробнее о лучших практиках контейнеризации Spring Boot-приложений с Open Liberty см. в руководстве&nbsp;<a href=\"https://openliberty.io/guides/spring-boot.html\"><u>Containerizing, packaging, and running a Spring Boot application</u></a>.</p>\r\n\r\n<p>Для создания образа приложения, использующего InstantOn, необходимо либо запустить привилегированный контейнер, либо предоставить инструменту сборки образов необходимые&nbsp;<a href=\"https://openliberty.io/docs/latest/instanton.html#linux-capabilities\"><u>Linux capabilities</u></a>, позволяющие создавать контрольные точки.</p>\r\n\r\n<h4>Включение сrac-1.3 в Liberty</h4>\r\n\r\n<p>В Liberty мы можем выбрать только необходимые нам компоненты. Для использования&nbsp;<code>org.crac</code>&nbsp;в Liberty, необходимо в конфигурацию Liberty добавить&nbsp;<code>crac-1.3</code>. В данном случае можно скопировать файл&nbsp;<code>src/main/liberty/config/crac.xml</code>&nbsp;в образ контейнера с помощью следующей команды в Dockerfile:</p>\r\n\r\n<pre>\r\n<code>COPY src/main/liberty/config/crac.xml /config/configDropins/defaults</code></pre>\r\n\r\n<p>Включаем crac-1.3 в файле crac.xml конфигурации Liberty:</p>\r\n\r\n<pre>\r\n<code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;\r\n&lt;server description=&quot;Enable the org.crac API&quot;&gt;\r\n\r\n    &lt;featureManager&gt;\r\n        &lt;feature&gt;crac-1.3&lt;/feature&gt;\r\n    &lt;/featureManager&gt;\r\n\r\n&lt;/server&gt;</code></pre>\r\n\r\n<h4>Сборка образа с помощью Podman</h4>\r\n\r\n<p>Podman позволяет при сборке образа указать Linux capabilities, необходимые&nbsp; для создания контрольной точки приложения, что позволит запустить&nbsp;<a href=\"http://checkpoint.sh/\">checkpoint.sh</a>&nbsp;с помощью команды&nbsp;<code>RUN</code>&nbsp;в Dockerfile. Это последняя инструкция в&nbsp;<code>Dockerfile.podman</code>:</p>\r\n\r\n<pre>\r\n<code>...\r\nRUN configure.sh\r\nRUN checkpoint.sh afterAppStart</code></pre>\r\n\r\n<p>Для сборки образа используем следующую команду с указанием необходимых capabilities:</p>\r\n\r\n<pre>\r\n<code>sudo podman build \\\r\n  -f Dockerfile.podman \\\r\n  -t springboot \\\r\n  --cap-add=CHECKPOINT_RESTORE \\\r\n  --cap-add=SYS_PTRACE\\\r\n  --cap-add=SETPCAP \\\r\n  --security-opt seccomp=unconfined .</code></pre>\r\n\r\n<p>Также вы можете запустить скрипт&nbsp;<code>scripts/build-instanton-podman.sh</code>&nbsp;из примеров.</p>\r\n\r\n<p>Последний этап сборки образа &mdash; запуск&nbsp;<a href=\"http://checkpoint.sh/\">checkpoint.sh</a>&nbsp;с параметром&nbsp;<code>afterAppStart</code>. В результате контрольная точка создается после запуска приложения. О других вариантах создания контрольной точки смотрите в&nbsp;<a href=\"https://openliberty.io/docs/latest/instanton.html#beforeAppStart\"><u>документации</u></a>.</p>\r\n\r\n<p>При запуске приложения вы увидите следующий результат:</p>\r\n\r\n<pre>\r\n<code>[AUDIT   ] CWWKZ0001I: Application thin-guide-spring-boot-0.1.0 started in 3.880 seconds.\r\n[AUDIT   ] CWWKC0451I: A server checkpoint &quot;afterAppStart&quot; was requested. When the checkpoint completes, the server stops.\r\n2023-09-06T21:06:18.763Z DEBUG 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Stopping Spring-managed lifecycle beans before JVM checkpoint\r\n2023-09-06T21:06:18.767Z DEBUG 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Stopping beans in phase 2147483647\r\n2023-09-06T21:06:18.768Z DEBUG 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Bean &#39;applicationTaskExecutor&#39; completed its stop procedure\r\n2023-09-06T21:06:18.769Z DEBUG 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Stopping beans in phase 2147482623\r\n2023-09-06T21:06:18.771Z DEBUG 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Bean &#39;webServerGracefulShutdown&#39; completed its stop procedure\r\n2023-09-06T21:06:18.771Z DEBUG 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Stopping beans in phase 2147481599\r\n2023-09-06T21:06:18.796Z DEBUG 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Bean &#39;webServerStartStop&#39; completed its stop procedure\r\n2023-09-06T21:06:18.796Z DEBUG 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Stopping beans in phase -2147483647\r\n2023-09-06T21:06:18.797Z DEBUG 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Bean &#39;springBootLoggingLifecycle&#39; completed its stop procedure\r\n[2/2] COMMIT springboot</code></pre>\r\n\r\n<p>По логам видно, что приложение останавливалось для создания контрольной точки. Теперь у вас есть образ контейнера приложения под названием&nbsp;<code>springboot</code>.</p>\r\n\r\n<h4>Сборка образа с помощью Docker</h4>\r\n\r\n<p>В настоящее время Docker не позволяет при сборке образа указать&nbsp;<code>Linux capabilities</code>. По этой причине мы не можем запустить&nbsp;<a href=\"http://checkpoint.sh/\">checkpoint.sh</a>&nbsp;при выполнении&nbsp;<code>docker build</code>. Вместо этого будем использовать&nbsp;<a href=\"https://openliberty.io/docs/latest/instanton.html#three_step_process\"><u>трехэтапную сборку образа</u></a>:</p>\r\n\r\n<ol>\r\n\t<li>\r\n\t<p>Соберем образ без слоя InstantOn.</p>\r\n\t</li>\r\n\t<li>\r\n\t<p>Запустим из полученного образа контейнер и создадим контрольную точку приложения.</p>\r\n\t</li>\r\n\t<li>\r\n\t<p>Сохраним контейнер с контрольной точкой в новый InstantOn-образ с помощью commit.</p>\r\n\t</li>\r\n</ol>\r\n\r\n<p>Выполните эти три этапа сборки, запустив скрипт&nbsp;<a href=\"https://raw.githubusercontent.com/OpenLiberty/guide-spring-boot/cracSpringBoot/finish/scripts/build-instanton-docker.sh\"><u>scripts/build-instanton-docker.sh</u></a>. Вывод при сборке через Docker похож на вывод Podman. В логе вы увидите сообщения от lifecycle-бинов.&nbsp;</p>\r\n\r\n<h4>Запуск приложения</h4>\r\n\r\n<p>И Podman, и Docker используют одинаковые параметры для запуска:</p>\r\n\r\n<p>Файлы&nbsp;<a href=\"http://run-instanton-podman.sh/\">run-instanton-podman.sh</a>&nbsp;и&nbsp;<a href=\"http://run-instanton-docker.sh/\">run-instanton-docker.sh</a>:</p>\r\n\r\n<pre>\r\n<code>[sudo podman or docker] run \\\r\n  --rm \\\r\n  -p 9080:9080 \\\r\n  --cap-add=CHECKPOINT_RESTORE \\\r\n  --cap-add=SETPCAP \\\r\n  --security-opt seccomp=unconfined \\\r\n  springboot</code></pre>\r\n\r\n<p>Для запуска можно использовать данную команду или один из скриптов:&nbsp;<code>scripts/run-instanton-podman.sh</code>&nbsp;или&nbsp;<code>scripts/run-instanton-docker.sh</code>.</p>\r\n\r\n<p>При запуске вы увидите следующий вывод:</p>\r\n\r\n<pre>\r\n<code>[AUDIT   ] Launching defaultServer (Open Liberty 23.0.0.10-beta/wlp-1.0.81.cl230920230904-1158) on Eclipse OpenJ9 VM, version 17.0.7+7 (en_US)\r\n2023-09-07T15:22:52.683Z  INFO 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Restarting Spring-managed lifecycle beans after JVM restore\r\n2023-09-07T15:22:52.684Z DEBUG 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Starting beans in phase -2147483647\r\n2023-09-07T15:22:52.684Z DEBUG 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Successfully started bean &#39;springBootLoggingLifecycle&#39;\r\n2023-09-07T15:22:52.685Z DEBUG 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Starting beans in phase 2147481599\r\n[AUDIT   ] CWWKT0016I: Web application available (default_host): http://e93ebe585ce3:9080/\r\n2023-09-07T15:22:52.759Z  INFO 118 --- [ecutor-thread-1] w.s.c.ServletWebServerApplicationContext : Root WebApplicationContext: initialization completed in 106109 ms\r\n2023-09-07T15:22:52.762Z DEBUG 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Successfully started bean &#39;webServerStartStop&#39;\r\n2023-09-07T15:22:52.763Z DEBUG 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Starting beans in phase 2147482623\r\n2023-09-07T15:22:52.763Z DEBUG 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Successfully started bean &#39;webServerGracefulShutdown&#39;\r\n2023-09-07T15:22:52.763Z DEBUG 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Starting beans in phase 2147483647\r\n2023-09-07T15:22:52.763Z DEBUG 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Successfully started bean &#39;applicationTaskExecutor&#39;\r\n2023-09-07T15:22:52.764Z  INFO 118 --- [ecutor-thread-1] o.s.c.support.DefaultLifecycleProcessor  : Spring-managed lifecycle restart completed in 80 ms\r\n[AUDIT   ] CWWKC0452I: The Liberty server process resumed operation from a checkpoint in 0.263 seconds.\r\n[AUDIT   ] CWWKZ0001I: Application thin-guide-spring-boot-0.1.0 started in 0.265 seconds.\r\n[AUDIT   ] CWWKF0012I: The server installed the following features: [crac-1.3, expressionLanguage-5.0, pages-3.1, servlet-6.0, springBoot-3.0, ssl-1.0, transportSecurity-1.0, websocket-2.1].\r\n[AUDIT   ] CWWKF0011I: The defaultServer server is ready to run a smarter planet. The defaultServer server started in 0.277 seconds.</code></pre>\r\n\r\n<p>Обратите внимание на последнее сообщение &quot;...&nbsp;<code>server started in 0.277 seconds</code>&quot;. Время запуска 0,277 секунды включает в себя как время, необходимое&nbsp;<code>criu</code>&nbsp;для восстановления Java-процесса, так и время, необходимое Liberty для правильного восстановления runtime-состояния для безопасного запуска приложения после восстановления. В результате мы получили более чем десятикратное ускорение запуска по сравнению с исходными 5,5+ сек. без использования InstantOn.</p>\r\n\r\n<h3>Резюме</h3>\r\n\r\n<p>Open Liberty InstantOn представляет собой единую среду выполнения для развертывания облачных приложений с быстрым запуском. Liberty InstantOn можно использовать как с приложениями, использующими открытые стандарты, такими как Jakarta EE и MicroProfile, так и с приложениями на Spring, использующими последние версии Spring Boot и Spring Framework, в которых реализована поддержка&nbsp;<code>org.crac</code>.&nbsp;</p>\r\n\r\n<p>У Open Liberty есть следующие преимущества:</p>\r\n\r\n<ul>\r\n\t<li>\r\n\t<p>Доступ к полноценной платформе Java SE без каких-либо компромиссов. Для быстрого запуска нет необходимости изменять код приложения под окружение, как, например, при нативной компиляции.</p>\r\n\t</li>\r\n\t<li>\r\n\t<p>Оптимизированный Liberty runtime обеспечивает высокую производительность и использует меньше памяти&nbsp;<a href=\"https://developer.ibm.com/articles/modernize-and-optimize-spring-boot-applications/\"><u>по сравнению с другими средами выполнения</u></a>.</p>\r\n\t</li>\r\n\t<li>\r\n\t<p>Расширенные возможности JIT-компиляции при развертывании в облаке (Semeru Cloud Compiler).</p>\r\n\t</li>\r\n\t<li>\r\n\t<p>Запуск в среде выполнения, содержащей только необходимые компоненты, что позволяет уменьшить размер образа контейнера.</p>\r\n\t</li>\r\n\t<li>\r\n\t<p>Использование production-ready образов Open Liberty позволяет придерживаться лучших практик по оптимизации и безопасности контейнеров, таких как отсутствие запуска приложения в контейнере от root и отказ от привилегированных контейнеров.</p>\r\n\t</li>\r\n</ul>\r\n\r\n<p>Образы InstantOn-приложений готовы к развертыванию в публичных облаках, таких как AWS EKS и Azure AKS. Быстрое время запуска, обеспечиваемое Liberty InstantOn, делает его идеальной платформой для создания бессерверных приложений, в том числе основанных на SpringBoot.</p>",
-    "author": 3,
-    "slug": "news_07"
-  }
-},
-{
-  "model": "mainapp.post",
-  "pk": 18,
-  "fields": {
-    "created_at": "2023-11-04T15:50:06.182Z",
-    "updated_at": "2023-11-04T15:50:06.182Z",
-    "title": "От идеи до реализации: создание игры с помощью нейросетей",
-    "text": "В эпоху быстро развивающихся технологий и искусственного интеллекта мы стоим на пороге новой эры творчества. Инструменты, такие как Midjourney, DALL•E 3 и GPT-4, предоставляют уникальные возможности для творцов различных направлений. Было решено исследовать этот потенциал, создав игру \"Angry Pumpkins\" в качестве эксперимента. Весь код был написан с помощью GPT-4, в то время как для графической части были использованы Midjourney и DALLE. Игра была создана за 10 часов и насчитывает 600 строк кода.",
-    "body": "<p>В эпоху быстро развивающихся технологий и искусственного интеллекта мы стоим на пороге новой эры творчества. Инструменты, такие как Midjourney, DALL&bull;E 3 и GPT-4, предоставляют уникальные возможности для творцов различных направлений. Было решено исследовать этот потенциал, создав игру &quot;Angry Pumpkins&quot; в качестве эксперимента. Весь код был написан с помощью GPT-4, в то время как для графической части были использованы Midjourney и DALLE.</p>\r\n\r\n<p><img src=\"https://habrastorage.org/r/w1560/getpro/habr/upload_files/be4/d5c/82c/be4d5c82c9fa65ce1a8878855631ea14.jpg\" style=\"height:1024px; width:100%\" /></p>\r\n\r\n<p>Итак, давайте рассмотрим промты, которые использовались:</p>\r\n\r\n<h2>Графика</h2>\r\n\r\n<p><strong>Заглавный экран (DALL&middot;E 3 от GPT-4)</strong></p>\r\n\r\n<ul>\r\n\t<li>\r\n\t<p>&quot;Photo of a horizontal vibrant home screen for a video game titled &#39;Angry Pumpkins&#39;. The design is inspired by the &#39;Angry Birds&#39; game aesthetic but different. Halloween elements like haunted houses, gravestones, and bats dominate the background. The game logo is prominently displayed at the center-top, with stylized pumpkin characters looking angry and ready for action on either side. A &#39;Play&#39; button is located at the bottom center, surrounded by eerie mist.&quot;</p>\r\n\t</li>\r\n</ul>\r\n\r\n<p><strong>Фоны (Midjourney)</strong></p>\r\n\r\n<p>Было использовано одно изображение для фона (с несколькими корректировками):</p>\r\n\r\n<ul>\r\n\t<li>\r\n\t<p>&quot;Angry birds skyline in iPhone screenshot, Halloween Edition, graveyard, in the style of light aquamarine and orange, neo-traditionalist, kerem beyit, earthworks, wood, Xbox 360 graphics, light pink and navy --ar 8:5&quot;</p>\r\n\t</li>\r\n</ul>\r\n\r\n<p><img src=\"https://habrastorage.org/r/w1560/getpro/habr/upload_files/8f5/f4f/3ac/8f5f4f3ac724587c45c31b47ff10fa35.jpg\" style=\"height:864px; width:100%\" /></p>\r\n\r\n<p><strong>И другое:</strong></p>\r\n\r\n<ul>\r\n\t<li>\r\n\t<p>&quot;2d platform, stone bricks, Halloween, 2d video game terrain, 2d platformer, Halloween scenario, similar to angry birds, metal slug Halloween, screenshot, in-game asset --ar 8:5&quot;</p>\r\n\t</li>\r\n</ul>\r\n\r\n<p><img src=\"https://habrastorage.org/r/w1560/getpro/habr/upload_files/4cd/fef/545/4cdfef5455f4f756b3374054733f0ad2.jpg\" style=\"height:864px; width:100%\" /></p>\r\n\r\n<p><strong>Персонажи (Midjourney)</strong></p>\r\n\r\n<ul>\r\n\t<li>\r\n\t<p>&quot;Halloween pumpkin, in-game sprite but Halloween edition, simple sprite, 2d, white background&quot;</p>\r\n\t</li>\r\n</ul>\r\n\r\n<p><img src=\"https://habrastorage.org/r/w1560/getpro/habr/upload_files/74e/39c/642/74e39c642334716455baee4a0d25b58d.jpg\" style=\"height:2048px; width:100%\" /></p>\r\n\r\n<ul>\r\n\t<li>\r\n\t<p>&quot;Green Halloween monster, silly, amusing, in-game sprite but Halloween edition, simple sprite, 2d, white background&quot;</p>\r\n\t</li>\r\n</ul>\r\n\r\n<p><img src=\"https://habrastorage.org/r/w1560/getpro/habr/upload_files/179/095/e65/179095e658ae803a2cbb54e84d0699b8.jpg\" style=\"height:2048px; width:100%\" /></p>\r\n\r\n<h3>Объекты (Midjourney)</h3>\r\n\r\n<p>Созданы различные &quot;таблицы стилей спрайтов&quot;, а затем обрезан и удалён фон с помощью Photoshop/Photopea. Для мелких деталей были использованы корректировки Midjourney.</p>\r\n\r\n<ul>\r\n\t<li>\r\n\t<p>&quot;Wooden box. Item assets sprites. White background. In-game sprites&quot;</p>\r\n\t</li>\r\n\t<li>\r\n\t<p>&quot;Skeleton bone. Large skeleton bone. Item assets sprites. White background. In-game sprites&quot;</p>\r\n\t</li>\r\n\t<li>\r\n\t<p>&quot;Rectangular stone. Item assets sprites. White background. In-game sprites&quot;</p>\r\n\t</li>\r\n\t<li>\r\n\t<p>&quot;Wooden box. Large skeleton bone. Item assets sprites. White background. In-game sprites&quot;</p>\r\n\t</li>\r\n\t<li>\r\n\t<p>&quot;Item assets sprites. Wooden planks. White background. In-game sprites. Similar to Angry Birds style&quot;</p>\r\n\t</li>\r\n</ul>\r\n\r\n<p><img src=\"https://habrastorage.org/r/w1560/getpro/habr/upload_files/38a/d2f/299/38ad2f299f6a810137ed74e98cd2c23e.jpg\" style=\"height:1072px; width:100%\" /></p>\r\n\r\n<h2>Программирование (GPT-4)</h2>\r\n\r\n<p>Полный исходный код&nbsp;<a href=\"https://bestaiprompts.art/angry-pumpkins/sketch.js\" rel=\"noopener noreferrer nofollow\">здесь</a></p>\r\n\r\n<p>В процессе работы было добавлено много деталей, таких как различные эффекты частиц, разные типы объектов и т. д. И до сих пор мы еще не находимся в точке, где GPT-4 может генерировать целую игру просто с помощью промта. Но у меня нет сомнений, что в будущем мы сможем создавать видеоигры уровня AAA, просто попросив об этом.</p>\r\n\r\n<p>Возвращаясь к настоящему, трюк в том, чтобы запрашивать у GPT-4 вещи итеративно. На самом деле, это очень похоже на то, как человек бы программировал: начиная с простой функциональной основы и постепенно улучшая и расширяя код.</p>\r\n\r\n<p>Вот несколько примеров::</p>\r\n\r\n<ul>\r\n\t<li>\r\n\t<p>&quot;Can we now create a simple game using matter.js and p5.js in the style of &quot;Angry Birds&quot;? Just launch a ball with angle and force using the mouse and hit some stacked boxes with 2D physics.</p>\r\n\t</li>\r\n</ul>\r\n\r\n<p>И далее продолжайте запрашивать все больше и больше. И каждый раз, когда что-то идет не так, четко объясните ошибку и позвольте ей это исправить:</p>\r\n\r\n<ul>\r\n\t<li>\r\n\t<p>&quot;Now, I ask you: do you know how the birds are launched in Angry Birds? What the finger does on the screen? Exactly. Add this to the game, using the mouse.&quot;</p>\r\n\t</li>\r\n\t<li>\r\n\t<p>&quot;I have this error, please, fix it: Uncaught ReferenceError: Constraint is not defined&quot;</p>\r\n\t</li>\r\n\t<li>\r\n\t<p>&quot;I would like to make a torch with particle effects. Can it be done with p5.js? Make one, please.&quot;</p>\r\n\t</li>\r\n\t<li>\r\n\t<p>&quot;Now, make the monsters circular, and be very careful: apply the same technique that already exists for the rectangular ones regarding scaling and collision area, and don&#39;t mess it up like before.&quot;</p>\r\n\t</li>\r\n</ul>\r\n\r\n<p>Следующая часть заняла больше всего времени:</p>\r\n\r\n<ul>\r\n\t<li>\r\n\t<p>&quot;There&#39;s something off with the logic that calculates when there&#39;s a strong impact on a bug. If the impact is direct, it works well, but not if it&#39;s indirect. For example, if I place a rectangle over two bugs and drop a box on the rectangle, even though the bugs should be affected by the impact, they don&#39;t notice it. What can we do to ensure they also get affected when things fall on top of a body they are under?&quot;</p>\r\n\t</li>\r\n</ul>\r\n\r\n<p><img src=\"https://habrastorage.org/r/w1560/getpro/habr/upload_files/465/49e/052/46549e05277bc90aa12cf1c3ccf40816.jpg\" style=\"height:1110px; width:100%\" /></p>\r\n\r\n<h2>Итог:</h2>\r\n\r\n<p>Игра была создана за 10-13 часов и насчитывает 600 строк кода. Целью было поставить эксперимент и проверить как пользователь, который не обладает серьезными знаниями программирования, сможет справиться с подобной задачей. А также насколько хорошо справятся с этим нейросети.</p>\r\n\r\n<p><img src=\"https://habrastorage.org/r/w1560/getpro/habr/upload_files/6f6/7c8/474/6f67c84742bef49a179139b775023551.png\" style=\"height:850px; width:100%\" /></p>\r\n\r\n<p><a href=\"https://bestaiprompts.art/angry-pumpkins/index.html\" rel=\"noopener noreferrer nofollow\">Ссылка на игру</a></p>",
-    "author": 4,
-    "slug": "news_08"
-  }
-},
-{
   "model": "mainapp.lesson",
   "pk": 1,
   "fields": {
@@ -829,23 +803,27 @@
   }
 },
 {
-  "model": "mainapp.news",
-  "pk": 7,
+  "model": "mainapp.comment",
+  "pk": 1,
   "fields": {
-    "created_at": "2023-11-04T15:47:06.651Z",
-    "updated_at": "2023-11-04T15:47:06.651Z",
-    "post": 17,
-    "img_url": "https://habrastorage.org/r/w780/getpro/habr/upload_files/6be/a81/85f/6bea8185f8981e5fda7afaa5f4bd65f0.jpeg"
+    "updated_at": "2023-11-04T10:59:47.625Z",
+    "text": "ghbdtn",
+    "author": 2,
+    "post": 12,
+    "parent": null,
+    "created_at": "2023-11-04T10:59:47.625Z"
   }
 },
 {
-  "model": "mainapp.news",
-  "pk": 8,
+  "model": "mainapp.comment",
+  "pk": 2,
   "fields": {
-    "created_at": "2023-11-04T15:50:38.602Z",
-    "updated_at": "2023-11-04T15:50:38.602Z",
-    "post": 18,
-    "img_url": "https://habrastorage.org/getpro/habr/upload_files/be4/d5c/82c/be4d5c82c9fa65ce1a8878855631ea14.jpg"
+    "updated_at": "2023-11-04T11:15:49.027Z",
+    "text": "dfhb",
+    "author": 2,
+    "post": 6,
+    "parent": null,
+    "created_at": "2023-11-04T11:15:49.027Z"
   }
 },
 {
@@ -957,11 +935,232 @@
   }
 },
 {
+  "model": "mainapp.coursefeedback",
+  "pk": 1,
+  "fields": {
+    "updated_at": "2023-11-04T10:48:00.638Z",
+    "course": 1,
+    "user": 2,
+    "feedback": "все отлично",
+    "created_at": "2023-11-04T10:48:00.638Z"
+  }
+},
+{
+  "model": "mainapp.coursefeedback",
+  "pk": 2,
+  "fields": {
+    "updated_at": "2023-11-04T10:51:42.017Z",
+    "course": 2,
+    "user": 2,
+    "feedback": "все классно",
+    "created_at": "2023-11-04T10:51:42.017Z"
+  }
+},
+{
+  "model": "mainapp.coursefeedback",
+  "pk": 3,
+  "fields": {
+    "updated_at": "2023-11-04T11:00:44.535Z",
+    "course": 3,
+    "user": 2,
+    "feedback": "ghbdt",
+    "created_at": "2023-11-04T11:00:44.535Z"
+  }
+},
+{
+  "model": "mainapp.coursefeedback",
+  "pk": 4,
+  "fields": {
+    "updated_at": "2023-11-04T11:03:48.542Z",
+    "course": 3,
+    "user": 2,
+    "feedback": "gfdb",
+    "created_at": "2023-11-04T11:03:48.542Z"
+  }
+},
+{
+  "model": "mainapp.coursefeedback",
+  "pk": 5,
+  "fields": {
+    "updated_at": "2023-11-04T11:05:35.409Z",
+    "course": 3,
+    "user": 2,
+    "feedback": "hgfs",
+    "created_at": "2023-11-04T11:05:35.409Z"
+  }
+},
+{
+  "model": "mainapp.coursefeedback",
+  "pk": 6,
+  "fields": {
+    "updated_at": "2023-11-04T11:08:29.580Z",
+    "course": 3,
+    "user": 2,
+    "feedback": "fdhbcv",
+    "created_at": "2023-11-04T11:08:29.580Z"
+  }
+},
+{
+  "model": "mainapp.coursefeedback",
+  "pk": 7,
+  "fields": {
+    "updated_at": "2023-11-04T11:27:16.704Z",
+    "course": 1,
+    "user": 2,
+    "feedback": "парапы",
+    "created_at": "2023-11-04T11:27:16.704Z"
+  }
+},
+{
+  "model": "mainapp.founders",
+  "pk": 1,
+  "fields": {
+    "created_at": "2023-11-05T13:17:16.069Z",
+    "updated_at": "2023-11-05T14:43:49.886Z",
+    "name": "Юлия",
+    "surname": "Брюховских",
+    "age": 47,
+    "country": "Сербия",
+    "city": "Белград",
+    "about": "Джуниор Пайтон бэкэнд разработчик 2 месяца без коммерческого опыта\r\nСертифицированный коуч ACF более 3 лет (более 2300 часов)\r\nМастер китайской чайной церемонии более 10 лет\r\nСоорганизатор митапов и конференций для IT комьюнити более 1 года",
+    "interests": "Python Backend Developer,\r\nAgil coach,\r\nChinese tea ceremony master.",
+    "img_url": ""
+  }
+},
+{
+  "model": "mainapp.founders",
+  "pk": 2,
+  "fields": {
+    "created_at": "2023-11-05T13:19:28.221Z",
+    "updated_at": "2023-11-05T14:43:53.359Z",
+    "name": "Дмитрий",
+    "surname": "Посвянский",
+    "age": 26,
+    "country": "Россия",
+    "city": "Санкт-Петербург",
+    "about": "Джуниор Пайтон бэкэнд разработчик.\r\nВ настоящий момент работаю менеджером по продажам.",
+    "interests": "Python,\r\nDjango,\r\nгорные лыжи,\r\nпутешествия.",
+    "img_url": ""
+  }
+},
+{
+  "model": "mainapp.founders",
+  "pk": 3,
+  "fields": {
+    "created_at": "2023-11-05T13:20:44.121Z",
+    "updated_at": "2023-11-05T14:48:06.579Z",
+    "name": "Владимир",
+    "surname": "Мальчевский",
+    "age": 57,
+    "country": "Россия",
+    "city": "Москва",
+    "about": "Джуниор Пайтон бэкэнд разработчик",
+    "interests": "Python Backend Developer,\r\nавто туризм,\r\nпарусные катамараны,\r\nфотография.",
+    "img_url": ""
+  }
+},
+{
+  "model": "mainapp.founders",
+  "pk": 4,
+  "fields": {
+    "created_at": "2023-11-05T13:22:48.604Z",
+    "updated_at": "2023-11-05T14:44:00.426Z",
+    "name": "Роман",
+    "surname": "Беляков",
+    "age": 42,
+    "country": "Россия",
+    "city": "Валдай",
+    "about": "По образованию инженер-микроэлектронка. Закончил курсы CCNA Discovery Cisco - 5  лет назад. Джуниор Пайтон разработчик,заканчиваю обучение в GeekBrains. Инженер связи и коммуникаций более 17 лет (монтаж настройка и эксплуатация оборудовния, немного devops и сетевой инженер). Немного занимался программированием микроконтроллеров и проектирование печатных плат. Хочу заниматься работотехникой и тем что с этим связано, а также программным обеспечением в области научных исследований!!!",
+    "interests": "Python Backend Developer,\r\nЙога,\r\nмедитации,\r\nпутешествия,\r\nтуризм,\r\nспортивное ориентирование.",
+    "img_url": ""
+  }
+},
+{
+  "model": "mainapp.founders",
+  "pk": 5,
+  "fields": {
+    "created_at": "2023-11-05T13:23:51.269Z",
+    "updated_at": "2023-11-05T14:44:04.609Z",
+    "name": "Анастасия",
+    "surname": "Максимова",
+    "age": 30,
+    "country": "Россия",
+    "city": "Саратов",
+    "about": "Джуниор Пайтон бэкэнд разработчик",
+    "interests": "Python Backend Development,\r\nкроссфит,\r\nвоспитание непокорных такс.",
+    "img_url": ""
+  }
+},
+{
+  "model": "mainapp.founders",
+  "pk": 6,
+  "fields": {
+    "created_at": "2023-11-05T13:25:37.105Z",
+    "updated_at": "2023-11-05T14:44:13.258Z",
+    "name": "Алия",
+    "surname": "Калимуллина",
+    "age": 40,
+    "country": "Россия",
+    "city": "Туймазы",
+    "about": "В 2003 г. окончила колледж по специальности Программное обеспечение вычислительной техники и автоматизированных систем. Второе образование высшее - Финансовый менеджер, ВЗФЭУ. Опыт работы в сфере программирования на языках MSSQL и Delphy 9 лет, сопровождение АСУП. Заканчиваю обучение в GeekBrains. Джуниор Пайтон бэкэнд разработчик.",
+    "interests": "Python Backend Developer,\r\nразработчик MS SQL,\r\nхудожественно путаю нитки в мягкие и теплые вязаные изделия.",
+    "img_url": ""
+  }
+},
+{
+  "model": "mainapp.founders",
+  "pk": 7,
+  "fields": {
+    "created_at": "2023-11-05T13:27:31.667Z",
+    "updated_at": "2023-11-05T14:44:16.990Z",
+    "name": "Сергей",
+    "surname": "Корниец",
+    "age": 50,
+    "country": "Россия",
+    "city": "Москва",
+    "about": "Программированием увлекаюсь давно. Начинал с ассемблера для ZX-Spectrum, затем С++, Pascal, Visual Basic, 1С, PHP (самостоятельно) и наконец Python. Работаю системным администратором.",
+    "interests": "Python Backend Developer,\r\nрадиоэлектроника,\r\nфутбол.",
+    "img_url": ""
+  }
+},
+{
+  "model": "mainapp.founders",
+  "pk": 8,
+  "fields": {
+    "created_at": "2023-11-05T13:29:37.243Z",
+    "updated_at": "2023-11-05T14:44:21.258Z",
+    "name": "Дмитрий",
+    "surname": "Карпасов",
+    "age": 45,
+    "country": "Россия",
+    "city": "Екатеринбург",
+    "about": "Предприниматель в ИТ сфере с 2008г (в основном ИТ-Аутсорсинг). \r\nПрограммирование является моим хобби с детства и люблю решать \r\nнестандартные задачи. В школьные годы \r\nпробовал разные языки программирования: от Basic, Assembler, Pascal до \r\nJava, С++, Kotlin. Недавно решил возобновить программирование, начал \r\nосваивать Python и я понял, что получаю огромное удовольствие от его \r\nбогатейших возможностей, лаконичности и удобства.",
+    "interests": "Python Backend Developer,\r\nйога,\r\nмедитации,\r\nкосмоэнергетика,\r\nбильярд,\r\nмотоциклы (enduro),\r\nработа с деревом и металлом.",
+    "img_url": ""
+  }
+},
+{
+  "model": "mainapp.founders",
+  "pk": 9,
+  "fields": {
+    "created_at": "2023-11-05T13:30:53.568Z",
+    "updated_at": "2023-11-05T14:44:24.089Z",
+    "name": "Виктор",
+    "surname": "Юсупов",
+    "age": 37,
+    "country": "Россия",
+    "city": "Москва",
+    "about": "Имею высшее образование по специальности сетевой инженер. Работаю в сфере медицинского образования. Продолжаю развивать свои навыки и компетенции в ИТ.",
+    "interests": "Python Backend Developer,\r\nПутешествия,\r\nФилософия,\r\nАстрономия.",
+    "img_url": ""
+  }
+},
+{
   "model": "authapp.user",
   "pk": 1,
   "fields": {
     "password": "pbkdf2_sha256$600000$eSl8fODkdkMS8llUbe4vg9$C1l0bK4MjXEw6J3/2zW9Re1VIpkRAXJ84uXblw8OD9Y=",
-    "last_login": "2023-11-04T15:45:25.770Z",
+    "last_login": "2023-11-05T13:08:52.191Z",
     "is_superuser": true,
     "username": "admin",
     "first_name": "",
@@ -994,8 +1193,8 @@
     "date_joined": "2023-10-15T20:24:34Z",
     "is_teacher": false,
     "is_teacher_approved": false,
-    "course": 5,
-    "avatar": "",
+    "course": 1,
+    "avatar": "1699096857251.jpeg",
     "groups": [],
     "user_permissions": []
   }
