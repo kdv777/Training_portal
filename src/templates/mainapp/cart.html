@@ -26,6 +26,11 @@
 
                         );
                     }
+                    if (data.length > 0) {
+                        $(".btn-primary").removeClass("disabled");
+                    } else {
+                        $(".btn-primary").addClass("disabled");
+                    }
                 },
                 error: function(){
                     alert("Не могу загрузить корзину");
@@ -71,7 +76,7 @@
         </table>
     </div>
     <div class="row">
-        <a href="{% url 'mainapp:payment' %}" class="btn btn-primary">Оформить заказ</a>
+        <a href="{% url 'mainapp:payment' %}" class="btn btn-primary disabled">Оформить заказ</a>
     </div>
 </div>
 
