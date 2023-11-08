@@ -41,6 +41,7 @@ services:
     build:
       context: .
       dockerfile: ./src/Dockerfile
+      network: host
     environment:
       DJANGO_SETTINGS_MODULE: "config.settings_prod"
     command: bash -c "python manage.py migrate 
@@ -69,6 +70,7 @@ services:
     build:
       context: .
       dockerfile: ./src/Dockerfile
+      network: host
     environment:
       DJANGO_SETTINGS_MODULE: "config.settings_prod"
     command: bash -c "celery -A config worker -l info"
