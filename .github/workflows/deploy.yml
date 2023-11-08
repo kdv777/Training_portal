@@ -1,0 +1,27 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [ "main" ]
+
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run command on remote server
+
+        uses: appleboy/ssh-action@v1.0.0
+        
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd Training_portal;
+            docker compose down --volumes;
+            git checkout .;
+            git pull;
+            docker compose up --build -d;
