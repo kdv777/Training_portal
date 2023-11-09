@@ -143,3 +143,9 @@ https://www.youtube.com/embed/Xiy8xwhbmew?si=vb7hqtiDATouk30x
 ```bash
 pdm run python manage.py test
 ```
+# Создание документации с помощью утилиты Sphinx
+Создать папку build в src/documentation_project
+```bash
+mkdir -p ./src/documentation_project/build
+```
+Инструкция и команды по созданию в документации проекта и в файле deployment_data/base_command.txt
