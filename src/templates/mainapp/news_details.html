@@ -153,6 +153,7 @@
 
 
     </div>
+
     {% if user.is_authenticated %}
     <div class="rating" id="rating" onchange="update_rating({{ user.id }}, {{ news.post.id }})">
         <input type="radio" name="rating" value="5" id="5"><label for="5">☆</label>
@@ -162,7 +163,9 @@
         <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
     </div>
     {% endif %}
+    {% if user.is_authenticated %}
     <div class="mb-3 mt-4">
+
         {% csrf_token %}
         <div class="card">
             <div class="card-body p-4">
@@ -186,7 +189,7 @@
             </div>
         </div>
     </div>
-
+    {% endif %}
 
 
     {# end block about #}
