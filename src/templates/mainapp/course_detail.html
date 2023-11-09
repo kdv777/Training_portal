@@ -21,6 +21,7 @@
           },
           success: function (data) {
             alert("Курс добавлен в корзину");
+            location.reload();
           },
           error: function (jqXHR) {
             if (jqXHR.status == 409) {
@@ -111,6 +112,8 @@
                     {% if not is_ordered %}
                         {% csrf_token %}
                         <input class="btn btn-primary" type="button" value="Добавить в корзину" onclick="add_to_cart({{ course.id }})">
+                    {% else %}
+                        <a href="{% url 'mainapp:cart' %}" class="btn btn-primary">В корзину</a>
                     {% endif %}
                 {% endif %}
                 {% endif %}
