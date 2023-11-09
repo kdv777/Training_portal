@@ -8,7 +8,7 @@
 
 project = 'Training_portal'
 copyright = '2023, Pythons'
-author = 'Belyakov_Roman'
+author = 'Pythons'
 release = '1.0.0'
 
 # -- General configuration ---------------------------------------------------
