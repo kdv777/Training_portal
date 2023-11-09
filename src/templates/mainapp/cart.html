@@ -27,9 +27,14 @@
                         );
                     }
                     if (data.length > 0) {
-                        $(".btn-primary").removeClass("disabled");
+
+                        $("#a_id").removeClass("disabled");
+                        $("#b_id").removeClass("disabled");
+                        $("#a_ord").removeClass("disabled");
                     } else {
-                        $(".btn-primary").addClass("disabled");
+                        $("#a_id").addClass("disabled");
+                        $("#a_ord").addClass("disabled");
+                        $("#b_id").addClass("disabled");
                     }
                 },
                 error: function(){
@@ -76,7 +81,7 @@
         </table>
     </div>
     <div class="row">
-        <a href="{% url 'mainapp:payment' %}" class="btn btn-primary disabled">Оформить заказ</a>
+        <a id="a_ord" href="{% url 'mainapp:payment' %}" class="btn btn-primary disabled">Оформить заказ</a>
     </div>
 </div>
 

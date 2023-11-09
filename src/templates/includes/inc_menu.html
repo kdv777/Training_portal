@@ -60,21 +60,11 @@
                             <li><a class="dropdown-item" style="color: #fff;" href="{% url 'mainapp:log_view' %}">Лог</a>
                             </li>
                             <!--Logging end-->
-                            <li><a class="dropdown-item" style="color: #fff;"
-                                   href="{% url 'authapp:logout' %}">Выйти</a></li>
 
                             {% elif user and user.is_authenticated %}
                             <li><a class="dropdown-item" style="color: #fff;" href="{% url 'mainapp:cabinet' %}">Личный
                                 кабинет</a></li>
                             <li><a class="dropdown-item" style="color: #fff;" href="{% url 'authapp:update' user.id %}">Профиль</a>
-                            </li>
-                            <li>
-                                <hr class="dropdown-divider"/>
-                            </li>
-                            <li><a class="dropdown-item" style="color: #fff;"
-                                   href="{% url 'authapp:logout' %}">Выйти</a></li>
-                            {% else %}
-                            <li><a class="dropdown-item" style="color: #fff;" href="{% url 'authapp:login' %}">Войти</a>
                             </li>
                             {% endif %}
                         </ul>
@@ -108,8 +98,8 @@
                         <p style="color: white; margin: 0 5 0 20px;">{{ user.username }}</p>
                     </li>
                     <li class="nav-item" style="display: flex; align-items: center;">
-                        <a class="nav-link active" href="{% url 'mainapp:cart' %}">
-                            <button class="btn btn-primary my-auto" type="submit" style="margin-left: 20px">
+                        <a id="a_id" class="nav-link active" href="{% url 'mainapp:cart' %}">
+                            <button id="b_id" class="btn btn-primary my-auto" type="submit" style="margin-left: 20px">
                                 Корзина
                             </button>
                         </a>
