@@ -42,6 +42,7 @@ urlpatterns = [
     path("search/", views.Search.as_view(), name="search"),
     path("terms/", views.TermsView.as_view(), name="terms"),
     path("founders/", views.FoundersTemplateView.as_view(), name="founders"),
+    path("user_manual/", views.UserManualView.as_view(), name="user_manual"),
 ]
 
 router.register(r"orders", views.OrderViewSet, basename="orders")
