@@ -97,12 +97,14 @@
 
                         <p style="color: white; margin: 0 5 0 20px;">{{ user.username }}</p>
                     </li>
-                    <li class="nav-item" style="display: flex; align-items: center;">
+                    <li class="nav-item" style="display: flex; align-items: center;position:relative;">
                         <a id="a_id" class="nav-link active" href="{% url 'mainapp:cart' %}">
-                            <button id="b_id" class="btn btn-primary my-auto" type="submit" style="margin-left: 20px">
+                            <button id="b_id" class="btn btn-primary my-auto" type="submit"
+                                    style="margin-left:20px;">
                                 Корзина
                             </button>
                         </a>
+                        <div id="dataCart" style="color:#ff00ff;position:absolute;left:60px;top:-5px"></div>
                     </li>
                     <li class="nav-item my-auto" style="display: flex; align-items: center;">
                         <a class="nav-link active" href="{% url 'logout' %}">

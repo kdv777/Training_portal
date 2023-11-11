@@ -30,10 +30,12 @@
 
                         $("#a_id").removeClass("disabled");
                         $("#b_id").removeClass("disabled");
+                        $('#dataCart').text(data.length);
                         $("#a_ord").removeClass("disabled");
                     } else {
                         $("#a_id").addClass("disabled");
                         $("#a_ord").addClass("disabled");
+                        $('#dataCart').empty();
                         $("#b_id").addClass("disabled");
                     }
                 },
