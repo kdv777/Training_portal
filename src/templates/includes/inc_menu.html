@@ -63,8 +63,7 @@
                             <!--Logging end-->
 
                             {% elif user and user.is_authenticated %}
-                            <li><a class="dropdown-item" style="color: #fff;" href="{% url 'mainapp:cabinet' %}">Личный
-                                кабинет</a></li>
+                            <li><a class="dropdown-item" style="color: #fff;" href="{% url 'mainapp:cabinet' %}">Мое обучение</a></li>
                             <li><a class="dropdown-item" style="color: #fff;" href="{% url 'authapp:update' user.id %}">Профиль</a>
                             </li>
                             {% endif %}
