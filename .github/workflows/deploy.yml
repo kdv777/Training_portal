@@ -25,3 +25,4 @@ jobs:
             git checkout .;
             git pull;
             docker compose up --build -d;
+            docker compose exec web python manage.py sup "${{ secrets.ADMINPASS }}";

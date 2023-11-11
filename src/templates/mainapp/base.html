@@ -25,7 +25,33 @@
 
     {% endblock %}
     {% block js %}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <script type="text/javascript">
+    $(document).ready(function (){
+            $.ajax({
+                url: "{% url 'mainapp:orders-list' %}",
+                type: "GET",
+                data: {
+                    is_paid: 0
+                },
+                success: function(data){
 
+                    if (data.length > 0) {
+                        $("#a_id").removeClass("disabled");
+                        $("#b_id").removeClass("disabled");
+                        $('#dataCart').text(data.length);
+                        $("#a_ord").removeClass("disabled");
+                    } else {
+                        $("#a_id").addClass("disabled");
+                        $("#a_ord").addClass("disabled");
+                        $('#dataCart').empty();
+                        $("#b_id").addClass("disabled");
+                    }
+                },
+
+            })
+        })
+</script>
     <script src="{% static 'js/bootstrap.bundle.min.js' %}"></script>
     {% endblock %}
 

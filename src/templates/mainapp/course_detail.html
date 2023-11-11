@@ -20,6 +20,9 @@
             xhr.setRequestHeader("X-CSRFToken", csrftoken);
           },
           success: function (data) {
+            $("#a_id").removeClass("disabled");
+            $("#b_id").removeClass("disabled");
+            $("#a_ord").removeClass("disabled");
             alert("Курс добавлен в корзину");
             location.reload();
           },

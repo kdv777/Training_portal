@@ -163,6 +163,7 @@ cython_debug/
 # Other
 src/static
 .DS_Store
+.vscode/
 
 # Logging
 main_log.log

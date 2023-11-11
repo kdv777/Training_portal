@@ -768,3 +768,7 @@ class FoundersTemplateView(CommonContextMixin, TemplateView):
         context = super().get_context_data(**kwargs)
         context["founders"] = Founders.objects.all().order_by("id")
         return context
+
+
+class UserManualView(CommonContextMixin, TemplateView):
+    template_name = "mainapp/user_manual.html"
