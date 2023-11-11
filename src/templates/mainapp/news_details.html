@@ -161,7 +161,6 @@
         <input type="radio" name="rating" value="2" id="2"><label for="2">☆</label>
         <input type="radio" name="rating" value="1" id="1"><label for="1">☆</label>
     </div>
-    {% endif %}
     <div class="mb-3 mt-4">
         {% csrf_token %}
         <div class="card">
@@ -186,6 +185,7 @@
             </div>
         </div>
     </div>
+    {% endif %}
 
 
 

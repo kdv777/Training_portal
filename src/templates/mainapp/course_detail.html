@@ -112,7 +112,7 @@
                     {% if not is_ordered %}
                         {% csrf_token %}
                         <input class="btn btn-primary" type="button" value="Добавить в корзину" onclick="add_to_cart({{ course.id }})">
-                    {% else %}
+                    {% elif not is_paid %}
                         <a href="{% url 'mainapp:cart' %}" class="btn btn-primary">В корзину</a>
                     {% endif %}
                 {% endif %}

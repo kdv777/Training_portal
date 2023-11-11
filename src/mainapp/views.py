@@ -1,7 +1,7 @@
 # Logging
 import logging
-from time import time
 from datetime import datetime
+from time import time
 
 from django.conf import settings
 from django.contrib import messages
@@ -12,7 +12,8 @@ from django.shortcuts import get_object_or_404, redirect
 from django.template import context
 from django.template.loader import render_to_string
 from django.urls import reverse_lazy
-from django.views.generic import CreateView, ListView, TemplateView, View, UpdateView, DeleteView
+from django.views.generic import (CreateView, DeleteView, ListView,
+                                  TemplateView, UpdateView, View)
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.viewsets import ModelViewSet
 
@@ -20,18 +21,12 @@ from authapp.models import User
 from config.settings import BASE_DIR
 from mainapp import forms as mainapp_forms
 from mainapp import models as mainapp_models
-from mainapp.models import (Category, Comment, Course, CourseFeedback, Lesson,
-                            News, Order, Post, RatingStar, Founders)
+from mainapp.forms import CourseUpdateForm
+from mainapp.models import (Category, Comment, Course, CourseFeedback,
+                            Founders, Lesson, News, Order, Post, RatingStar)
 from mainapp.serializers import (CommentSerializer, OrderSerializer,
                                  RatingStarSerializer)
 from mainapp.tasks import send_feedback_mail
-
-from mainapp.forms import CourseUpdateForm
-
-from mainapp.forms import LessonUpdateForm
-
-from mainapp.forms import PostUpdateForm
-
 
 logger = logging.getLogger(__name__)
 
@@ -139,7 +134,6 @@ class NewsPageView(TemplateView):
     template_name = "mainapp/news.html"
 
 
-
 class CourseDetailPageView(CommonContextMixin, TemplateView):
     template_name = "mainapp/course_detail.html"
 
@@ -156,10 +150,13 @@ class CourseDetailPageView(CommonContextMixin, TemplateView):
         context["course_id"] = course.id
         context["rating"] = course.rating
         if self.request.user.is_authenticated:
-            if Order.objects.filter(course=course, buyer=self.request.user).exists():
+            order = Order.objects.filter(buyer=self.request.user, course=course).first()
+            if order:
                 context["is_ordered"] = True
+                context["is_paid"] = order.is_paid
             else:
                 context["is_ordered"] = False
+                context["is_paid"] = False
 
         if self.request.user.id == course.author.id:
             context["course_author"] = True
@@ -208,8 +205,9 @@ class LessonDetailPageView(CommonContextMixin, TemplateView):
         context["lesson"] = lesson
         course = get_object_or_404(Course, pk=lesson.course.id)
         context["course"] = course
-        context["all_lessons"] = Lesson.objects.all().\
-            filter(course=lesson.course.id).order_by("order")
+        context["all_lessons"] = (
+            Lesson.objects.all().filter(course=lesson.course.id).order_by("order")
+        )
         context["course_author"] = False
         if self.request.user.id == course.author.id:
             context["course_author"] = True
@@ -236,15 +234,15 @@ class LessonUpdateView(CommonContextMixin, LoginRequiredMixin, TemplateView):
         the_post_id = the_lesson.post_id
         the_post = get_object_or_404(Post, pk=the_post_id)
         context = super().get_context_data(**kwargs)
-        context['now_title'] = the_post.title
-        context['now_text'] = the_post.text
-        context['now_body'] = the_post.body
-        context['now_author'] = the_post.author
-        context['now_slug'] = the_post.slug
-        context['now_course'] = the_lesson.course_id
-        context['now_order'] = the_lesson.order
-        context['now_video_url'] = the_lesson.video_url
-        context['now_img_url'] = the_lesson.img_url
+        context["now_title"] = the_post.title
+        context["now_text"] = the_post.text
+        context["now_body"] = the_post.body
+        context["now_author"] = the_post.author
+        context["now_slug"] = the_post.slug
+        context["now_course"] = the_lesson.course_id
+        context["now_order"] = the_lesson.order
+        context["now_video_url"] = the_lesson.video_url
+        context["now_img_url"] = the_lesson.img_url
         return context
 
     def post(self, request, pk=None, *args, **kwargs):
@@ -278,17 +276,16 @@ class LessonUpdateView(CommonContextMixin, LoginRequiredMixin, TemplateView):
         post.title = post_title
         post.text = post_text
         post.body = post_body
-        post.save(update_fields=['title', 'text', 'body'])
+        post.save(update_fields=["title", "text", "body"])
 
         lesson.order = lesson_order
         if lesson_vid_url:
             lesson.video_url = lesson_vid_url
         if lesson_img_url:
             lesson.img_url = lesson_img_url
-        lesson.save(update_fields=['order', 'video_url', 'img_url'])
+        lesson.save(update_fields=["order", "video_url", "img_url"])
 
         return redirect("mainapp:lesson_detail", pk=lesson.id)
-
 
 
 class CabinetView(CommonContextMixin, TemplateView):
@@ -550,13 +547,13 @@ class CourseCreateView(CommonContextMixin, TemplateView):
         course.category.add(course_category)
         return redirect("mainapp:cabinet")
 
+
 class CourseUpdateView(LoginRequiredMixin, UpdateView):
     template_name = "mainapp/course_update_form.html"
     model = Course
     form_class = CourseUpdateForm
 
-
-    def post(self,  request, pk=None, *args, **kwargs):
+    def post(self, request, pk=None, *args, **kwargs):
         course = get_object_or_404(Course, pk=pk)
         course_name = request.POST.get("name")
         course_description = request.POST.get("description")
@@ -591,9 +588,12 @@ class CourseUpdateView(LoginRequiredMixin, UpdateView):
         if course_img_file:
             course.img_file = course_img_file
         course.price = course_price
-        course.save(update_fields=['name', 'description', 'img_url', 'img_file', 'price'])
+        course.save(
+            update_fields=["name", "description", "img_url", "img_file", "price"]
+        )
         course.category.add(course_category)
         return redirect("mainapp:cabinet")
+
 
 class CourseDeleteView(CommonContextMixin, DeleteView):
     model = Course
@@ -766,5 +766,5 @@ class FoundersTemplateView(CommonContextMixin, TemplateView):
 
     def get_context_data(self, *args, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['founders'] = Founders.objects.all().order_by('id')
+        context["founders"] = Founders.objects.all().order_by("id")
         return context
