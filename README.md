@@ -1,4 +1,4 @@
-[![CI/CD](https://github.com/Amixp/Training_portal/actions/workflows/deploy.yml/badge.svg)](https://github.com/Amixp/Training_portal/actions/workflows/deploy.yml)
+[![CI/CD](https://github.com/kdv777/Training_portal/actions/workflows/deploy.yml/badge.svg)](https://github.com/kdv777/Training_portal/actions/workflows/deploy.yml)
 
 # Training_portal
 дипломная работа GB 2023
