@@ -35,6 +35,7 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                     {% if user and user.is_authenticated %}
                     <li class="nav-item dropdown">
                         <a
                                 class="nav-link dropdown-toggle active"
@@ -43,7 +44,7 @@
                                 data-bs-toggle="dropdown"
                                 aria-expanded="false"
                         >
-                            Личн.кабинет
+                            Личный кабинет
                         </a>
                         <ul class="dropdown-menu">
 
@@ -69,7 +70,7 @@
                             {% endif %}
                         </ul>
                     </li>
-
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page"
                            href="{% url 'mainapp:categories' %}">Категории</a>
@@ -80,6 +81,9 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="{% url 'mainapp:contacts' %}">Контакты</a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'mainapp:user_manual' %}">Справка</a>
+                    </li>                    
                 </ul>
                 <form action="{% url 'mainapp:search' %}" method="get" class="d-flex my-auto me-3" role="search">
                     <input
