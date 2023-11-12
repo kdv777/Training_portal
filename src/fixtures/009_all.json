@@ -1156,6 +1156,22 @@
   }
 },
 {
+  "model": "mainapp.founders",
+  "pk": 10,
+  "fields": {
+    "created_at": "2023-11-05T13:27:31.667Z",
+    "updated_at": "2023-11-05T14:44:16.990Z",
+    "name": "Артём",
+    "surname": "Худолей",
+    "age": 42,
+    "country": "Россия",
+    "city": "Владивосток",
+    "about": "Админ Баз Данных, Программист.",
+    "interests": "Джуниор Пайтон бэкэнд разработчик.",
+    "img_url": ""
+  }
+},
+{
   "model": "authapp.user",
   "pk": 1,
   "fields": {
