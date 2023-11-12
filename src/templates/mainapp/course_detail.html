@@ -2,7 +2,7 @@
 {% load static %}
 
 {% block js %}
-   {{ block.super }}
+    {{ block.super }}
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
     <!--<script src="/static/js/jquery.min.js"></script>-->
     <script type="text/javascript">
@@ -35,11 +35,14 @@
           }
         })
       }
+
       $(document).ready(function () {
-        $("#rating").children("input").each(function(){
-            if ({{ rating }} == this.id){
-                $(this).attr("checked", true);
-            }
+        $("#rating").children("input").each(function () {
+          if ({{ rating }} == this.id
+        )
+          {
+            $(this).attr("checked", true);
+          }
         });
         {% if feedback_form %}
           $("#feedbackSubmit").click(function () {
@@ -61,66 +64,67 @@
 {% endblock %}
 
 {% block content %}
-<!-- Блок Lesson-->
+    <!-- Блок Lesson-->
 
 
-<div class="container d-flex" style="margin-top: 100px;">
-    <!-- left bar -->
-    <div class='col-md-3' style="padding: 20px;">
-        {% if is_ordered %}
-        {% if all_lessons %}
-        <h2 style="margin-top: 40px;"> Список лекций</h2>
-        <ul class="list-group">
-            {% for item in all_lessons %}
-            <li class="list-group-item"><a href="{% url 'mainapp:lesson_detail' item.pk %}"
-                                           style="text-decoration: none">
-                <!--                    {{ item.id }} {{ item.post.title }}-->
-                {{ item.post.title }}
-            </a></li>
-            {% endfor %}
-        </ul>
-        {% endif %}
-        {% endif %}
+    <div class="container d-flex" style="margin-top: 100px;">
+        <!-- left bar -->
+        <div class='col-md-3' style="padding: 20px;">
+            {% if is_ordered %}
+                {% if all_lessons %}
+                    <h2 style="margin-top: 40px;"> Список лекций</h2>
+                    <ul class="list-group">
+                        {% for item in all_lessons %}
+                            <li class="list-group-item"><a href="{% url 'mainapp:lesson_detail' item.pk %}"
+                                                           style="text-decoration: none">
+                                <!--                    {{ item.id }} {{ item.post.title }}-->
+                                {{ item.post.title }}
+                            </a></li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            {% endif %}
 
-        {% if course_author %}
-        {% if all_lessons %}
-        <h2 style="margin-top: 40px;"> Список лекций</h2>
-        <ul class="list-group" >
-            {% for item in all_lessons %}
-            <li class="list-group-item">
-                <a href="{% url 'mainapp:lesson_detail' item.pk %}"
-                                           style="text-decoration: none"> {{ item.post.title }} </a>
-            </li>
-            {% endfor %}
-        </ul>
-        {% else %}
-                <h2 style="margin-top: 40px;"> Лекций пока нет </h2>
-        {% endif%}
-        {% endif %}
-    </div>
-    <!-- end of left bar -->
-    <!-- main content -->
-    <div class='col-md-9' style="
+            {% if course_author %}
+                {% if all_lessons %}
+                    <h2 style="margin-top: 40px;"> Список лекций</h2>
+                    <ul class="list-group">
+                        {% for item in all_lessons %}
+                            <li class="list-group-item">
+                                <a href="{% url 'mainapp:lesson_detail' item.pk %}"
+                                   style="text-decoration: none"> {{ item.post.title }} </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <h2 style="margin-top: 40px;"> Лекций пока нет </h2>
+                {% endif %}
+            {% endif %}
+        </div>
+        <!-- end of left bar -->
+        <!-- main content -->
+        <div class='col-md-9' style="
             /* border:3px solid blue;  */
             padding: 20px; ">
-        <h1>Курс: {{ course.name }}</h1>
+            <h1>Курс: {{ course.name }}</h1>
 
-        <figure class="figure mt-3">
-            <img src="{{ course.img_url }}" class="figure-img img-fluid rounded" alt="...">
-        </figure>
+            <figure class="figure mt-3">
+                <img src="{{ course.img_url }}" class="figure-img img-fluid rounded" alt="...">
+            </figure>
 
-                <p>{{ course.description }}</p>
-                {% if user.is_authenticated %}
+            <p>{{ course.description }}</p>
+            {% if user.is_authenticated %}
                 {% if not user.is_teacher %}
                     {% if not is_ordered %}
                         {% csrf_token %}
-                        <input class="btn btn-primary" type="button" value="Добавить в корзину" onclick="add_to_cart({{ course.id }})">
+                        <input class="btn btn-primary" type="button" value="Добавить в корзину"
+                               onclick="add_to_cart({{ course.id }})">
                     {% elif not is_paid %}
                         <a href="{% url 'mainapp:cart' %}" class="btn btn-primary">В корзину</a>
                     {% endif %}
                 {% endif %}
-                {% endif %}
-                {% if course_author %}
+            {% endif %}
+            {% if course_author %}
                 <div class="d-flex justify-content-between" style="width: 70%;">
                     <a href="{% url 'mainapp:cabinet' %}"
                        class="mt-4 btn btn-primary" style="width:150px;">Обратно <br> в кабинет </a>
@@ -130,38 +134,39 @@
                        class="mt-4 btn btn-outline-warning" style="width:150px;">Удалить <br> курс </a>
                 </div>
 
-        <h2 style="margin-top: 40px;"> Список лекций</h2>
-        <ul class="list-group">
-            {% for item in all_lessons %}
-            <li class="list-group-item d-flex justify-content-between">
-                <a href="{% url 'mainapp:lesson_detail' item.pk %}" class="d-inline-flex"
-                                           style="text-decoration: none; width: 80%;"> {{ item.post.title }} </a>
-                {% comment %}
+                <h2 style="margin-top: 40px;"> Список лекций</h2>
+                <ul class="list-group">
+                    {% for item in all_lessons %}
+                        <li class="list-group-item d-flex justify-content-between">
+                            <a href="{% url 'mainapp:lesson_detail' item.pk %}" class="d-inline-flex"
+                               style="text-decoration: none; width: 80%;"> {{ item.post.title }} </a>
+                            {% comment %}
                 <a href="{% url 'mainapp:lesson_delete' %}" type="button" class="btn btn-outline-primary btn-sm"
                style="width:15%;"> удалить </a>
                            {% endcomment %}
 
-            </li>
-            {% endfor %}
-        </ul>
-                            <div>
-                        <a href="{% url 'mainapp:lesson_create' course.id %}" class="mt-4 btn btn-primary">Создать лекцию</a>
-                    </div>
-        {% endif %}
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div>
+                    <a href="{% url 'mainapp:lesson_create' course.id %}" class="mt-4 btn btn-primary">Создать
+                        лекцию</a>
+                </div>
+            {% endif %}
 
-                <!-- comments to course -->
+            <!-- comments to course -->
 
-        <div class="rating" id="rating">
-            <input type="radio" name="rating" value="5" id="5" disabled><label for="5">☆</label>
-            <input type="radio" name="rating" value="4" id="4" disabled><label for="4">☆</label>
-            <input type="radio" name="rating" value="3" id="3" disabled><label for="3">☆</label>
-            <input type="radio" name="rating" value="2" id="2" disabled><label for="2">☆</label>
-            <input type="radio" name="rating" value="1" id="1" disabled><label for="1">☆</label>
-        </div>
+            <div class="rating" id="rating">
+                <input type="radio" name="rating" value="5" id="5" disabled><label for="5">☆</label>
+                <input type="radio" name="rating" value="4" id="4" disabled><label for="4">☆</label>
+                <input type="radio" name="rating" value="3" id="3" disabled><label for="3">☆</label>
+                <input type="radio" name="rating" value="2" id="2" disabled><label for="2">☆</label>
+                <input type="radio" name="rating" value="1" id="1" disabled><label for="1">☆</label>
+            </div>
 
 
-        <!-- comments to course -->
-          <!-- comments to course -->
+            <!-- comments to course -->
+            <!-- comments to course -->
             <div id="feedback-list" class="mt-5">
                 {% if feedback %}
                     {% for item in feedback %}
@@ -175,33 +180,35 @@
                 {% endif %}
             </div>
             {% if not user.is_teacher %}
-                {% if feedback_form %}
-                    <div class="card" id="cardForm">
-                        <div class="card-body">
-                            <h5 class="card-title">Добавить отзыв</h5>
-                            <p class="card-text">
-                            <form action="{% url 'mainapp:course_feedback' %}" method="POST" id="feedbackForm">
-                                {% csrf_token %}
-                                {% for hidden in feedback_form.hidden_fields %}
-                                    {{ hidden }}
-                                {% endfor %}
-                                {% for field in feedback_form.visible_fields %}
-                                    {{ field }}
-                                {% endfor %}
-                            </form>
-                            <button id="feedbackSubmit" class="btn btn-primary btn-block">Отправить отзыв</button>
-                            </p>
+                {% if is_paid %}
+                    {% if feedback_form %}
+                        <div class="card" id="cardForm">
+                            <div class="card-body">
+                                <h5 class="card-title">Добавить отзыв</h5>
+                                <p class="card-text">
+                                <form action="{% url 'mainapp:course_feedback' %}" method="POST" id="feedbackForm">
+                                    {% csrf_token %}
+                                    {% for hidden in feedback_form.hidden_fields %}
+                                        {{ hidden }}
+                                    {% endfor %}
+                                    {% for field in feedback_form.visible_fields %}
+                                        {{ field }}
+                                    {% endfor %}
+                                </form>
+                                <button id="feedbackSubmit" class="btn btn-primary btn-block">Отправить отзыв</button>
+                                </p>
+                            </div>
                         </div>
-                    </div>
+                    {% endif %}
                 {% endif %}
             {% endif %}
             <!-- end of comments to course -->
-        <!-- end of comments to course -->
+            <!-- end of comments to course -->
+        </div>
+        <!-- end of main content -->
+
+
     </div>
-    <!-- end of main content -->
-
-
-</div>
-<!-- КОНЕЦ Блок Course-->
+    <!-- КОНЕЦ Блок Course-->
 {% endblock %}
 
