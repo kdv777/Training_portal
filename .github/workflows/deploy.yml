@@ -21,7 +21,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             cd Training_portal;
-            docker compose down --volumes;
+            docker compose down;
             git checkout .;
             git pull;
             docker compose up --build -d;
