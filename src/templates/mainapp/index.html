@@ -28,7 +28,7 @@
                         <div class="p-2">
                             {% for k,v in count_cours.items %}
                             {% if k == item.name %}
-                            {{ v }} курса
+                            {{ v }}
                             {% endif %}
                             {% endfor %}
                         </div>
@@ -94,14 +94,13 @@
                     {% endif %}
                     <div style="height: 86px;" class=" d-flex flex-column justify-content-between">
                         <h5 class="card-title">{{ teacher.get_full_name }}</h5>
-                        <p style="margin-top: 5px;">Автор {{ teacher.courses.count }} курсов</p>
+                        <p style="margin-top: 5px;">Автор {{ teacher.get_courses_count }}</p>
                     </div>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
-
 </div>
 <div style="margin-top: 40px;"></div>
 {% endblock %}

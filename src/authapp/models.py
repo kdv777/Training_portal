@@ -36,3 +36,10 @@ class User(AbstractUser):
         random_teachers = random.sample(list(cls.objects.filter(is_teacher=True)), teachers_count)
         return random_teachers
     
+    def get_courses_count(self):
+        if hasattr(self, 'courses'):
+            count = self.courses.count()
+            if count != 11 and count % 10 == 1:
+                return f"{count} курса"
+            else:
+                return f"{count} курсов"

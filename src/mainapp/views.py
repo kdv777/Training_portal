@@ -60,22 +60,30 @@ class MainPageView(CommonContextMixin, TemplateView):
     template_name = "mainapp/index.html"
     TEACHERS_COUNT = 3
 
+    @staticmethod
+    def completion(number):
+        if number % 10 == 1 and number != 11:
+            return 'курс'
+        elif number % 10 in (2, 3, 4) and number not in (12, 13, 14):
+            return 'курса'
+        else:
+            return 'курсов'
+
     def get_context_data(self, **kwargs):
         logger.info("Enter in main_page")
         # Get all previous data
         context = super().get_context_data(**kwargs)
 
         category = Category.objects.all()
-        count_cours = {}
         context["category"] = category
+
+        count_course = {}
         for cat in category:
-            count_cours[cat.name] = Course.objects.filter(
-                category=Category.objects.get(name=cat).id
-            ).count()
+            count = cat.courses.count()
+            count_course[cat.name] = f"{count} {self.completion(count)}"
 
-        context["count_cours"] = count_cours
+        context["count_cours"] = count_course
         context["teachers"] = User.get_random_teachers(self.TEACHERS_COUNT)
-
         context["list_of_news"] = News.objects.all().order_by("created_at")[:3]
         context["base_dir"] = str(BASE_DIR).replace("\\", "/")
         return context
