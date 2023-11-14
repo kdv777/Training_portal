@@ -54,8 +54,4 @@ sphinx-quickstart -  создание нового сфинкс проекта
 
 pip install sphinxcontrib‑django - установка утилиты django для sphinx
 
-sphinx-build --version - проверка версии Sphinx
 
-.\make latex - генерация документов в формате latex
-
-.\make latexpdf - генерация документов в формате pdf
