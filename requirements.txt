@@ -11,6 +11,7 @@ selenium==4.14.0
 gunicorn==21.2.0
 
 
+# С сервера Reg.ru
 attrs==21.2.0
 Automat==20.2.0
 Babel==2.8.0
