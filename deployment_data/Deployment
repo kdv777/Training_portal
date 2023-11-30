@@ -21,7 +21,7 @@ rsync --archive --compress --delete . romik1981@95.163.235.40:/home/romik1981/Tr
 Доступ к  VPS серверу
 
 Логин: root
-Пароль: npeRF3Aysy$w
+Пароль: wnAtvf4~ny7V
 
 Доступ к DNS
 
@@ -61,3 +61,5 @@ python3 -m venv venv - создание виртуального окружен�
 python manage.py runserver 95.163.235.40:8080 - запуск серверв проекта
 
 pdm run python src/manage.py runserver 95.163.235.40:8080 - запуск проекта через pdm
+
+docker rmi $ (docker images -a -q) - удаление всех неактивных контейнеров Docker

@@ -7,6 +7,8 @@
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#project-information
 
 project = 'Training_portal'
+copyright = '2023, Belyakov_Roman'
+author = 'Belyakov_Roman'
 copyright = '2023, Pythons'
 author = 'Pythons'
 release = '1.0.0'
@@ -16,6 +18,8 @@ release = '1.0.0'
 
 import os
 import sys
+
+#from src.config.settings import *
 
 # Указываем путь до root-папки проекта Django
 # Путь относительно файла conf.py
@@ -36,8 +40,6 @@ extensions = [
 
 templates_path = ['_templates']
 exclude_patterns = []
-
-
 # -- Options for HTML output -------------------------------------------------
 # https://www.sphinx-doc.org/en/master/usage/configuration.html#options-for-html-output
 
