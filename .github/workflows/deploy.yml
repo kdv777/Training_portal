@@ -61,3 +61,18 @@ jobs:
             git pull;
             docker compose up --build -d;
             docker compose exec web python manage.py sup "${{ secrets.ADMINPASS }}";
+
+  clean:
+    needs: deploy
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Clean docker garbage
+
+        uses: appleboy/ssh-action@v1.0.0
+
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USER }}
+          password: ${{ secrets.PASSWORD }}
+          script: docker system prune -af;
